@@ -48,7 +48,7 @@ export default function Learn() {
                 key={index}
                 className={`rounded-2xl p-6 shadow-md transition hover:shadow-xl ${
                   isPurpleBg
-                    ? "bg-purple-300 text-black"
+                    ? "bg-[#D9D9D9] text-black"
                     : "bg-white text-gray-800"
                 }`}
               >
@@ -72,7 +72,7 @@ export default function Learn() {
         <div className="mt-16 text-center">
           <a
             href="/resources"
-              className="inline-block bg-purple-400 text-black px-6 py-3 rounded-full hover:bg-purple-600 transition"
+              className="inline-block bg-[#4C334C] text-white px-6 py-3 rounded-full hover:bg-purple-400 transition"
           >
             Explore Resources
           </a>

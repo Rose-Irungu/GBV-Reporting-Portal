@@ -28,10 +28,10 @@ export default function Report() {
       {/* Initial View */}
       {!showForm && !submitted && (
         <div className="text-center mt-20">
-          <h2 className="text-2xl font-bold text-purple-800 mb-6">Need to Report Gender-Based Violence?</h2>
+          <h2 className="text-2xl font-bold text- mb-6">Need to Report Gender-Based Violence?</h2>
           <button
             onClick={() => setShowForm(true)}
-            className="bg-purple-800 text-white px-6 py-3 rounded hover:bg-purple-700 transition text-lg"
+            className="bg-[#4C334C] text-white px-6 py-3 rounded hover:bg-[#CEA6CD] transition text-lg"
           >
             Start Reporting
           </button>
@@ -45,36 +45,36 @@ export default function Report() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
-          <h2 className="text-2xl font-bold text-purple-800 mb-6">Report GBV Incident</h2>
+          <h2 className="text-2xl font-bold text-purple-500 mb-6">Report GBV Incident</h2>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-gray-700">Your Name</label>
-              <input type="text" className="w-full mt-1 border border-gray-300 rounded px-3 py-2" />
+              <input type="text" className="w-full mt-1 border border-gray-700 rounded px-3 py-2" />
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700">Your Email</label>
-              <input type="text" className="w-full mt-1 border border-gray-300 rounded px-3 py-2" />
+              <input type="text" className="w-full mt-1 border border-gray-700 rounded px-3 py-2" />
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700">Phone Number</label>
-              <input type="text" className="w-full mt-1 border border-gray-300 rounded px-3 py-2" />
+              <input type="text" className="w-full mt-1 border border-gray-700 rounded px-3 py-2" />
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700">Incident Location</label>
-              <input type="text" className="w-full mt-1 border border-gray-300 rounded px-3 py-2" required />
+              <input type="text" className="w-full mt-1 border border-gray-700 rounded px-3 py-2" required />
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700">Date of Incident</label>
-              <input type="date" className="w-full mt-1 border border-gray-300 rounded px-3 py-2" required />
+              <input type="date" className="w-full mt-1 border border-gray-700 rounded px-3 py-2" required />
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700">Describe What Happened</label>
-              <textarea className="w-full mt-1 border border-gray-300 rounded px-3 py-2" rows="5" required></textarea>
+              <textarea className="w-full mt-1 border border-gray-700 rounded px-3 py-2" rows="5" required></textarea>
             </div>
             <button
               type="submit"
-              className="bg-purple-800 text-white px-4 py-2 rounded hover:bg-purple-700 transition"
+              className="bg-[#4C334C] text-white px-4 py-2 rounded hover:bg-[#CEA6CD] transition"
             >
               Submit Report
             </button>

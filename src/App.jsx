@@ -5,7 +5,7 @@ import Home from './pages/Home';
 import Resources from './pages/Resources';
 import Report from './pages/Report';
 // import Login from './pages/Login';
-// import Signup from './pages/Signup';
+import Learn from './pages/Learn';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 
@@ -18,8 +18,7 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/resources" element={<Resources />} />
         <Route path="/report" element={<Report />} />
-        {/* <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} /> */}
+        <Route path="/learn" element={<Learn />} /> 
       </Routes>
 
       <Footer />

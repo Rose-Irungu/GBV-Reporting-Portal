@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 export default function Navbar() {
   return (
-    <nav className="bg-purple-500 text-white px-4 py-3 shadow">
+    <nav className="bg-[#B67AB5] text-white px-4 py-3 shadow">
       <div className="container mx-auto flex justify-between items-center">
         {/* Left: Logo + Site Name */}
         <div className="flex items-center gap-3">
@@ -34,13 +34,13 @@ export default function Navbar() {
         <div className="flex gap-4">
           <a
             href="/signup"
-            className="px-4 py-2 border border-white rounded hover:bg-white hover:text-purple-800 transition"
+            className="px-4 py-2 border bg-[#4C334C] border-white rounded hover:bg-white hover:text-purple-800 transition"
           >
             Sign Up
           </a>
           <a
             href="/login"
-            className="px-4 py-2 bg-white text-purple-800 rounded hover:bg-purple-700 hover:text-white transition"
+            className="px-4 py-2 border bg-[#4C334C] border-white rounded hover:bg-white hover:text-purple-800 transition"
           >
             Login
           </a>

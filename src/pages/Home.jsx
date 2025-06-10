@@ -4,6 +4,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
+import { Link } from "react-router-dom";
 
 export default function Home() {
   return (
@@ -44,13 +45,13 @@ export default function Home() {
           <div className="mt-8 flex gap-4">
             <a
               href="/report"
-              className="bg-purple-700 text-white px-6 py-3 rounded-lg hover:bg-purple-200"
+              className="bg-[#4C334C] border-purple-900 text-white px-6 py-3 rounded-lg hover:bg-purple-400"
             >
               Report GBV
             </a>
             <a
               href="/resources"
-              className="border border-purple-700 text-white px-6 py-3 rounded-lg hover:bg-purple-300"
+              className=" bg-[#4C334C] border border-purple-900 text-white px-6 py-3 rounded-lg hover:bg-purple-400"
             >
               Find Support
             </a>
@@ -76,17 +77,18 @@ export default function Home() {
             </svg>
           </div>
 
-          <h2 className="text-4xl font-extrabold text-purple-700 mb-6">
+          <h2 className="text-4xl font-extrabold text-black mb-6">
             Our Mission
           </h2>
 
           <p className="text-gray-700 text-lg leading-relaxed">
             To provide a <span className="font-semibold text-purple-600">safe, accessible, and confidential</span> platform for survivors and witnesses of Gender-Based Violence to report incidents, access support services, and find empowerment through justice and healing. We are committed to <span className="italic text-purple-500">promoting awareness</span>, protecting human dignity, and standing up for every voice affected by GBV.
           </p>
-
-          <button className="mt-8 bg-purple-600 hover:bg-purple-200 text-black font-semibold py-3 px-8 rounded-full shadow-lg transition">
+        <Link to="/learn">
+            <button className="mt-8 bg-[#4C334C] hover:bg-purple-400 text-white font-semibold py-3 px-8 rounded-full shadow-lg transition">
             Learn More
           </button>
+        </Link>  
         </div>
       </section>
 

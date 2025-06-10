@@ -2,7 +2,7 @@ import { FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn } from "react-icons/f
 
 export default function Footer() {
   return (
-    <footer className="bg-purple-500 text-white py-6 mt-12">
+    <footer className="bg-[#B67AB5] text-white py-6 mt-12">
       <div className="text-center space-y-2">
         <p>&copy; {new Date().getFullYear()} GBV Support System</p>
         <p>Emergency Hotline: 123-456-7890</p>
@@ -20,6 +20,9 @@ export default function Footer() {
           <a href="https://linkedin.com" aria-label="LinkedIn" className="hover:text-purple-400">
             <FaLinkedinIn />
           </a>
+        </div>
+        <div>
+          <p>YOU ARE NOT ALONE. ❤️</p>
         </div>
       </div>
     </footer>
