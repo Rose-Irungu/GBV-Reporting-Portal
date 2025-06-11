@@ -12,7 +12,7 @@ export default function Home() {
 
 
       {/* Swiper Carousel */}
-      <div className="relative w-full h-[80vh]">
+      <div className="relative w-[200vh] h-[80vh] pt-10 rounded-xl p-8">
         <Swiper
           modules={[Autoplay, Pagination]}
           autoplay={{ delay: 4000, disableOnInteraction: false }}
@@ -21,22 +21,22 @@ export default function Home() {
           className="w-full h-full"
         >
           <SwiperSlide>
-            <img src="/images/END-gbv-1.jpg" alt="Slide 1" className="w-full h-full object-cover" />
+            <img src="/images/34.jpg" alt="Slide 1" className="w-full h-full object-cover rounded-xl" />
           </SwiperSlide>
           <SwiperSlide>
-            <img src="/images/2.jpg" alt="Slide 2" className="w-full h-full object-cover" />
+            <img src="/images/w.jpg" alt="Slide 2" className="w-full h-full object-cover rounded-xl" />
           </SwiperSlide>
           <SwiperSlide>
-            <img src="/images/4.jpg" alt="Slide 3" className="w-full h-full object-cover" />
+            <img src="/images/7.jpg" alt="Slide 3" className="w-full h-full object-cover rounded-xl"/>
           </SwiperSlide>
           <SwiperSlide>
-            <img src="/images/6.jpg" alt="Slide 3" className="w-full h-full object-cover" />
+            <img src="/images/8.jpg" alt="Slide 3" className="w-full h-full object-cover rounded-xl" />
           </SwiperSlide>
         </Swiper>
 
         {/* Hero Content */}
         <section className="absolute inset-0 bg-grey bg-opacity-40 flex flex-col items-center justify-center text-center px-4 py-10 z-10">
-          <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">
+          <h1 className="text-4xl md:text-6xl font-bold text-black mb-4">
             Speak Up. Stay Safe.
           </h1>
           <p className="text-lg md:text-xl text-white max-w-2xl">
@@ -101,7 +101,7 @@ export default function Home() {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8 text-center max-w-5xl mx-auto">
+        <div className="grid md:grid-cols-3 gap-8 text-center max-w-5xl mx-auto animate-pulse">
           {[1, 2, 3].map((step, index) => (
             <div key={index} className="flip-card bg-transparent h-64 relative">
               <div className="flip-inner w-full h-full">
