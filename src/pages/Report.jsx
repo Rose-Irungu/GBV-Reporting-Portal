@@ -45,7 +45,7 @@ export default function Report() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
-          <h2 className="text-2xl font-bold text-purple-500 mb-6">Report GBV Incident</h2>
+          <h2 className="text-2xl font-bold text-[#5B3C5A] mb-6">Report GBV Incident</h2>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
