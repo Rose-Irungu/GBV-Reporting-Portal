@@ -20,7 +20,7 @@ export default function Signup() {
   return (
       <div className="min-h-[80vh] p-8 pt-16 rounded-xl flex">
       {/* Left Side */}
-      <div className="w-1/2 bg-[#A776B4] text-white flex items-center justify-center p-10"
+      <div className="w-1/2 bg-[#A776B4] text-white flex items-center justify-center p-10 "
        style={{
         background: "linear-gradient(to right, #a776b4, #f3e8ff)",
       }}
@@ -85,6 +85,7 @@ export default function Signup() {
           </button>
         </form>
       </div>
+      
     </div>
   );
 }
