@@ -60,9 +60,9 @@ export default function Login() {
         </div>
         
         {/* Decorative elements */}
-        <div className="absolute top-10 left-10 w-20 h-20 bg-purple-200 bg-opacity-10 rounded-full"></div>
-        <div className="absolute bottom-20 right-20 w-32 h-32 bg-white bg-opacity-5 rounded-full"></div>
-        <div className="absolute top-1/2 left-20 w-16 h-16 bg-purple-200 bg-opacity-10 rounded-full"></div>
+        <div className="absolute top-10 left-10 w-20 h-20 bg-purple-200 bg-opacity-10 rounded-full animate-bounce"></div>
+        <div className="absolute bottom-20 right-20 w-32 h-32 bg-purple-200 bg-opacity-5 rounded-full animate-bounce"></div>
+        <div className="absolute top-1/2 left-20 w-16 h-16 bg-purple-200 bg-opacity-10 rounded-full animate-bounce"></div>
       </div>
 
       {/* Right Side - Login Form */}
