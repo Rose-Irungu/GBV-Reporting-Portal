@@ -20,11 +20,7 @@ export default function Signup() {
   return (
       <div className="min-h-[80vh] p-8 pt-16 rounded-xl flex">
       {/* Left Side */}
-      <div className="w-1/2 bg-[#A776B4] text-white flex items-center justify-center p-10 "
-       style={{
-        background: "linear-gradient(to right, #a776b4, #f3e8ff)",
-      }}
-      >
+      <div className="w-1/2 bg-gradient-to-r from-purple-600 to-indigo-300 text-white flex items-center justify-center p-10 ">
         <div>
           <h2 className="text-4xl font-bold mb-4">Hello, Friend!</h2>
           <p className="text-lg">
@@ -80,7 +76,7 @@ export default function Signup() {
 
           <button
             type="submit"
-            className="w-full bg-[#4C334C] text-white py-2 rounded hover:bg-purple-400 transition"
+            className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-indigo-400 text-white py-2 rounded hover:bg-purple-400 transition duration-200 ease-in-out transform hover:scale-105"
           >
             Create Account
           </button>

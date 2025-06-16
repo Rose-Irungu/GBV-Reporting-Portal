@@ -13,7 +13,7 @@ function Navbar() {
             <div className="bg-gradient-to-r from-purple-600 to-blue-400 p-2 rounded-lg">
                 <Shield className="h-6 w-6 text-white" />
             </div>
-            <span className="text-xl font-bold bg-gradient-to-r from-purple-600 to-blue-200 bg-clip-text text-transparent">
+            <span className="text-xl font-bold bg-gradient-to-r from-[#a776b4] to-[#f3e8ff] bg-clip-text text-transparent">
               SafeHaven
             </span>
           </div>
@@ -22,22 +22,22 @@ function Navbar() {
             <Link to="/" className="text-gray-700 hover:text-purple-600 transition-colors">
               Home
             </Link>
-            <Link to="/#services" className="text-gray-700 hover:text-purple-600 transition-colors">
+            <Link to="/Services" className="text-gray-700 hover:text-purple-600 transition-colors">
               Services
             </Link>
             <Link to="/resources" className="text-gray-700 hover:text-purple-600 transition-colors">
               Resources
             </Link>
-            <Link to="/#contact" className="text-gray-700 hover:text-purple-600 transition-colors">
+            <Link to="/contactus" className="text-gray-700 hover:text-purple-600 transition-colors">
               Contact
             </Link>
           </div>
 
           <div className="hidden md:flex space-x-4">
-              <button className="px-4 py-2 text-purple-600 hover:bg-purple-50 rounded-lg transition-colors">
+              <button className="px-4 py-2 text-purple-600 hover:bg-purple-100 rounded-lg transition-colors">
                 <Link to="/signup">Sign In</Link>
               </button>
-                <button className="px-4 py-2 text-purple-600 hover:bg-purple-50 rounded-lg transition-colors">
+                <button className="px-4 py-3 bg-purple-600 text-white rounded-lg hover:shadow-lg transform hover:scale-105 transition-all">
                 <Link to="/login">Login</Link>
               </button>
             <button className="px-4 py-2 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg hover:shadow-lg transform hover:scale-105 transition-all">

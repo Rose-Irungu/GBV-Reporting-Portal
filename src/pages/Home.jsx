@@ -16,7 +16,7 @@ export default function Home() {
      
 
       {/* Hero Section */}
-      <section id="home" className="pt-20 pb-32 px-4 sm:px-6 lg:px-8">
+      <section id="home" className="pt-10 pb-32 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="text-center">
             <div className="inline-flex items-center bg-purple-100 text-purple-800 px-4 py-2 rounded-full text-sm font-medium mb-8 animate-pulse">
@@ -51,7 +51,7 @@ export default function Home() {
             {/* Trust indicators */}
             <div className="mt-16 flex flex-wrap justify-center items-center gap-8 opacity-60">
               <div className="flex items-center">
-                <Shield className="h-5 w-5 text-green-600 mr-2" />
+                <Shield className="h-5 w-5 text-blue-600 mr-2" />
                 <span className="text-sm">SSL Encrypted</span>
               </div>
               <div className="flex items-center">
@@ -192,7 +192,7 @@ export default function Home() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-24 bg-gradient-to-r from-purple-600 to-blue-600">
+      <section className="py-24 bg-gradient-to-r from-purple-600 to-blue-600 ">
         <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
           <h2 className="text-4xl font-bold text-white mb-6">
             You Don't Have to Face This Alone

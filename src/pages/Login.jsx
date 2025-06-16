@@ -25,11 +25,7 @@ export default function Login() {
     <div className="min-h-[80vh] p-8 pt-16 rounded-xl flex">
       {/* Left Side - Welcome Message */}
       <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-purple-600 via-blue-600 to-indigo-700 relative overflow-hidden">
-        <div className="absolute inset-0 bg-[#A776B4] bg-opacity-20"
-        style={{
-        background: "linear-gradient(to right, #a776b4, #f3e8ff)",
-      }}
-        ></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-indigo-300 bg-opacity-20"></div>
         <div className="relative z-10 flex flex-col justify-center items-center p-12 text-white">
           <div className="max-w-md text-center space-y-6">
             <div className="flex justify-center mb-8">
@@ -46,8 +42,8 @@ export default function Login() {
               <p className="font-semibold text-blue-300">
                 We've got your back
               </p>
-              <p className="text-black leading-relaxed">
-                <span className="text-black">You're not alone </span>in this journey. Our platform provides a safe, confidential space where you can access support, resources, and connect with <span className="text-black">those who understand.</span>
+              <p className="text-White leading-relaxed">
+               You're not alone in this journey. Our platform provides a safe, confidential space where you can access support, resources, and connect with those who understand.
               </p>
             </div>
             
@@ -159,7 +155,7 @@ export default function Login() {
             <div>
               <button
                 onClick={handleSubmit}
-                className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-[#4C334C] bg-gradient-to-r hover:from-purple-700 hover:to-indigo-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition duration-200 ease-in-out transform hover:scale-105"
+                className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-gradient-to-r from-purple-600 to-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition duration-200 ease-in-out transform hover:scale-105"
               >
                 Sign In Securely
               </button>

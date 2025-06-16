@@ -23,7 +23,7 @@ import {
   Calendar
 } from 'lucide-react';
 
-export default function ResourcesPage() {
+export default function Resources() {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
   const [viewMode, setViewMode] = useState('grid'); // grid or list
@@ -116,7 +116,7 @@ export default function ResourcesPage() {
       rating: 4.7,
       isVerified: true,
       tags: ['Women\'s Rights', 'Legal Advocacy'],
-      website: 'https://fidakenya.org',
+      website: 'https://fidakenya.org/',
       location: 'Nairobi & Branches',
       lastUpdated: '2025-06-09'
     },

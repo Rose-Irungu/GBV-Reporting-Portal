@@ -11,7 +11,7 @@ export default function Report() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Optionally send data to a server here
+    // Optionally send data to a server here2
     setSubmitted(true); // Show thank you card
   };
 
@@ -31,7 +31,7 @@ export default function Report() {
           <h2 className="text-2xl font-bold text- mb-6">Need to Report Gender-Based Violence?</h2>
           <button
             onClick={() => setShowForm(true)}
-            className="bg-[#4C334C] text-white px-6 py-3 rounded hover:bg-[#CEA6CD] transition text-lg"
+            className="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-6 py-3 rounded transition duration-200 ease-in-out transform hover:scale-105 text-lg"
           >
             Start Reporting
           </button>
@@ -74,7 +74,7 @@ export default function Report() {
             </div>
             <button
               type="submit"
-              className="bg-[#4C334C] text-white px-4 py-2 rounded hover:bg-[#CEA6CD] transition"
+              className="bg-gradient-to-r from-purple-600 to-blue-600 transition duration-200 ease-in-out transform hover:scale-105 text-white px-4 py-2 rounded"
             >
               Submit Report
             </button>

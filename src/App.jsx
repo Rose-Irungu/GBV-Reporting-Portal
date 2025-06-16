@@ -7,7 +7,9 @@ import Report from './pages/Report';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Learn from './pages/Learn';
-// import Dashboard from './pages/Dashboard';
+import Contactus from './pages/Contactus';
+import Dashboard from './pages/Dashboard';
+import Services from './pages/Services'
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 
@@ -23,6 +25,9 @@ const App = () => {
         <Route path="/learn" element={<Learn />} /> 
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/contactus" element={<Contactus />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/services" element={<Services />} />
        
       </Routes>
       
