@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { 
   Search,
   Filter,
@@ -308,7 +309,7 @@ export default function Resources() {
                     className={`w-full flex items-center justify-between p-3 rounded-lg text-left transition-colors ${
                       selectedCategory === category.id
                         ? 'bg-purple-100 text-purple-700 border border-purple-200'
-                        : 'hover:bg-gray-50 text-gray-700'
+                        : 'hover:bg-gray-100 text-gray-700'
                     }`}
                   >
                     <div className="flex items-center space-x-3">
@@ -417,12 +418,12 @@ export default function Resources() {
                     <div className="flex space-x-2">
                       {resource.website && (
                         <button className="flex-1 bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors flex items-center justify-center space-x-2">
-                          <ExternalLink className="w-4 h-4" />
-                          <span>Visit</span>
+                          <ExternalLink className="w-4 h-4 " />
+                          <span><Link to="https://fidakenya.org/">Visit</Link></span>
                         </button>
                       )}
                       {resource.downloadUrl && (
-                        <button className="flex-1 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors flex items-center justify-center space-x-2">
+                        <button className="flex-1 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors flex items-center justify-center space-x-2 mt-22">
                         
                           <Download className="w-4 h-4" />
                           <span><a href='https://library.fes.de/pdf-files/bueros/mosambik/14983.pdf'>Download</a></span>
@@ -431,7 +432,7 @@ export default function Resources() {
                       {resource.contact && !resource.website && !resource.downloadUrl && (
                         <button className="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center space-x-2">
                           <Phone className="w-4 h-4" />
-                          <span>Contact</span>
+                          <span><Link to='/Contactus'>Contact</Link></span>
                         </button>
                       )}
                     </div>
