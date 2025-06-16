@@ -13,7 +13,7 @@ function Navbar() {
             <div className="bg-gradient-to-r from-purple-600 to-blue-400 p-2 rounded-lg">
                 <Shield className="h-6 w-6 text-white" />
             </div>
-            <span className="text-xl font-bold bg-gradient-to-r from-[#a776b4] to-[#f3e8ff] bg-clip-text text-transparent">
+            <span className="text-xl font-bold bg-gradient-to-r from-[#a776b4] to-purple-400 bg-clip-text text-transparent">
               SafeHaven
             </span>
           </div>
