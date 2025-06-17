@@ -9,7 +9,7 @@ import Signup from './pages/Signup';
 import Learn from './pages/Learn';
 import Contactus from './pages/Contactus';
 import Dashboard from './pages/Dashboard';
-import SuvivorDashboard from './pages/SuvivorDashboard';
+import SurvivorDashboard from './pages/SurvivorDashboard';
 import Services from './pages/Services'
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
@@ -29,7 +29,7 @@ const App = () => {
         <Route path="/contactus" element={<Contactus />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/services" element={<Services />} />
-        <Route path="/suvivordashboard" element={<SuvivorDashboard />} />
+        <Route path="/survivordashboard" element={<SurvivorDashboard />} />
        
       </Routes>
       
