@@ -22,7 +22,7 @@ import {
 
 const SurvivorsDashboard = () => {
   const [activeTab, setActiveTab] = useState('overview');
-  const [notifications, setNotifications] = useState(3);
+  const [notifications, setNotifications] = useState(4);
 
   // Mock data for demonstration
   const upcomingAppointments = [
