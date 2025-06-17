@@ -13,6 +13,7 @@ export default function Login() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [submitMessage, setSubmitMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [errors, setErrors] = useState({});
 
   const handleInputChange = (e) => {
     setFormData({
@@ -23,10 +24,39 @@ export default function Login() {
     if (errorMessage) {
       setErrorMessage("");
     }
+    // Clear field-specific errors
+    if (errors[e.target.name]) {
+      setErrors({ ...errors, [e.target.name]: "" });
+    }
+  };
+
+  // Validation function
+  const validateForm = () => {
+    const newErrors = {};
+    
+    if (!formData.email.trim()) {
+      newErrors.email = "Email is required";
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = "Please enter a valid email address";
+    }
+    
+    if (!formData.password.trim()) {
+      newErrors.password = "Password is required";
+    }
+    
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Validate form before submission
+    if (!validateForm()) {
+      setErrorMessage("Please fill in all required fields correctly.");
+      return;
+    }
+    
     setIsSubmitting(true);
     setErrorMessage("");
     
@@ -37,20 +67,7 @@ export default function Login() {
       // Simulate network delay
       await new Promise(resolve => setTimeout(resolve, 1500));
       
-      // Here you would make your actual API call
-      // const response = await fetch('/api/login', {
-      //   method: 'POST',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //   },
-      //   body: JSON.stringify(formData),
-      // });
-      // 
-      // if (!response.ok) {
-      //   throw new Error('Invalid credentials');
-      // }
-      
-      // For now, we'll simulate a successful login
+      // Simulate successful login
       setIsLoggedIn(true);
       setSubmitMessage(`Welcome back! You have successfully logged into your secure account.`);
       
@@ -69,6 +86,8 @@ export default function Login() {
       email: '',
       password: ''
     });
+    setErrors({});
+    setErrorMessage("");
   };
 
   if (isLoggedIn) {
@@ -98,7 +117,7 @@ export default function Login() {
               
               <div className="space-y-3">
                 <button className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white py-3 rounded-lg font-medium transition duration-200 ease-in-out transform hover:scale-105">
-                 <Link to="/SuvivorDashboard">Go to Dashboard</Link> 
+                 <Link to="/SurvivorDashboard">Go to Dashboard</Link> 
                 </button>
                 
                 <button
@@ -187,7 +206,8 @@ export default function Login() {
             </p>
           </div>
 
-          <div className="space-y-6">
+          {/* Form wrapper with onSubmit */}
+          <form onSubmit={handleSubmit} className="space-y-6">
             {/* Error Message */}
             {errorMessage && (
               <div className="p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg">
@@ -206,11 +226,14 @@ export default function Login() {
                 autoComplete="email"
                 required
                 disabled={isSubmitting}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition duration-200 ease-in-out disabled:bg-gray-100 disabled:cursor-not-allowed"
+                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition duration-200 ease-in-out disabled:bg-gray-100 disabled:cursor-not-allowed ${
+                  errors.email ? 'border-red-500' : 'border-gray-300'
+                }`}
                 placeholder="Enter your email"
                 value={formData.email}
                 onChange={handleInputChange}
               />
+              {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
             </div>
 
             <div>
@@ -225,7 +248,9 @@ export default function Login() {
                   autoComplete="current-password"
                   required
                   disabled={isSubmitting}
-                  className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition duration-200 ease-in-out disabled:bg-gray-100 disabled:cursor-not-allowed"
+                  className={`w-full px-4 py-3 pr-12 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition duration-200 ease-in-out disabled:bg-gray-100 disabled:cursor-not-allowed ${
+                    errors.password ? 'border-red-500' : 'border-gray-300'
+                  }`}
                   placeholder="Enter your password"
                   value={formData.password}
                   onChange={handleInputChange}
@@ -243,6 +268,7 @@ export default function Login() {
                   )}
                 </button>
               </div>
+              {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}
             </div>
 
             <div className="flex items-center justify-between">
@@ -268,7 +294,7 @@ export default function Login() {
 
             <div>
               <button
-                onClick={handleSubmit}
+                type="submit"
                 disabled={isSubmitting}
                 className="w-full flex justify-center items-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-gradient-to-r from-purple-600 to-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition duration-200 ease-in-out transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
               >
@@ -305,7 +331,7 @@ export default function Login() {
                 </div>
               </div>
             </div>
-          </div>
+          </form>
         </div>
       </div>
     </div>
