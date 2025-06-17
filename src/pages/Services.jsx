@@ -61,7 +61,7 @@ const Services = () => {
 
   const emergencyContacts = [
     { service: "Emergency Hotline", number: "911", description: "Immediate emergency response" },
-    { service: "GBV Helpline", number: "1-800-GBV-HELP", description: "24/7 support and counseling" },
+    { service: "GBV Helpline", number: "1-195-GBV-HELP", description: "24/7 support and counseling" },
     { service: "Legal Aid Hotline", number: "1-800-LEGAL-AID", description: "Free legal consultation" }
   ];
 
