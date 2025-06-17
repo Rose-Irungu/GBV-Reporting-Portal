@@ -4,11 +4,6 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { Shield, Heart, Users, Phone, MessageCircle, MapPin, ArrowRight, Menu, X, Star, CheckCircle } from 'lucide-react';
 
-
-
-
-
-
 export default function Home() {
 
   return (
