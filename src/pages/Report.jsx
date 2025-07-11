@@ -92,7 +92,7 @@ export default function Report() {
         >
           <h3 className="text-2xl font-bold text-white-700 mb-2">Thank you for your report</h3>
           <p className="text-white-800">
-            We've received your information. You're not alone — we've got your back and will get back to you as soon as possible.
+            We've received your information. You're not alone we've got your back and will get back to you as soon as possible.
           </p>
         </motion.div>
       )}

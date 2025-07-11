@@ -35,7 +35,7 @@ function Navbar() {
 
           <div className="hidden md:flex space-x-4">
               <button className="px-4 py-2 text-purple-600 hover:bg-purple-100 rounded-lg transition-colors">
-                <Link to="/signup">Sign In</Link>
+                <Link to="/signup">Sign Up</Link>
               </button>
                 <button className="px-4 py-3 bg-purple-600 text-white rounded-lg hover:shadow-lg transform hover:scale-105 transition-all">
                 <Link to="/login">Login</Link>

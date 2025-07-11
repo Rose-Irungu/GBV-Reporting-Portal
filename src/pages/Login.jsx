@@ -117,7 +117,7 @@ export default function Login() {
               
               <div className="space-y-3">
                 <button className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white py-3 rounded-lg font-medium transition duration-200 ease-in-out transform hover:scale-105">
-                 <Link to="/SurvivorDashboard">Go to Dashboard</Link> 
+                 <Link to="/Dashboard">Go to Dashboard</Link> 
                 </button>
                 
                 <button
