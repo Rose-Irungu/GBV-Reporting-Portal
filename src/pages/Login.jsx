@@ -147,7 +147,7 @@ export default function Login() {
     <div className="min-h-[80vh] p-8 pt-16 rounded-xl flex">
       {/* Left Side - Welcome Message */}
       <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-purple-600 via-blue-600 to-indigo-700 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-indigo-300 bg-opacity-20"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-purple-400 to-indigo-300 bg-opacity-20"></div>
         <div className="relative z-10 flex flex-col justify-center items-center p-12 text-white">
           <div className="max-w-md text-center space-y-6">
             <div className="flex justify-center mb-8">
@@ -178,9 +178,9 @@ export default function Login() {
         </div>
         
         {/* Decorative elements */}
-        <div className="absolute top-10 left-10 w-20 h-20 bg-purple-200 bg-opacity-10 rounded-full animate-bounce"></div>
+        {/* <div className="absolute top-10 left-10 w-20 h-20 bg-purple-200 bg-opacity-10 rounded-full animate-bounce"></div>
         <div className="absolute bottom-20 right-20 w-32 h-32 bg-purple-200 bg-opacity-5 rounded-full animate-bounce"></div>
-        <div className="absolute top-1/2 left-20 w-16 h-16 bg-purple-200 bg-opacity-10 rounded-full animate-bounce"></div>
+        <div className="absolute top-1/2 left-20 w-16 h-16 bg-purple-200 bg-opacity-10 rounded-full animate-bounce"></div> */}
       </div>
 
       {/* Right Side - Login Form */}

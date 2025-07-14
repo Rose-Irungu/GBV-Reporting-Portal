@@ -136,7 +136,7 @@ export default function Signup() {
 
   return (
     <div className="min-h-[80vh] p-8 pt-16 top-[64px] rounded-xl flex">
-      <div className="w-1/2 bg-gradient-to-r from-purple-600 to-indigo-300 text-white flex items-center justify-center p-10">
+      <div className="w-1/2 bg-gradient-to-r from-purple-400 to-indigo-300 text-white flex items-center justify-center p-10">
         <div>
           <h2 className="text-4xl font-bold mb-4">Hello, Friend!</h2>
           <p className="text-lg">
