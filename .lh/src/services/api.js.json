@@ -1,0 +1,22 @@
+{
+    "sourceFile": "src/services/api.js",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 1,
+            "patches": [
+                {
+                    "date": 1752598063217,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1752598071175,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,8 +1,8 @@\n import axios from 'axios';\r\n \r\n const api = axios.create({\r\n-  baseURL: 'http://127.0.0.1:8000', // Or your hosted backend\r\n+  baseURL: 'http://127.0.0.1:8000', \r\n   headers: {\r\n     'Content-Type': 'application/json',\r\n   },\r\n });\r\n"
+                }
+            ],
+            "date": 1752598063217,
+            "name": "Commit-0",
+            "content": "import axios from 'axios';\r\n\r\nconst api = axios.create({\r\n  baseURL: 'http://127.0.0.1:8000', // Or your hosted backend\r\n  headers: {\r\n    'Content-Type': 'application/json',\r\n  },\r\n});\r\n\r\nexport default api;\r\n"
+        }
+    ]
+}
