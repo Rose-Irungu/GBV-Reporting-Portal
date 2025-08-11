@@ -1,0 +1,62 @@
+{
+    "sourceFile": "src/components/GetStarted.jsx",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 11,
+            "patches": [
+                {
+                    "date": 1753427640922,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1753427646801,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,1 @@\n+ra\r\n"
+                },
+                {
+                    "date": 1753427657651,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,9 @@\n+import React from 'react'\r\n+\r\n+const GetStarted = () => {\r\n+  return (\r\n+    <div></div>\r\n+  )\r\n+}\r\n+\r\n+export default GetStarted\r\n"
+                },
+                {
+                    "date": 1753427666950,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,12 @@\n+import React from 'react'\r\n+\r\n+const GetStarted = () => {\r\n+  return (\r\n+    <div>\r\n+      \r\n+\r\n+    </div>\r\n+  )\r\n+}\r\n+\r\n+export default GetStarted\r\n"
+                },
+                {
+                    "date": 1753427675221,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,17 @@\n+import React from 'react'\r\n+\r\n+const GetStarted = () => {\r\n+  return (\r\n+    <div>\r\n+        <button className=\"px-4 py-2  text-purple-600 hover:bg-purple-100 rounded-full border-2  border-purple-400 hover:border-purple-300 hover:shadow-lg transition-all duration-300\">\r\n+                <Link to=\"/signup\">Get Started</Link>\r\n+              </button>\r\n+            <button className=\"px-4 py-2  text-purple-600 hover:bg-purple-100 rounded-full border-2  border-purple-400 hover:border-purple-300 hover:shadow-lg transition-all duration-300\">\r\n+                <Link to=\"/signup\">Get Started</Link>\r\n+              </button>    \r\n+\r\n+    </div>\r\n+  )\r\n+}\r\n+\r\n+export default GetStarted\r\n"
+                },
+                {
+                    "date": 1753427682034,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,9 +3,9 @@\n const GetStarted = () => {\r\n   return (\r\n     <div>\r\n         <button className=\"px-4 py-2  text-purple-600 hover:bg-purple-100 rounded-full border-2  border-purple-400 hover:border-purple-300 hover:shadow-lg transition-all duration-300\">\r\n-                <Link to=\"/signup\">Get Started</Link>\r\n+                <Link to=\"/signup\">L</Link>\r\n               </button>\r\n             <button className=\"px-4 py-2  text-purple-600 hover:bg-purple-100 rounded-full border-2  border-purple-400 hover:border-purple-300 hover:shadow-lg transition-all duration-300\">\r\n                 <Link to=\"/signup\">Get Started</Link>\r\n               </button>    \r\n"
+                },
+                {
+                    "date": 1753427690833,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,17 @@\n+import React from 'react'\r\n+\r\n+const GetStarted = () => {\r\n+  return (\r\n+    <div>\r\n+        <button className=\"px-4 py-2  text-purple-600 hover:bg-purple-100 rounded-full border-2  border-purple-400 hover:border-purple-300 hover:shadow-lg transition-all duration-300\">\r\n+                <Link to=\"/signup\">Login</Link>\r\n+              </button>\r\n+            <button className=\"px-4 py-2  text-purple-600 hover:bg-purple-100 rounded-full border-2  border-purple-400 hover:border-purple-300 hover:shadow-lg transition-all duration-300\">\r\n+                <Link to=\"/signup\"></Link>\r\n+              </button>    \r\n+\r\n+    </div>\r\n+  )\r\n+}\r\n+\r\n+export default GetStarted\r\n"
+                },
+                {
+                    "date": 1753427701509,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,17 @@\n+import React from 'react'\r\n+\r\n+const GetStarted = () => {\r\n+  return (\r\n+    <div>\r\n+        <button className=\"px-4 py-2  text-purple-600 hover:bg-purple-100 rounded-full border-2  border-purple-400 hover:border-purple-300 hover:shadow-lg transition-all duration-300\">\r\n+                <Link to=\"/login\">Login</Link>\r\n+              </button>\r\n+            <button className=\"px-4 py-2  text-purple-600 hover:bg-purple-100 rounded-full border-2  border-purple-400 hover:border-purple-300 hover:shadow-lg transition-all duration-300\">\r\n+                <Link to=\"/signup\">Sign up</Link>\r\n+              </button>    \r\n+\r\n+    </div>\r\n+  )\r\n+}\r\n+\r\n+export default GetStarted\r\n"
+                },
+                {
+                    "date": 1753428153360,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,19 @@\n+export default function AuthCard() {\r\n+  return (\r\n+    <div className=\"max-w-md mx-auto bg-white rounded-xl shadow-lg p-8 m-4\">\r\n+      <div className=\"text-center mb-6\">\r\n+        <h2 className=\"text-2xl font-bold text-gray-800 mb-2\">Welcome</h2>\r\n+        <p className=\"text-gray-600\">Please login or create an account to continue</p>\r\n+      </div>\r\n+      \r\n+      <div className=\"flex flex-col space-y-3\">\r\n+        <button className=\"px-4 py-2 text-purple-600 hover:bg-purple-100 rounded-full border-2 border-purple-400 hover:border-purple-300 hover:shadow-lg transition-all duration-300\">\r\n+          Login\r\n+        </button>\r\n+        <button className=\"px-4 py-2 text-purple-600 hover:bg-purple-100 rounded-full border-2 border-purple-400 hover:border-purple-300 hover:shadow-lg transition-all duration-300\">\r\n+          Sign up\r\n+        </button>    \r\n+      </div>\r\n+    </div>\r\n+  );\r\n+}\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1753428170687,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,20 @@\n+export default function AuthCard() {\r\n+  return (\r\n+    <div className=\"max-w-md mx-auto bg-white rounded-xl shadow-lg p-8 m-4\">\r\n+      <div className=\"text-center mb-6\">\r\n+        <h2 className=\"text-2xl font-bold text-gray-800 mb-2\">Welcome</h2>\r\n+        <p className=\"text-gray-600\">Please login or create an account to continue</p>\r\n+      </div>\r\n+      \r\n+      <div className=\"flex flex-col space-y-3\">\r\n+        <button className=\"px-4 py-2 text-purple-600 hover:bg-purple-100 rounded-full border-2 border-purple-400 hover:border-purple-300 hover:shadow-lg transition-all duration-300\">\r\n+          Login\r\n+          \r\n+        </button>\r\n+        <button className=\"px-4 py-2 text-purple-600 hover:bg-purple-100 rounded-full border-2 border-purple-400 hover:border-purple-300 hover:shadow-lg transition-all duration-300\">\r\n+          Sign up\r\n+        </button>    \r\n+      </div>\r\n+    </div>\r\n+  );\r\n+}\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1753428178256,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -8,9 +8,9 @@\n       \r\n       <div className=\"flex flex-col space-y-3\">\r\n         <button className=\"px-4 py-2 text-purple-600 hover:bg-purple-100 rounded-full border-2 border-purple-400 hover:border-purple-300 hover:shadow-lg transition-all duration-300\">\r\n           Login\r\n-               <Link to=\"/signup\">Get Started</Link>\r\n+               <Link to=\"/login\">Get Started</Link>\r\n         </button>\r\n         <button className=\"px-4 py-2 text-purple-600 hover:bg-purple-100 rounded-full border-2 border-purple-400 hover:border-purple-300 hover:shadow-lg transition-all duration-300\">\r\n           Sign up\r\n         </button>    \r\n"
+                },
+                {
+                    "date": 1753428187255,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,20 @@\n+export default function AuthCard() {\r\n+  return (\r\n+    <div className=\"max-w-md mx-auto bg-white rounded-xl shadow-lg p-8 m-4\">\r\n+      <div className=\"text-center mb-6\">\r\n+        <h2 className=\"text-2xl font-bold text-gray-800 mb-2\">Welcome</h2>\r\n+        <p className=\"text-gray-600\">Please login or create an account to continue</p>\r\n+      </div>\r\n+      \r\n+      <div className=\"flex flex-col space-y-3\">\r\n+        <button className=\"px-4 py-2 text-purple-600 hover:bg-purple-100 rounded-full border-2 border-purple-400 hover:border-purple-300 hover:shadow-lg transition-all duration-300\">\r\n+          Login\r\n+               <Link to=\"/login\">Login</Link>\r\n+        </button>\r\n+        <button className=\"px-4 py-2 text-purple-600 hover:bg-purple-100 rounded-full border-2 border-purple-400 hover:border-purple-300 hover:shadow-lg transition-all duration-300\">\r\n+          Sign up\r\n+        </button>    \r\n+      </div>\r\n+    </div>\r\n+  );\r\n+}\n\\ No newline at end of file\n"
+                }
+            ],
+            "date": 1753427640921,
+            "name": "Commit-0",
+            "content": "rafce\r\n"
+        }
+    ]
+}

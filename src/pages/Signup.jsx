@@ -1,9 +1,11 @@
 import React, { useState } from "react";
-import { Link  } from 'react-router-dom';
+import { Link } from "react-router-dom";
+import { signup as submitSignup } from "../services/auth";
 
 export default function Signup() {
   const [formData, setFormData] = useState({
-    name: "",
+    first_name: "",
+    last_name: "",
     email: "",
     password: "",
     role: "",
@@ -26,8 +28,12 @@ export default function Signup() {
   const validateForm = () => {
     const newErrors = {};
 
-    if (!formData.name.trim()) {
-      newErrors.name = "Name is required";
+    if (!formData.first_name?.trim()) {
+      newErrors.first_name = "First name is required";
+    }
+
+    if (!formData.last_name?.trim()) {
+      newErrors.last_name = "Last name is required";
     }
 
     if (!formData.email.trim()) {
@@ -64,8 +70,13 @@ export default function Signup() {
     try {
       console.log("Form submitted:", formData);
 
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      await submitSignup({
+        email: formData.email,
+        password: formData.password,
+        role: formData.role,
+        first_name: formData.first_name,
+        last_name: formData.last_name,
+      });
 
       setSubmitMessage(
         `Welcome ${formData.name}! Your ${formData.role} account has been created successfully.`
@@ -73,49 +84,60 @@ export default function Signup() {
       setIsSubmitted(true);
 
       setFormData({
-        name: "",
+        first_name: "",
+        last_name: "",
         email: "",
         password: "",
         role: "",
       });
 
-      // Start countdown and redirect with visual counter
       let timeLeft = 3;
       setCountdown(timeLeft);
-      
+
       const countdownInterval = setInterval(() => {
         timeLeft -= 1;
         setCountdown(timeLeft);
-        
+
         if (timeLeft === 0) {
           clearInterval(countdownInterval);
         }
       }, 1000);
-
     } catch (error) {
       console.error("Submission error:", error);
-      setSubmitMessage("There was an error creating your account. Please try again.");
+      setSubmitMessage(
+        "There was an error creating your account. Please try again."
+      );
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const handleGoToLogin = () => {
-    // In a real app, this would be: navigate("/signin");
-  };
+  const handleGoToLogin = () => {};
 
   if (isSubmitted) {
     return (
-      <div className="min-h-[80vh] p-8 pt-16 rounded-xl flex">
-        <div className="w-full flex items-center justify-center bg-gray-100">
+      <div className="min-h-[80vh] p-8 pt-16 rounded-xl flex  ">
+        <div className="w-full flex items-center justify-center bg-gray-100 ">
           <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md text-center">
             <div className="mb-6">
               <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+                <svg
+                  className="w-8 h-8 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M5 13l4 4L19 7"
+                  ></path>
                 </svg>
               </div>
-              <h2 className="text-2xl font-bold mb-4 text-[#5b3c5a]">Account Created Successfully!</h2>
+              <h2 className="text-2xl font-bold mb-4 text-[#5b3c5a]">
+                Account Created Successfully!
+              </h2>
               <p className="text-gray-600 mb-6">{submitMessage}</p>
               <p className="text-sm text-gray-500 mb-4">
                 Redirecting to login in {countdown} seconds...
@@ -124,8 +146,7 @@ export default function Signup() {
                 onClick={handleGoToLogin}
                 className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-indigo-400 text-white py-2 px-6 rounded transition duration-200 ease-in-out transform hover:scale-105"
               >
-                <Link to="/Login">Go to Login Now</Link> 
-                
+                <Link to="/Login">Go to Login Now</Link>
               </button>
             </div>
           </div>
@@ -135,12 +156,13 @@ export default function Signup() {
   }
 
   return (
-    <div className="min-h-[80vh] p-8 pt-16 top-[64px] rounded-xl flex">
+    <div className="min-h-[80vh] p-8 pt-[16px] top-[64px] rounded-xl flex">
       <div className="w-1/2 bg-gradient-to-r from-purple-400 to-indigo-300 text-white flex items-center justify-center p-10">
         <div>
           <h2 className="text-4xl font-bold mb-4">Hello, Friend!</h2>
           <p className="text-lg">
-            You're one step closer to supporting survivors. Create an admin or specialist account to begin.
+            You're one step closer to supporting survivors. Create an admin or
+            specialist account to begin.
           </p>
         </div>
       </div>
@@ -157,19 +179,39 @@ export default function Signup() {
             )}
 
             <div className="mb-4">
-              <label className="block text-gray-700 mb-1">Name</label>
+              <label className="block text-gray-700 mb-1">First Name</label>
               <input
                 type="text"
-                name="name"
-                value={formData.name}
+                name="first_name"
+                value={formData.first_name}
                 onChange={handleChange}
                 required
                 disabled={isSubmitting}
                 className={`w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-purple-500 disabled:bg-gray-100 disabled:cursor-not-allowed ${
-                  errors.name ? "border-red-500" : ""
+                  errors.first_name ? "border-red-500" : ""
                 }`}
               />
-              {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
+              {errors.first_name && (
+                <p className="text-red-500 text-sm mt-1">{errors.first_name}</p>
+              )}
+            </div>
+
+            <div className="mb-4">
+              <label className="block text-gray-700 mb-1">Last Name</label>
+              <input
+                type="text"
+                name="last_name"
+                value={formData.last_name}
+                onChange={handleChange}
+                required
+                disabled={isSubmitting}
+                className={`w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-purple-500 disabled:bg-gray-100 disabled:cursor-not-allowed ${
+                  errors.last_name ? "border-red-500" : ""
+                }`}
+              />
+              {errors.last_name && (
+                <p className="text-red-500 text-sm mt-1">{errors.last_name}</p>
+              )}
             </div>
 
             <div className="mb-4">
@@ -185,7 +227,9 @@ export default function Signup() {
                   errors.email ? "border-red-500" : ""
                 }`}
               />
-              {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
+              {errors.email && (
+                <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+              )}
             </div>
 
             <div className="mb-4">
@@ -201,7 +245,9 @@ export default function Signup() {
                   errors.password ? "border-red-500" : ""
                 }`}
               />
-              {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}
+              {errors.password && (
+                <p className="text-red-500 text-sm mt-1">{errors.password}</p>
+              )}
             </div>
 
             <div className="mb-6">
@@ -216,12 +262,14 @@ export default function Signup() {
                 }`}
               >
                 <option value="">Select your role</option>
-                <option value="admin">Admin</option>
+
                 <option value="doctor">Doctor</option>
                 <option value="counselor">Counselor</option>
                 <option value="lawyer">Lawyer</option>
               </select>
-              {errors.role && <p className="text-red-500 text-sm mt-1">{errors.role}</p>}
+              {errors.role && (
+                <p className="text-red-500 text-sm mt-1">{errors.role}</p>
+              )}
             </div>
 
             <button
@@ -237,7 +285,14 @@ export default function Signup() {
                     fill="none"
                     viewBox="0 0 24 24"
                   >
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    />
                     <path
                       className="opacity-75"
                       fill="currentColor"

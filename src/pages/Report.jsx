@@ -68,11 +68,11 @@ export default function Report() {
     setError(null);
 
     try {
-      const response = await submitReport(formData); // actual API call
+      const response = await submitReport(formData); 
       setReferenceCode(response.reference_code);
       setSubmitted(true);
     } catch (err) {
-      console.error("API error:", err);
+    
       setError("Failed to submit report. Please try again.");
     } finally {
       setLoading(false);

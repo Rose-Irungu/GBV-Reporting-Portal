@@ -1,0 +1,98 @@
+{
+    "sourceFile": "src/services/auth.js",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 20,
+            "patches": [
+                {
+                    "date": 1752822527826,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1752822635983,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,6 +1,6 @@\n import api from './api';\r\n-import { API_ENDPOINTS } from \"../utils/constants\";\r\n+import { API_ENDPOINTS } from \";\r\n \r\n export const loginUser = async (credentials) => {\r\n   const response = await api.post(API_ENDPOINTS.LOGIN, credentials);\r\n   return response.data;\r\n"
+                },
+                {
+                    "date": 1752822642235,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,7 @@\n+import api from './api';\r\n+import { API_ENDPOINTS } from \"../\";\r\n+\r\n+export const loginUser = async (credentials) => {\r\n+  const response = await api.post(API_ENDPOINTS.LOGIN, credentials);\r\n+  return response.data;\r\n+};\r\n"
+                },
+                {
+                    "date": 1752822647930,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,7 @@\n+import api from './api';\r\n+import { API_ENDPOINTS } from \"../utils/\";\r\n+\r\n+export const loginUser = async (credentials) => {\r\n+  const response = await api.post(API_ENDPOINTS.LOGIN, credentials);\r\n+  return response.data;\r\n+};\r\n"
+                },
+                {
+                    "date": 1752822656559,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,7 @@\n+import api from './api';\r\n+import { API_ENDPOINTS } from \"../utils/c\";\r\n+\r\n+export const loginUser = async (credentials) => {\r\n+  const response = await api.post(API_ENDPOINTS.LOGIN, credentials);\r\n+  return response.data;\r\n+};\r\n"
+                },
+                {
+                    "date": 1752822697939,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,28 +1,7 @@\n import api from './api';\r\n-import { API_ENDPOINTS } from \"../utils/c\";\r\n+import { API_ENDPOINTS } from \"../utils/constants\";\r\n \r\n export const loginUser = async (credentials) => {\r\n   const response = await api.post(API_ENDPOINTS.LOGIN, credentials);\r\n   return response.data;\r\n };\r\n-import api from './api';\r\n-import { API_ENDPOINTS } from \"../utils/\";\r\n-\r\n-export const loginUser = async (credentials) => {\r\n-  const response = await api.post(API_ENDPOINTS.LOGIN, credentials);\r\n-  return response.data;\r\n-};\r\n-import api from './api';\r\n-import { API_ENDPOINTS } from \"../\";\r\n-\r\n-export const loginUser = async (credentials) => {\r\n-  const response = await api.post(API_ENDPOINTS.LOGIN, credentials);\r\n-  return response.data;\r\n-};\r\n-import api from './api';\r\n-import { API_ENDPOINTS } from \";\r\n-\r\n-export const loginUser = async (credentials) => {\r\n-  const response = await api.post(API_ENDPOINTS.LOGIN, credentials);\r\n-  return response.data;\r\n-};\r\n"
+                },
+                {
+                    "date": 1752822797869,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,6 +1,6 @@\n import api from './api';\r\n-import { API_ENDPOINTS } from \"../utils/constants\";\r\n+import { API_ENDPOINTS } from \"../utils/onstants\";\r\n \r\n export const loginUser = async (credentials) => {\r\n   const response = await api.post(API_ENDPOINTS.LOGIN, credentials);\r\n   return response.data;\r\n"
+                },
+                {
+                    "date": 1752822806328,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,7 @@\n+import api from './api';\r\n+import { API_ENDPOINTS } from \"../utils/onstants\";\r\n+\r\n+export const loginUser = async (credentials) => {\r\n+  const response = await api.post(API_ENDPOINTS.LOGIN, credentials);\r\n+  return response.data;\r\n+};\r\n"
+                },
+                {
+                    "date": 1752823057999,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,6 @@\n+import api from './api\r\n+\r\n+export const loginUser = async (credentials) => {\r\n+  const response = await api.post(API_ENDPOINTS.LOGIN, credentials);\r\n+  return response.data;\r\n+};\r\n"
+                },
+                {
+                    "date": 1752823063667,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,7 @@\n+import api from './api';\r\n+imprt\r\n+\r\n+export const loginUser = async (credentials) => {\r\n+  const response = await api.post(API_ENDPOINTS.LOGIN, credentials);\r\n+  return response.data;\r\n+};\r\n"
+                },
+                {
+                    "date": 1752828667604,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,5 +3,5 @@\n \r\n export const loginUser = async (credentials) => {\r\n   const response = await api.post(API_ENDPOINTS.LOGIN, credentials);\r\n   return response.data;\r\n-};\r\n\\ No newline at end of file\n+};\r\n"
+                },
+                {
+                    "date": 1752828680963,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,7 @@\n+import api from './api';\r\n+\r\n+\r\n+export const loginUser = async (credentials) => {\r\n+  const response = await api.post(API_ENDPOINTS.LOGIN, credentials);\r\n+  return response.data;\r\n+};\r\n"
+                },
+                {
+                    "date": 1752828758406,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,35 +1,7 @@\n import api from './api';\r\n-\r\n-\r\n-export const loginUser = async (credentials) => {\r\n-  const response = await api.post(API_ENDPOINTS.LOGIN, credentials);\r\n-  return response.data;\r\n-};\r\n-import api from './api';\r\n-imprt\r\n-\r\n-export const loginUser = async (credentials) => {\r\n-  const response = await api.post(API_ENDPOINTS.LOGIN, credentials);\r\n-  return response.data;\r\n-};\r\n-import api from './api\r\n-\r\n-export const loginUser = async (credentials) => {\r\n-  const response = await api.post(API_ENDPOINTS.LOGIN, credentials);\r\n-  return response.data;\r\n-};\r\n-import api from './api';\r\n import { API_ENDPOINTS } from \"../utils/onstants\";\r\n \r\n export const loginUser = async (credentials) => {\r\n   const response = await api.post(API_ENDPOINTS.LOGIN, credentials);\r\n   return response.data;\r\n };\r\n-import api from './api';\r\n-import { API_ENDPOINTS } from \"../utils/onstants\";\r\n-\r\n-export const loginUser = async (credentials) => {\r\n-  const response = await api.post(API_ENDPOINTS.LOGIN, credentials);\r\n-  return response.data;\r\n-};\r\n-\n"
+                },
+                {
+                    "date": 1752828776698,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,6 +1,6 @@\n import api from './api';\r\n-import { API_ENDPOINTS } from \"../utils/onstants\";\r\n+import { API_ENDPOINTS } from \"../utils/Constants\";\r\n \r\n export const loginUser = async (credentials) => {\r\n   const response = await api.post(API_ENDPOINTS.LOGIN, credentials);\r\n   return response.data;\r\n"
+                },
+                {
+                    "date": 1753279697683,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,7 +1,7 @@\n import api from './api';\r\n-import { API_ENDPOINTS } from \"../utils/Constants\";\r\n+import { API_ENDPOINTS } from \"../utils/constants\";\r\n \r\n-export const loginUser = async (credentials) => {\r\n-  const response = await api.post(API_ENDPOINTS.LOGIN, credentials);\r\n+export const submitReport = async (formData) => {\r\n+  const response = await api.post(API_ENDPOINTS.SUBMIT_REPORT, formData);\r\n   return response.data;\r\n };\r\n"
+                },
+                {
+                    "date": 1753279707176,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,7 +1,7 @@\n import api from './api';\r\n import { API_ENDPOINTS } from \"../utils/constants\";\r\n \r\n export const submitReport = async (formData) => {\r\n-  const response = await api.post(API_ENDPOINTS.SUBMIT_REPORT, formData);\r\n+  const response = await api.post(API_ENDPOINTS.S, formData);\r\n   return response.data;\r\n };\r\n"
+                },
+                {
+                    "date": 1753279714263,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,7 @@\n+import api from './api';\r\n+import { API_ENDPOINTS } from \"../utils/constants\";\r\n+\r\n+export const submitReport = async (formData) => {\r\n+  const response = await api.post(API_ENDPOINTS.SI, formData);\r\n+  return response.data;\r\n+};\r\n"
+                },
+                {
+                    "date": 1753281286883,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,14 +1,7 @@\n import api from './api';\r\n import { API_ENDPOINTS } from \"../utils/constants\";\r\n \r\n-export const submitReport = async (formData) => {\r\n-  const response = await api.post(API_ENDPOINTS.SI, formData);\r\n+export const sign = async (formData) => {\r\n+  const response = await api.post(API_ENDPOINTS.SIGN_UP, formData);\r\n   return response.data;\r\n };\r\n-import api from './api';\r\n-import { API_ENDPOINTS } from \"../utils/constants\";\r\n-\r\n-export const submitReport = async (formData) => {\r\n-  const response = await api.post(API_ENDPOINTS.S, formData);\r\n-  return response.data;\r\n-};\r\n"
+                },
+                {
+                    "date": 1753428536732,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,7 +1,8 @@\n import api from './api';\r\n import { API_ENDPOINTS } from \"../utils/constants\";\r\n \r\n-export const sign = async (formData) => {\r\n+export const signup = async (formData) => {\r\n   const response = await api.post(API_ENDPOINTS.SIGN_UP, formData);\r\n   return response.data;\r\n };\r\n+\r\n"
+                },
+                {
+                    "date": 1753428544121,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,11 @@\n+import api from './api';\r\n+import { API_ENDPOINTS } from \"../utils/constants\";\r\n+\r\n+export const signup = async (formData) => {\r\n+  const response = await api.post(API_ENDPOINTS.SIGN_UP, formData);\r\n+  return response.data;\r\n+};\r\n+export const login = async (formData) => {\r\n+  const response = await api.post(API_ENDPOINTS.SIGN_UP, formData);\r\n+  return response.data;\r\n+};\r\n"
+                },
+                {
+                    "date": 1753428552869,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,11 @@\n+import api from './api';\r\n+import { API_ENDPOINTS } from \"../utils/constants\";\r\n+\r\n+export const signup = async (formData) => {\r\n+  const response = await api.post(API_ENDPOINTS.SIGN_UP, formData);\r\n+  return response.data;\r\n+};\r\n+export const login = async (formData) => {\r\n+  const response = await api.post(API_ENDPOINTS.LO, formData);\r\n+  return response.data;\r\n+};\r\n"
+                }
+            ],
+            "date": 1752822527826,
+            "name": "Commit-0",
+            "content": "import api from './api';\r\nimport { API_ENDPOINTS } from \"../utils/constants\";\r\n\r\nexport const loginUser = async (credentials) => {\r\n  const response = await api.post(API_ENDPOINTS.LOGIN, credentials);\r\n  return response.data;\r\n};\r\n"
+        }
+    ]
+}

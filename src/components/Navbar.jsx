@@ -34,12 +34,11 @@ function Navbar() {
           </div>
 
           <div className="hidden md:flex space-x-4">
-              <button className="px-4 py-2 text-purple-600 hover:bg-purple-100 rounded-lg transition-colors">
-                <Link to="/signup">Sign Up</Link>
+             
+               <button className="px-4 py-2  text-purple-600 hover:bg-purple-100 rounded-full border-2  border-purple-400 hover:border-purple-300 hover:shadow-lg transition-all duration-300">
+                <Link to="/getstarted">Get Started</Link>
               </button>
-                <button className="px-4 py-3 bg-purple-600 text-white rounded-lg hover:shadow-lg transform hover:scale-105 transition-all">
-                <Link to="/login">Login</Link>
-              </button>
+              
             <button className="px-4 py-2 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg hover:shadow-lg transform hover:scale-105 transition-all">
               <Link to="/report">Get Help Now</Link>
             </button>
