@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Eye, EyeOff, Shield, Heart } from 'lucide-react';
+import { Eye, EyeOff, Shield, Heart, X } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { login } from '../services/auth'; 
 
@@ -11,6 +11,9 @@ export default function Login() {
   const [submitMessage, setSubmitMessage] = useState('');
 
   const navigate = useNavigate();
+   const handleEmergencyExit = () => {
+    window.location.replace("https://poki.com/en/g/subway-surfers");
+  };
 
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -72,6 +75,13 @@ export default function Login() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 p-6">
+       <button
+        onClick={handleEmergencyExit}
+        className="fixed bottom-4 right-4 z-50 bg-red-600 text-white px-6 py-3 rounded-full font-bold hover:bg-red-700 transition-all shadow-lg flex items-center gap-2"
+      >
+        <X className="w-5 h-5" />
+        Quick Exit
+      </button>
       <div className="max-w-md w-full bg-white rounded-xl shadow-md p-8 space-y-6">
         <div className="flex justify-center items-center gap-2 mb-4 text-primary font-semibold text-xl">
           <Shield className="w-6 h-6" /> Secure Login <Heart className="w-6 h-6 text-red-500" />
@@ -135,9 +145,9 @@ export default function Login() {
             </button>
 
             <div className="text-center text-sm">
-              Don't have an account?{' '}
+            
               <Link to="/signup" className="text-blue-600 hover:underline">
-                Register here
+                Forgot Password?
               </Link>
             </div>
           </form>

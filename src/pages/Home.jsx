@@ -2,13 +2,22 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import { Shield, Heart, Users, Phone, MessageCircle, MapPin, ArrowRight, Menu, X, Star, CheckCircle } from 'lucide-react';
+import { Shield, Heart, Users, Phone, MessageCircle, MapPin, ArrowRight, Menu, X, Star, CheckCircle} from 'lucide-react';
 
 export default function Home() {
+ const handleEmergencyExit = () => {
+    window.location.replace("https://poki.com/en/g/subway-surfers");
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50">
-     
+      <button
+        onClick={handleEmergencyExit}
+        className="fixed bottom-4 right-4 z-50 bg-red-600 text-white px-6 py-3 rounded-full font-bold hover:bg-red-700 transition-all shadow-lg flex items-center gap-2"
+      >
+        <X className="w-5 h-5" />
+        Quick Exit
+      </button>
 
       {/* Hero Section */}
       <section id="home" className="pt-10 pb-32 px-4 sm:px-6 lg:px-8">
@@ -143,8 +152,8 @@ export default function Home() {
                     <Heart className="h-6 w-6 text-blue-600" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">Anonymous Support</h3>
-                    <p className="text-gray-600">Access help without revealing your identity. No registration required for crisis support.</p>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">Secure Help Line</h3>
+                    <p className="text-gray-600">Reach our Secure Help Line for crisis support — no registration, no identity needed.</p>
                   </div>
                 </div>
                 <div className="flex items-start space-x-4">

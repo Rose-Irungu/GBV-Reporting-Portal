@@ -24,8 +24,14 @@ const App = () => {
 
   // Routes where Navbar and Footer should be hidden
   const hiddenOnRoutes = [
-    "/dashboard",
-    "/survivor",
+    
+    "/survivor-dashboard",
+    "/admin-dashboard",
+    "/doctor-dashboard" ,
+    "/lawyer-dashboard",
+    "/counselor-dashboard",
+
+
     // add more paths here if needed
   ];
 

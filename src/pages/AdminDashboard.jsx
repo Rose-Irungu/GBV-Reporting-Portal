@@ -9,13 +9,9 @@ import {
   Search,
   Filter,
   AlertTriangle,
-  CheckCircle,
   Clock,
   User,
   MapPin,
-  Phone,
-  Mail,
-  Calendar,
   TrendingUp,
   Activity,
   Eye,
@@ -26,7 +22,6 @@ import {
   Download,
   Plus,
   AlertCircle,
-  ChevronRight,
   Home
 } from 'lucide-react';
 
@@ -67,10 +62,8 @@ const GBVAdminDashboard = () => {
     { id: 'dashboard', label: 'Dashboard', icon: Home },
     { id: 'reports', label: 'Reports', icon: FileText, badge: '24' },
     { id: 'users', label: 'Users', icon: Users },
-    { id: 'analytics', label: 'Analytics', icon: BarChart3 },
-    { id: 'safety', label: 'Safety', icon: Shield, badge: '3' },
     { id: 'settings', label: 'Settings', icon: Settings },
-    { id: 'audit', label: 'Audit Logs', icon: Activity }
+    
   ];
 
   const StatCard = ({ title, value, icon: Icon, color, trend }) => (
@@ -316,27 +309,27 @@ const GBVAdminDashboard = () => {
             {/* Stats Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               <StatCard
-                title="Active Reports"
+                title="Total Reports"
                 value={stats.activeReports}
                 icon={FileText}
                 color="text-blue-600"
                 trend="+12% this week"
               />
               <StatCard
-                title="Pending Assignments"
+                title="Pending Cases"
                 value={stats.pendingAssignments}
                 icon={Clock}
                 color="text-orange-600"
               />
               <StatCard
-                title="Avg Response Time"
+                title="In Progress"
                 value={stats.avgResponseTime}
                 icon={Activity}
                 color="text-green-600"
                 trend="-0.5h improved"
               />
               <StatCard
-                title="Online Responders"
+                title="Resolved Cases"
                 value={stats.onlineResponders}
                 icon={Users}
                 color="text-purple-600"
@@ -366,24 +359,7 @@ const GBVAdminDashboard = () => {
               <div className="lg:col-span-2">
                 <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
                   <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
-                    <button className="flex flex-col items-center p-3 border border-gray-200 rounded-lg hover:bg-gray-50">
-                      <Plus className="w-6 h-6 text-blue-600 mb-2" />
-                      <span className="text-sm text-gray-700">New Report</span>
-                    </button>
-                    <button className="flex flex-col items-center p-3 border border-gray-200 rounded-lg hover:bg-gray-50">
-                      <UserCheck className="w-6 h-6 text-green-600 mb-2" />
-                      <span className="text-sm text-gray-700">Bulk Assign</span>
-                    </button>
-                    <button className="flex flex-col items-center p-3 border border-gray-200 rounded-lg hover:bg-gray-50">
-                      <Download className="w-6 h-6 text-purple-600 mb-2" />
-                      <span className="text-sm text-gray-700">Generate Report</span>
-                    </button>
-                    <button className="flex flex-col items-center p-3 border border-gray-200 rounded-lg hover:bg-gray-50">
-                      <AlertCircle className="w-6 h-6 text-red-600 mb-2" />
-                      <span className="text-sm text-gray-700">Emergency Alert</span>
-                    </button>
-                  </div>
+                
                   
                   <h4 className="text-md font-medium text-gray-900 mb-3">Recent Activity</h4>
                   <div className="space-y-3">
@@ -403,10 +379,7 @@ const GBVAdminDashboard = () => {
                     </div>
                     <div className="flex items-center p-3 bg-gray-50 rounded-lg">
                       <div className="w-2 h-2 bg-orange-500 rounded-full mr-3"></div>
-                      <div className="flex-1">
-                        <p className="text-sm text-gray-900">Responder John Mwangi logged off</p>
-                        <p className="text-xs text-gray-500">1 hour ago</p>
-                      </div>
+                     
                     </div>
                   </div>
                 </div>
@@ -437,38 +410,6 @@ const GBVAdminDashboard = () => {
           </div>
         );
       
-      case 'analytics':
-        return (
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Analytics & Insights</h2>
-            <p className="text-gray-600">Analytics dashboard with charts, trends, and reporting tools would be implemented here.</p>
-          </div>
-        );
-      
-      case 'safety':
-        return (
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <div className="flex items-center mb-6">
-              <Shield className="w-6 h-6 text-red-600 mr-2" />
-              <h2 className="text-2xl font-bold text-gray-900">Safety Monitoring</h2>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-                <h3 className="font-semibold text-red-800 mb-2">Security Alerts</h3>
-                <p className="text-red-700 text-sm">3 active security alerts requiring attention</p>
-              </div>
-              <div className="bg-orange-50 border border-orange-200 rounded-lg p-4">
-                <h3 className="font-semibold text-orange-800 mb-2">Pattern Detection</h3>
-                <p className="text-orange-700 text-sm">Monitoring for suspicious activity patterns</p>
-              </div>
-              <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-                <h3 className="font-semibold text-green-800 mb-2">System Status</h3>
-                <p className="text-green-700 text-sm">All systems operational and secure</p>
-              </div>
-            </div>
-          </div>
-        );
-      
       case 'settings':
         return (
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
@@ -495,13 +436,7 @@ const GBVAdminDashboard = () => {
           </div>
         );
       
-      case 'audit':
-        return (
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Audit Logs</h2>
-            <p className="text-gray-600">Comprehensive audit trail and compliance monitoring tools would be implemented here.</p>
-          </div>
-        );
+     
       
       default:
         return null;

@@ -9,6 +9,7 @@ import {
   Eye,
   EyeOff,
 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { submitReport } from "../services/reportService";
 export default function Report() {
   const [showForm, setShowForm] = useState(false);
@@ -20,6 +21,12 @@ export default function Report() {
   const [trackingCode, setTrackingCode] = useState("");
   const [trackingResult, setTrackingResult] = useState(null);
   const [showEmergencyAlert, setShowEmergencyAlert] = useState(false);
+
+  const navigate = useNavigate();
+  const handleLoginClick = () => {
+    navigate = ("/login");
+  }
+
 
   const API_BASE_URL = "http://localhost:8000/api";
 
@@ -39,6 +46,7 @@ export default function Report() {
   const handleEmergencyExit = () => {
     window.location.replace("https://poki.com/en/g/subway-surfers");
   };
+
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -143,7 +151,7 @@ export default function Report() {
               </button>
 
               <button
-                onClick={() => setShowTracking(true)}
+                onClick={handleLoginClick}
                 className="w-full sm:w-auto bg-white text-purple-600 px-8 py-4 rounded-lg text-lg font-semibold border-2 border-purple-600 hover:bg-purple-50 ml-0 sm:ml-4 transition-all"
               >
                 Track Existing Report
@@ -463,7 +471,7 @@ export default function Report() {
           </motion.div>
         )}
 
-        {showTracking && !submitted && (
+        {/* {showTracking && !submitted && (
           <motion.div
             initial={{ opacity: 0, x: 100 }}
             animate={{ opacity: 1, x: 0 }}
@@ -547,7 +555,7 @@ export default function Report() {
               </div>
             </div>
           </motion.div>
-        )}
+        )} */}
 
         {/* Success Message */}
         {submitted && (

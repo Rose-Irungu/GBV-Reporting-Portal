@@ -36,7 +36,7 @@ function Navbar() {
           <div className="hidden md:flex space-x-4">
              
                <button className="px-4 py-2  text-purple-600 hover:bg-purple-100 rounded-full border-2  border-purple-400 hover:border-purple-300 hover:shadow-lg transition-all duration-300">
-                <Link to="/getstarted">Get Started</Link>
+                <Link to="/login">Get Started</Link>
               </button>
               
             <button className="px-4 py-2 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg hover:shadow-lg transform hover:scale-105 transition-all">
@@ -62,7 +62,7 @@ function Navbar() {
             <a href="/resources" className="block px-3 py-2 text-gray-700 hover:bg-purple-50 rounded-md">Resources</a>
             <a href="#contact" className="block px-3 py-2 text-gray-700 hover:bg-purple-50 rounded-md">Contact</a>
             <div className="flex flex-col space-y-2 px-3 pt-2">
-              <button className="px-4 py-2 text-purple-600 border border-purple-200 rounded-lg">Sign In</button>
+              {/* <button className="px-4 py-2 text-purple-600 border border-purple-200 rounded-lg">Sign In</button> */}
               <button className="px-4 py-2 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg">Get Help Now</button>
             </div>
           </div>

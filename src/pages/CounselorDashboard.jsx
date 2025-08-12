@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Calendar, Clock, FileText, MessageCircle, UserCheck, Upload, Phone, Video, Mail, Download, Plus, Edit, Check, AlertCircle, Heart, Shield, BookOpen, Users } from 'lucide-react';
+import { Link, useNavigate } from "react-router-dom";
 
 const CounselorDashboard = () => {
   const [activeTab, setActiveTab] = useState('reports');
@@ -7,6 +8,8 @@ const CounselorDashboard = () => {
   const [showNewSession, setShowNewSession] = useState(false);
   const [showScheduleForm, setShowScheduleForm] = useState(false);
   const [newSessionNotes, setNewSessionNotes] = useState('');
+  const navigate = useNavigate();
+
 
   // Mock data for demonstration
   const [reports] = useState([
@@ -299,7 +302,7 @@ const CounselorDashboard = () => {
               { id: 'sessions', label: 'Counseling Sessions', icon: MessageCircle },
               { id: 'appointments', label: 'Appointments', icon: Calendar },
               { id: 'resources', label: 'Support Resources', icon: BookOpen },
-              { id: 'referrals', label: 'Referrals', icon: Users }
+              
             ].map((tab) => {
               const Icon = tab.icon;
               return (
@@ -547,11 +550,10 @@ const CounselorDashboard = () => {
                   <div className="flex gap-2">
                     <button className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm">
                       <Download className="w-4 h-4" />
-                      Download
+                    
+                      Download 
                     </button>
-                    <button className="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 text-sm">
-                      Share
-                    </button>
+                   
                   </div>
                 </div>
               ))}
