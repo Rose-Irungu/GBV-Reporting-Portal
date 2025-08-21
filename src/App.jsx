@@ -32,7 +32,7 @@ const App = () => {
     "/counselor-dashboard",
 
 
-    // add more paths here if needed
+   
   ];
 
   const shouldHideNavbar = hiddenOnRoutes.includes(location.pathname);

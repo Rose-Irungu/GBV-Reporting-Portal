@@ -302,7 +302,6 @@ export default function Report() {
                       <option value="physical">Physical Violence</option>
                       <option value="sexual">Sexual Violence</option>
                       <option value="emotional">Emotional/Psychological</option>
-                      <option value="economic">Economic Violence</option>
                       <option value="other">Other</option>
                     </select>
                   </div>

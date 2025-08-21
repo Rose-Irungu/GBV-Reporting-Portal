@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { 
   Shield, 
   Users, 
@@ -25,45 +25,35 @@ import {
   Home
 } from 'lucide-react';
 
-const GBVAdminDashboard = () => {
+const GBVAdminDashboard = ({ 
+  urgentReports = [], 
+  stats = {}, 
+  reports = [], 
+  platformName = "GBV Reporting Platform",
+  adminUser = { name: "Admin User", role: "Super Administrator" },
+  onAssignReport = () => {},
+  onViewReport = () => {},
+  onCreateReport = () => {},
+  onFilterReports = () => {},
+  onSearchReports = () => {}
+}) => {
   const [activeSection, setActiveSection] = useState('dashboard');
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [urgentReports, setUrgentReports] = useState([]);
-  const [stats, setStats] = useState({
-    activeReports: 24,
-    pendingAssignments: 8,
-    avgResponseTime: '2.3h',
-    onlineResponders: 15
-  });
 
-  // Mock data
-  useEffect(() => {
-    setUrgentReports([
-      {
-        id: 'GBV-2024-001',
-        type: 'Domestic Violence',
-        location: 'Nairobi Central',
-        urgency: 'Critical',
-        timeAgo: '15 min ago',
-        status: 'Unassigned'
-      },
-      {
-        id: 'GBV-2024-002',
-        type: 'Sexual Harassment',
-        location: 'Westlands',
-        urgency: 'High',
-        timeAgo: '1h ago',
-        status: 'Assigned'
-      }
-    ]);
-  }, []);
+  // Default stats if not provided
+  const defaultStats = {
+    activeReports: 0,
+    pendingAssignments: 0,
+    assignedCases: 0,
+    onlineResponders: 0,
+    ...stats
+  };
 
   const sidebarItems = [
     { id: 'dashboard', label: 'Dashboard', icon: Home },
-    { id: 'reports', label: 'Reports', icon: FileText, badge: '24' },
+    { id: 'reports', label: 'Reports', icon: FileText, badge: reports.length > 0 ? reports.length.toString() : null },
     { id: 'users', label: 'Users', icon: Users },
     { id: 'settings', label: 'Settings', icon: Settings },
-    
   ];
 
   const StatCard = ({ title, value, icon: Icon, color, trend }) => (
@@ -112,85 +102,65 @@ const GBVAdminDashboard = () => {
             {report.status}
           </span>
         </div>
-        <button className="text-blue-600 hover:text-blue-800 font-medium text-sm">
+        <button 
+          onClick={() => onAssignReport(report.id)}
+          className="text-blue-600 hover:text-blue-800 font-medium text-sm"
+        >
           Assign Now
         </button>
       </div>
     </div>
   );
 
-  const ReportsTable = () => {
-    const mockReports = [
-      {
-        id: 'GBV-2024-001',
-        date: '2024-08-12',
-        type: 'Domestic Violence',
-        status: 'New',
-        urgency: 'Critical',
-        location: 'Nairobi Central',
-        assignedTo: 'Unassigned'
-      },
-      {
-        id: 'GBV-2024-002',
-        date: '2024-08-12',
-        type: 'Sexual Harassment',
-        status: 'In Progress',
-        urgency: 'High',
-        location: 'Westlands',
-        assignedTo: 'Sarah Ochieng'
-      },
-      {
-        id: 'GBV-2024-003',
-        date: '2024-08-11',
-        type: 'Physical Assault',
-        status: 'Closed',
-        urgency: 'Medium',
-        location: 'Kasarani',
-        assignedTo: 'John Mwangi'
-      }
-    ];
-
-    return (
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200">
-        <div className="px-6 py-4 border-b border-gray-200">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-gray-900">Recent Reports</h3>
-            <div className="flex space-x-2">
-              <button className="flex items-center px-3 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50">
-                <Filter className="w-4 h-4 mr-2" />
-                Filter
-              </button>
-              <button className="flex items-center px-3 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-                <Plus className="w-4 h-4 mr-2" />
-                New Report
-              </button>
-            </div>
-          </div>
-          <div className="relative">
-            <Search className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
-            <input
-              type="text"
-              placeholder="Search reports..."
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            />
+  const ReportsTable = () => (
+    <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+      <div className="px-6 py-4 border-b border-gray-200">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-lg font-semibold text-gray-900">Recent Reports</h3>
+          <div className="flex space-x-2">
+            <button 
+              onClick={onFilterReports}
+              className="flex items-center px-3 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50"
+            >
+              <Filter className="w-4 h-4 mr-2" />
+              Filter
+            </button>
+            <button 
+              onClick={onCreateReport}
+              className="flex items-center px-3 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+            >
+              <Plus className="w-4 h-4 mr-2" />
+              New Report
+            </button>
           </div>
         </div>
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead className="bg-gray-50">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Case ID</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Urgency</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Location</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Assigned To</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
-              {mockReports.map((report) => (
+        <div className="relative">
+          <Search className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
+          <input
+            type="text"
+            placeholder="Search reports..."
+            onChange={(e) => onSearchReports(e.target.value)}
+            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          />
+        </div>
+      </div>
+      <div className="overflow-x-auto">
+        <table className="w-full">
+          <thead className="bg-gray-50">
+            <tr>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Case ID</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Urgency</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Location</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Assigned To</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+            </tr>
+          </thead>
+          <tbody className="bg-white divide-y divide-gray-200">
+            {reports.length > 0 ? (
+              reports.map((report) => (
                 <tr key={report.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-600 hover:text-blue-800 cursor-pointer">
                     {report.id}
@@ -219,22 +189,34 @@ const GBVAdminDashboard = () => {
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{report.assignedTo}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     <div className="flex space-x-2">
-                      <button className="text-blue-600 hover:text-blue-900">
+                      <button 
+                        onClick={() => onViewReport(report.id)}
+                        className="text-blue-600 hover:text-blue-900"
+                      >
                         <Eye className="w-4 h-4" />
                       </button>
-                      <button className="text-gray-600 hover:text-gray-900">
+                      <button 
+                        onClick={() => onAssignReport(report.id)}
+                        className="text-gray-600 hover:text-gray-900"
+                      >
                         <UserCheck className="w-4 h-4" />
                       </button>
                     </div>
                   </td>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="8" className="px-6 py-8 text-center text-gray-500">
+                  No reports available
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
       </div>
-    );
-  };
+    </div>
+  );
 
   const Sidebar = () => (
     <div className={`fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg transform ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-200 ease-in-out lg:translate-x-0 lg:static lg:inset-0`}>
@@ -292,8 +274,8 @@ const GBVAdminDashboard = () => {
               <User className="w-4 h-4 text-white" />
             </div>
             <div className="ml-3">
-              <p className="text-sm font-medium text-gray-900">Admin User</p>
-              <p className="text-xs text-gray-500">Super Administrator</p>
+              <p className="text-sm font-medium text-gray-900">{adminUser.name}</p>
+              <p className="text-xs text-gray-500">{adminUser.role}</p>
             </div>
           </div>
         </div>
@@ -310,27 +292,27 @@ const GBVAdminDashboard = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               <StatCard
                 title="Total Reports"
-                value={stats.activeReports}
+                value={defaultStats.activeReports}
                 icon={FileText}
                 color="text-blue-600"
-                trend="+12% this week"
+                trend={defaultStats.reportsTrend}
               />
               <StatCard
                 title="Pending Cases"
-                value={stats.pendingAssignments}
+                value={defaultStats.pendingAssignments}
                 icon={Clock}
                 color="text-orange-600"
               />
               <StatCard
-                title="In Progress"
-                value={stats.avgResponseTime}
+                title="Avg Response Time"
+                value={defaultStats.avgResponseTime}
                 icon={Activity}
                 color="text-green-600"
-                trend="-0.5h improved"
+                trend={defaultStats.responseTimeTrend}
               />
               <StatCard
-                title="Resolved Cases"
-                value={stats.onlineResponders}
+                title="Active Responders"
+                value={defaultStats.onlineResponders}
                 icon={Users}
                 color="text-purple-600"
               />
@@ -345,13 +327,22 @@ const GBVAdminDashboard = () => {
                     <Bell className="w-5 h-5 text-red-500" />
                   </div>
                   <div className="space-y-3">
-                    {urgentReports.map((report) => (
-                      <UrgentAlert key={report.id} report={report} />
-                    ))}
+                    {urgentReports.length > 0 ? (
+                      urgentReports.map((report) => (
+                        <UrgentAlert key={report.id} report={report} />
+                      ))
+                    ) : (
+                      <div className="text-center text-gray-500 py-4">
+                        <AlertCircle className="w-8 h-8 mx-auto mb-2 text-gray-300" />
+                        <p className="text-sm">No urgent alerts</p>
+                      </div>
+                    )}
                   </div>
-                  <button className="w-full mt-4 text-sm text-blue-600 hover:text-blue-800 font-medium">
-                    View All Alerts
-                  </button>
+                  {urgentReports.length > 0 && (
+                    <button className="w-full mt-4 text-sm text-blue-600 hover:text-blue-800 font-medium">
+                      View All Alerts
+                    </button>
+                  )}
                 </div>
               </div>
 
@@ -359,28 +350,41 @@ const GBVAdminDashboard = () => {
               <div className="lg:col-span-2">
                 <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
                   <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
-                
+                  
+                  <div className="grid grid-cols-2 gap-4 mb-6">
+                    <button 
+                      onClick={onCreateReport}
+                      className="flex items-center justify-center p-4 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                    >
+                      <Plus className="w-5 h-5 mr-2 text-blue-600" />
+                      <span className="text-sm font-medium">Create Report</span>
+                    </button>
+                    <button className="flex items-center justify-center p-4 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                      <Download className="w-5 h-5 mr-2 text-green-600" />
+                      <span className="text-sm font-medium">Export Data</span>
+                    </button>
+                  </div>
                   
                   <h4 className="text-md font-medium text-gray-900 mb-3">Recent Activity</h4>
                   <div className="space-y-3">
-                    <div className="flex items-center p-3 bg-gray-50 rounded-lg">
-                      <div className="w-2 h-2 bg-blue-500 rounded-full mr-3"></div>
-                      <div className="flex-1">
-                        <p className="text-sm text-gray-900">New report GBV-2024-004 submitted</p>
-                        <p className="text-xs text-gray-500">2 minutes ago</p>
+                    {reports.length > 0 ? (
+                      reports.slice(0, 3).map((report, index) => (
+                        <div key={report.id} className="flex items-center p-3 bg-gray-50 rounded-lg">
+                          <div className={`w-2 h-2 rounded-full mr-3 ${
+                            index === 0 ? 'bg-blue-500' : index === 1 ? 'bg-green-500' : 'bg-orange-500'
+                          }`}></div>
+                          <div className="flex-1">
+                            <p className="text-sm text-gray-900">Report {report.id} - {report.type}</p>
+                            <p className="text-xs text-gray-500">{report.date}</p>
+                          </div>
+                        </div>
+                      ))
+                    ) : (
+                      <div className="text-center text-gray-500 py-4">
+                        <Activity className="w-8 h-8 mx-auto mb-2 text-gray-300" />
+                        <p className="text-sm">No recent activity</p>
                       </div>
-                    </div>
-                    <div className="flex items-center p-3 bg-gray-50 rounded-lg">
-                      <div className="w-2 h-2 bg-green-500 rounded-full mr-3"></div>
-                      <div className="flex-1">
-                        <p className="text-sm text-gray-900">Case GBV-2024-002 assigned to Sarah Ochieng</p>
-                        <p className="text-xs text-gray-500">15 minutes ago</p>
-                      </div>
-                    </div>
-                    <div className="flex items-center p-3 bg-gray-50 rounded-lg">
-                      <div className="w-2 h-2 bg-orange-500 rounded-full mr-3"></div>
-                     
-                    </div>
+                    )}
                   </div>
                 </div>
               </div>
@@ -420,7 +424,12 @@ const GBVAdminDashboard = () => {
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
                     <span className="text-gray-700">Platform Name</span>
-                    <input type="text" value="GBV Reporting Platform" className="px-3 py-2 border border-gray-300 rounded-lg" readOnly />
+                    <input 
+                      type="text" 
+                      value={platformName} 
+                      className="px-3 py-2 border border-gray-300 rounded-lg" 
+                      readOnly 
+                    />
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-gray-700">Auto-logout Timer</span>
@@ -435,8 +444,6 @@ const GBVAdminDashboard = () => {
             </div>
           </div>
         );
-      
-     
       
       default:
         return null;
@@ -476,14 +483,16 @@ const GBVAdminDashboard = () => {
             <div className="flex items-center space-x-4">
               <button className="relative p-2 text-gray-600 hover:text-gray-900">
                 <Bell className="w-5 h-5" />
-                <span className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
+                {urgentReports.length > 0 && (
+                  <span className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
+                )}
               </button>
               
               <div className="flex items-center space-x-2">
                 <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
                   <User className="w-4 h-4 text-white" />
                 </div>
-                <span className="hidden md:inline text-sm font-medium text-gray-700">Admin User</span>
+                <span className="hidden md:inline text-sm font-medium text-gray-700">{adminUser.name}</span>
               </div>
             </div>
           </div>
