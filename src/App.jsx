@@ -17,6 +17,8 @@ import LawyerDashboard from "./pages/LawyerDashboard";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import GetStarted from "./components/GetStarted";
+import AddUser from "./components/AdminComponents/AddUsers";
+import Appointments from "./components/SurvivorComponents/Appointments";
 
 
 const App = () => {
@@ -56,6 +58,8 @@ const App = () => {
         <Route path="/lawyer-dashboard" element={<LawyerDashboard />} />
         <Route path="/counselor-dashboard" element={<CounselorDashboard />} />
         <Route path="/getstarted" element={<GetStarted />} />
+        <Route path="/user-form" element={<AddUser />} />
+        <Route path="/appointments-form" element={<Appointments />} />
       </Routes>
 
       {!shouldHideNavbar && <Footer />}

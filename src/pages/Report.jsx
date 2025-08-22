@@ -24,11 +24,10 @@ export default function Report() {
 
   const navigate = useNavigate();
   const handleLoginClick = () => {
-    navigate = ("/login");
-  }
+    navigate("/login");
+  };
 
 
-  const API_BASE_URL = "http://localhost:8000/api";
 
   const [formData, setFormData] = useState({
     incident_date: "",
@@ -46,7 +45,6 @@ export default function Report() {
   const handleEmergencyExit = () => {
     window.location.replace("https://poki.com/en/g/subway-surfers");
   };
-
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -76,11 +74,10 @@ export default function Report() {
     setError(null);
 
     try {
-      const response = await submitReport(formData); 
+      const response = await submitReport(formData);
       setReferenceCode(response.reference_code);
       setSubmitted(true);
     } catch (err) {
-    
       setError("Failed to submit report. Please try again.");
     } finally {
       setLoading(false);
