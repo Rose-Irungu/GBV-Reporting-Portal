@@ -9,29 +9,17 @@ import {
   Eye,
   EyeOff,
 } from "lucide-react";
+import { authService } from "../../services/authService";
 
 export default function GBVUserForm() {
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
+    first_name: "",
+    last_name: "",
     email: "",
-    phone: "",
-    alternatePhone: "",
-    dateOfBirth: "",
-    gender: "",
-    address: "",
-    city: "",
-    county: "",
-    emergencyContact: "",
-    emergencyPhone: "",
-    userType: "",
-    organizationName: "",
-    professionalId: "",
-    specialization: "",
+    phone_number: "",
+    role: "",
     password: "",
     confirmPassword: "",
-    agreeToTerms: false,
-    consentToDataProcessing: false,
   });
 
   const [showPassword, setShowPassword] = useState(false);
@@ -59,13 +47,18 @@ export default function GBVUserForm() {
     const newErrors = {};
 
     // Required field validation
-    if (!formData.firstName.trim())
-      newErrors.firstName = "First name is required";
-    if (!formData.lastName.trim()) newErrors.lastName = "Last name is required";
-    if (!formData.email.trim()) newErrors.email = "Email is required";
-    if (!formData.phone.trim()) newErrors.phone = "Phone number is required";
-    if (!formData.userType) newErrors.userType = "User type is required";
-    if (!formData.password) newErrors.password = "Password is required";
+    if (!formData.first_name.trim())
+      newErrors.first_name = "First name is required";
+    if (!formData.last_name.trim())
+      newErrors.last_name = "Last name is required";
+    if (!formData.email.trim())
+      newErrors.email = "Email is required";
+    if (!formData.phone_number.trim())
+      newErrors.phone_number = "Phone number is required";
+    if (!formData.role)
+      newErrors.role = "Role is required";
+    if (!formData.password)
+      newErrors.password = "Password is required";
     if (!formData.confirmPassword)
       newErrors.confirmPassword = "Please confirm password";
 
@@ -77,8 +70,8 @@ export default function GBVUserForm() {
 
     // Phone validation (basic)
     const phoneRegex = /^[+]?[\d\s\-()]+$/;
-    if (formData.phone && !phoneRegex.test(formData.phone)) {
-      newErrors.phone = "Please enter a valid phone number";
+    if (formData.phone_number && !phoneRegex.test(formData.phone_number)) {
+      newErrors.phone_number = "Please enter a valid phone number";
     }
 
     // Password validation
@@ -89,27 +82,6 @@ export default function GBVUserForm() {
     // Password confirmation
     if (formData.password !== formData.confirmPassword) {
       newErrors.confirmPassword = "Passwords do not match";
-    }
-
-    // Professional fields validation for service providers
-    if (formData.userType === "service_provider") {
-      if (!formData.organizationName.trim()) {
-        newErrors.organizationName =
-          "Organization name is required for service providers";
-      }
-      if (!formData.professionalId.trim()) {
-        newErrors.professionalId =
-          "Professional ID is required for service providers";
-      }
-    }
-
-    // Consent validation
-    if (!formData.agreeToTerms) {
-      newErrors.agreeToTerms = "You must agree to the terms and conditions";
-    }
-    if (!formData.consentToDataProcessing) {
-      newErrors.consentToDataProcessing =
-        "Consent to data processing is required";
     }
 
     setErrors(newErrors);
@@ -126,37 +98,34 @@ export default function GBVUserForm() {
     setIsSubmitting(true);
 
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      // Create the payload for API submission (exclude confirmPassword)
+      const { confirmPassword, ...submitData } = formData;
 
-      // Here you would typically send the data to your backend
-      console.log("Form submitted:", formData);
+      console.log("Form submitted:", submitData);
 
-      // Reset form on success
-      setFormData({
-        firstName: "",
-        lastName: "",
-        email: "",
-        phone: "",
-       
-       
-        gender: "",
-        
-        emergencyContact: "",
-        emergencyPhone: "",
-        userType: "",
-        organizationName: "",
-        professionalId: "",
-        specialization: "",
-        password: "",
-        confirmPassword: "",
-   
-      });
+      // Here you would make your API call
+      const response = await authService.addUser(submitData);
 
-      alert("User registration successful!");
+      if (response.result_code === 0) {
+        // Reset form on success
+        setFormData({
+          first_name: "",
+          last_name: "",
+          email: "",
+          phone_number: "",
+          role: "",
+          password: "",
+          confirmPassword: "",
+        });
+        alert("User registration successful!");
+      } else {
+        const errorData = await response.json();
+        console.error("Registration failed:", errorData);
+        alert("Registration failed. Please try again.");
+      }
     } catch (error) {
       console.error("Registration error:", error);
-      alert("Registration failed. Please try again.");
+      alert("Registration failed. Please check your connection.");
     } finally {
       setIsSubmitting(false);
     }
@@ -172,17 +141,17 @@ export default function GBVUserForm() {
               <Shield className="h-8 w-8 text-white" />
               <div>
                 <h1 className="text-2xl font-bold text-white">
-                  GBV Platform Registration
+                  GBV Platform - Add New User
                 </h1>
                 <p className="text-purple-100 mt-1">
-                  Join our safe and supportive community
+                  Create a new user account
                 </p>
               </div>
             </div>
           </div>
 
           {/* Form */}
-          <div className="px-8 py-6">
+          <form onSubmit={handleSubmit} className="px-8 py-6">
             {/* Personal Information */}
             <div className="mb-8">
               <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
@@ -197,19 +166,18 @@ export default function GBVUserForm() {
                   </label>
                   <input
                     type="text"
-                    name="firstName"
-                    value={formData.firstName}
+                    name="first_name"
+                    value={formData.first_name}
                     onChange={handleInputChange}
-                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all ${
-                      errors.firstName
+                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all ${errors.first_name
                         ? "border-red-500 bg-red-50"
                         : "border-gray-300"
-                    }`}
-                    placeholder="Enter your first name"
+                      }`}
+                    placeholder="Enter first name"
                   />
-                  {errors.firstName && (
+                  {errors.first_name && (
                     <p className="mt-1 text-sm text-red-600">
-                      {errors.firstName}
+                      {errors.first_name}
                     </p>
                   )}
                 </div>
@@ -220,46 +188,30 @@ export default function GBVUserForm() {
                   </label>
                   <input
                     type="text"
-                    name="lastName"
-                    value={formData.lastName}
+                    name="last_name"
+                    value={formData.last_name}
                     onChange={handleInputChange}
-                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all ${
-                      errors.lastName
+                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all ${errors.last_name
                         ? "border-red-500 bg-red-50"
                         : "border-gray-300"
-                    }`}
-                    placeholder="Enter your last name"
+                      }`}
+                    placeholder="Enter last name"
                   />
-                  {errors.lastName && (
+                  {errors.last_name && (
                     <p className="mt-1 text-sm text-red-600">
-                      {errors.lastName}
+                      {errors.last_name}
                     </p>
                   )}
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Gender
-                  </label>
-                  <select
-                    name="gender"
-                    value={formData.gender}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
-                  >
-                    <option value="">Select gender</option>
-                    <option value="female">Female</option>
-                    <option value="male">Male</option>
-                    <option value="non-binary">Non-binary</option>
-                    <option value="prefer-not-to-say">Prefer not to say</option>
-                  </select>
                 </div>
               </div>
             </div>
 
             {/* Contact Information */}
             <div className="mb-8">
-           
+              <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+                <Mail className="h-5 w-5 mr-2 text-purple-600" />
+                Contact Information
+              </h2>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
@@ -271,12 +223,11 @@ export default function GBVUserForm() {
                     name="email"
                     value={formData.email}
                     onChange={handleInputChange}
-                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all ${
-                      errors.email
+                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all ${errors.email
                         ? "border-red-500 bg-red-50"
                         : "border-gray-300"
-                    }`}
-                    placeholder="Enter your email"
+                      }`}
+                    placeholder="Enter email address"
                   />
                   {errors.email && (
                     <p className="mt-1 text-sm text-red-600">{errors.email}</p>
@@ -289,60 +240,46 @@ export default function GBVUserForm() {
                   </label>
                   <input
                     type="tel"
-                    name="phone"
-                    value={formData.phone}
+                    name="phone_number"
+                    value={formData.phone_number}
                     onChange={handleInputChange}
-                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all ${
-                      errors.phone
+                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all ${errors.phone_number
                         ? "border-red-500 bg-red-50"
                         : "border-gray-300"
-                    }`}
+                      }`}
                     placeholder="+254 700 000 000"
                   />
-                  {errors.phone && (
-                    <p className="mt-1 text-sm text-red-600">{errors.phone}</p>
+                  {errors.phone_number && (
+                    <p className="mt-1 text-sm text-red-600">{errors.phone_number}</p>
                   )}
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Alternate Phone
-                  </label>
-                  <input
-                    type="tel"
-                    name="alternatePhone"
-                    value={formData.alternatePhone}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
-                    placeholder="+254 700 000 000"
-                  />
                 </div>
               </div>
             </div>
 
-            {/* User Type */}
+            {/* Role Selection */}
             <div className="mb-8">
-              <h2 className="text-xl font-semibold text-gray-800 mb-4">
-                Account Type *
+              <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+                <Shield className="h-5 w-5 mr-2 text-purple-600" />
+                User Role *
               </h2>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
                 <label
-                  className={`cursor-pointer p-4 border-2 rounded-lg transition-all ${
-                    formData.userType === "survivor"
+                  className={`cursor-pointer p-4 border-2 rounded-lg transition-all ${formData.role === "survivor"
                       ? "border-purple-500 bg-purple-50"
                       : "border-gray-200 hover:border-purple-300"
-                  }`}
+                    }`}
                 >
                   <input
                     type="radio"
-                    name="userType"
+                    name="role"
                     value="survivor"
-                    checked={formData.userType === "survivor"}
+                    checked={formData.role === "survivor"}
                     onChange={handleInputChange}
                     className="sr-only"
                   />
                   <div className="text-center">
+                    <User className="h-6 w-6 mx-auto mb-2 text-purple-600" />
                     <h3 className="font-medium text-gray-800">Survivor</h3>
                     <p className="text-sm text-gray-600 mt-1">
                       Seeking support and resources
@@ -351,142 +288,114 @@ export default function GBVUserForm() {
                 </label>
 
                 <label
-                  className={`cursor-pointer p-4 border-2 rounded-lg transition-all ${
-                    formData.userType === "service_provider"
+                  className={`cursor-pointer p-4 border-2 rounded-lg transition-all ${formData.role === "admin"
                       ? "border-purple-500 bg-purple-50"
                       : "border-gray-200 hover:border-purple-300"
-                  }`}
+                    }`}
                 >
                   <input
                     type="radio"
-                    name="userType"
-                    value="service_provider"
-                    checked={formData.userType === "service_provider"}
+                    name="role"
+                    value="admin"
+                    checked={formData.role === "admin"}
                     onChange={handleInputChange}
                     className="sr-only"
                   />
                   <div className="text-center">
+                    <AlertTriangle className="h-6 w-6 mx-auto mb-2 text-purple-600" />
                     <h3 className="font-medium text-gray-800">
-                      Service Provider
+                      Administrator
                     </h3>
                     <p className="text-sm text-gray-600 mt-1">
-                      Offering professional services
+                      System administration access
                     </p>
                   </div>
                 </label>
 
                 <label
-                  className={`cursor-pointer p-4 border-2 rounded-lg transition-all ${
-                    formData.userType === "advocate"
+                  className={`cursor-pointer p-4 border-2 rounded-lg transition-all ${formData.role === "doctor"
                       ? "border-purple-500 bg-purple-50"
                       : "border-gray-200 hover:border-purple-300"
-                  }`}
+                    }`}
                 >
                   <input
                     type="radio"
-                    name="userType"
-                    value="advocate"
-                    checked={formData.userType === "advocate"}
+                    name="role"
+                    value="doctor"
+                    checked={formData.role === "doctor"}
                     onChange={handleInputChange}
                     className="sr-only"
                   />
                   <div className="text-center">
+                    <Shield className="h-6 w-6 mx-auto mb-2 text-purple-600" />
                     <h3 className="font-medium text-gray-800">
-                      Advocate/Supporter
+                      Doctor
                     </h3>
                     <p className="text-sm text-gray-600 mt-1">
-                      Supporting the cause
+                      Medical professional
+                    </p>
+                  </div>
+                </label>
+
+                <label
+                  className={`cursor-pointer p-4 border-2 rounded-lg transition-all ${formData.role === "counselor"
+                      ? "border-purple-500 bg-purple-50"
+                      : "border-gray-200 hover:border-purple-300"
+                    }`}
+                >
+                  <input
+                    type="radio"
+                    name="role"
+                    value="counselor"
+                    checked={formData.role === "counselor"}
+                    onChange={handleInputChange}
+                    className="sr-only"
+                  />
+                  <div className="text-center">
+                    <User className="h-6 w-6 mx-auto mb-2 text-purple-600" />
+                    <h3 className="font-medium text-gray-800">
+                      Counselor
+                    </h3>
+                    <p className="text-sm text-gray-600 mt-1">
+                      Mental health support
+                    </p>
+                  </div>
+                </label>
+
+                <label
+                  className={`cursor-pointer p-4 border-2 rounded-lg transition-all ${formData.role === "lawyer"
+                      ? "border-purple-500 bg-purple-50"
+                      : "border-gray-200 hover:border-purple-300"
+                    }`}
+                >
+                  <input
+                    type="radio"
+                    name="role"
+                    value="lawyer"
+                    checked={formData.role === "lawyer"}
+                    onChange={handleInputChange}
+                    className="sr-only"
+                  />
+                  <div className="text-center">
+                    <Shield className="h-6 w-6 mx-auto mb-2 text-purple-600" />
+                    <h3 className="font-medium text-gray-800">
+                      Lawyer
+                    </h3>
+                    <p className="text-sm text-gray-600 mt-1">
+                      Legal assistance
                     </p>
                   </div>
                 </label>
               </div>
-              {errors.userType && (
-                <p className="mt-2 text-sm text-red-600">{errors.userType}</p>
+              {errors.role && (
+                <p className="mt-2 text-sm text-red-600">{errors.role}</p>
               )}
             </div>
 
-            {/* Professional Information (for service providers) */}
-            {formData.userType === "service_provider" && (
-              <div className="mb-8">
-                <h2 className="text-xl font-semibold text-gray-800 mb-4">
-                  Professional Information
-                </h2>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Organization Name *
-                    </label>
-                    <input
-                      type="text"
-                      name="organizationName"
-                      value={formData.organizationName}
-                      onChange={handleInputChange}
-                      className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all ${
-                        errors.organizationName
-                          ? "border-red-500 bg-red-50"
-                          : "border-gray-300"
-                      }`}
-                      placeholder="Enter organization name"
-                    />
-                    {errors.organizationName && (
-                      <p className="mt-1 text-sm text-red-600">
-                        {errors.organizationName}
-                      </p>
-                    )}
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Professional ID/License *
-                    </label>
-                    <input
-                      type="text"
-                      name="professionalId"
-                      value={formData.professionalId}
-                      onChange={handleInputChange}
-                      className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all ${
-                        errors.professionalId
-                          ? "border-red-500 bg-red-50"
-                          : "border-gray-300"
-                      }`}
-                      placeholder="Enter professional ID"
-                    />
-                    {errors.professionalId && (
-                      <p className="mt-1 text-sm text-red-600">
-                        {errors.professionalId}
-                      </p>
-                    )}
-                  </div>
-
-                  <div className="md:col-span-2">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Specialization/Area of Expertise
-                    </label>
-                    <select
-                      name="specialization"
-                      value={formData.specialization}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
-                    >
-                      <option value="">Select specialization</option>
-                      <option value="counseling">Counseling/Psychology</option>
-                      <option value="legal">Legal Services</option>
-                      <option value="medical">Medical Services</option>
-                      <option value="social-work">Social Work</option>
-                      <option value="law-enforcement">Law Enforcement</option>
-                      <option value="shelter">Shelter Services</option>
-                      <option value="advocacy">Advocacy</option>
-                      <option value="other">Other</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* Password */}
+            {/* Password Section */}
             <div className="mb-8">
-              <h2 className="text-xl font-semibold text-gray-800 mb-4">
+              <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+                <Shield className="h-5 w-5 mr-2 text-purple-600" />
                 Account Security
               </h2>
 
@@ -501,11 +410,10 @@ export default function GBVUserForm() {
                       name="password"
                       value={formData.password}
                       onChange={handleInputChange}
-                      className={`w-full px-4 py-3 pr-12 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all ${
-                        errors.password
+                      className={`w-full px-4 py-3 pr-12 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all ${errors.password
                           ? "border-red-500 bg-red-50"
                           : "border-gray-300"
-                      }`}
+                        }`}
                       placeholder="Enter password"
                     />
                     <button
@@ -540,11 +448,10 @@ export default function GBVUserForm() {
                       name="confirmPassword"
                       value={formData.confirmPassword}
                       onChange={handleInputChange}
-                      className={`w-full px-4 py-3 pr-12 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all ${
-                        errors.confirmPassword
+                      className={`w-full px-4 py-3 pr-12 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all ${errors.confirmPassword
                           ? "border-red-500 bg-red-50"
                           : "border-gray-300"
-                      }`}
+                        }`}
                       placeholder="Confirm password"
                     />
                     <button
@@ -570,27 +477,34 @@ export default function GBVUserForm() {
               </div>
             </div>
 
-            <div className="flex justify-center">
+            {/* Submit Button */}
+            <div className="flex justify-center space-x-4">
+              <button
+                type="button"
+                onClick={() => window.history.back()}
+                className="px-8 py-4 rounded-lg font-semibold text-gray-600 border border-gray-300 hover:bg-gray-50 transition-all"
+              >
+                Cancel
+              </button>
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className={`px-8 py-4 rounded-lg font-semibold text-white transition-all ${
-                  isSubmitting
+                className={`px-8 py-4 rounded-lg font-semibold text-white transition-all ${isSubmitting
                     ? "bg-gray-400 cursor-not-allowed"
                     : "bg-gradient-to-r from-purple-600 to-blue-600 transform hover:scale-105"
-                } focus:ring-4 focus:ring-purple-200`}
+                  } focus:ring-4 focus:ring-purple-200`}
               >
                 {isSubmitting ? (
                   <div className="flex items-center space-x-2">
                     <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-                    <span>Registering...</span>
+                    <span>Creating User...</span>
                   </div>
                 ) : (
-                  "Register Account"
+                  "Create User Account"
                 )}
               </button>
             </div>
-          </div>
+          </form>
         </div>
       </div>
     </div>

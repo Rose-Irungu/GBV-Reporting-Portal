@@ -1,21 +1,33 @@
 import { useEffect, useState } from "react";
-import { getTotalReports } from "../services/adminDashboardService";
+import { getDashboardStats, getAppointments, getAllReports } from "../services/adminDashboardService";
 
-const useReports = (status = null) => {
-  const [reports, setReports] = useState([]);
+const useReports = () => {
+  // Initialize as null since you're expecting an object
+  const [dashboardData, setDashboardData] = useState(null);
+  const [allReports, setAllReports] = useState([]);
+  const [appointments, setAppointments] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   const fetchReports = async () => {
     try {
       setLoading(true);
-      const data = await getTotalReports(status);
-      setReports(data);
+      const [data, appointments, allReports] = await Promise.all([
+        getDashboardStats(),
+        getAppointments(),
+        getAllReports(),
+      ]);
+      // const data = await getDashboardStats();
+      // const appointmentData = await getAppointments();
+      console.log("Raw API data:", data);
+      setDashboardData(data);
+      setAppointments(appointments);
+      setAllReports(allReports)
       setError(null);
     } catch (error) {
-      // console.error("Error fetching reports:", error);
+      console.error("Error fetching reports:", error);
       if (error.response) {
-        // console.error("Server responded with:", error.response.data);
+        console.error("Server responded with:", error.response.data);
         setError("Server error occurred. Please try again.");
       } else {
         setError("Something went wrong. Please check your connection.");
@@ -27,18 +39,31 @@ const useReports = (status = null) => {
 
   useEffect(() => {
     fetchReports();
-  }, [status]); 
+  }, []);
 
   const refreshReports = async () => {
     await fetchReports();
   };
 
-  return { 
-    reports, 
-    loading, 
-    error, 
+  console.log("Dashboard data:", dashboardData);
+
+  return {
+    // Return the entire dashboard data object
+    dashboardData,
+    loading,
+    error,
+    setAppointments,
     refreshReports,
-    totalReports: reports?.length || 0,
+    allReports: allReports || [],
+    appointments: appointments || [],
+    totalReports: dashboardData?.total_reports || 0,
+    pendingReports: dashboardData?.pending_reports || 0,
+    underReviewReports: dashboardData?.under_review_reports || 0,
+    resolvedReports: dashboardData?.resolved_reports || 0,
+    assignedReports: dashboardData?.assigned_reports || 0,
+    urgentCases: dashboardData?.urgent_cases || [],
+
+    reports: dashboardData?.urgent_cases || [], // or whatever array you need
   };
 };
 

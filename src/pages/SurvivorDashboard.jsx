@@ -17,6 +17,8 @@ import {
   Bell,
   X,
 } from "lucide-react";
+import useReports from "../hooks/useReportStats";
+import dayjs from "dayjs";
 
 const SurvivorsDashboard = ({ userName }) => {
   const [activeTab, setActiveTab] = useState("overview");
@@ -27,33 +29,57 @@ const SurvivorsDashboard = ({ userName }) => {
     window.location.replace("https://poki.com/en/g/subway-surfers");
   };
 
+  const {
+    dashboardData,
+    appointments,
+    setAppointments,
+    loading: reportLoading
+  } = useReports();
+
   // Mock data for appointments
-  const [appointments, setAppointments] = useState([
-    {
-      id: 1,
-      type: "Counseling Session",
-      date: "2025-08-25",
-      time: "10:00 AM",
-      status: "scheduled",
-      counselor: "Dr. Sarah Johnson",
-    },
-    {
-      id: 2,
-      type: "Legal Consultation",
-      date: "2025-08-28",
-      time: "2:00 PM",
-      status: "scheduled",
-      counselor: "Attorney Mark Davis",
-    },
-    {
-      id: 3,
-      type: "Medical Check-up",
-      date: "2025-08-20",
-      time: "9:00 AM",
-      status: "completed",
-      counselor: "Dr. Emily Chen",
-    },
-  ]);
+  // const [appointments, setAppointments] = useState([
+  //   {
+  //     id: 1,
+  //     type: "Counseling Session",
+  //     date: "2025-08-25",
+  //     time: "10:00 AM",
+  //     status: "scheduled",
+  //     counselor: "Dr. Sarah Johnson",
+  //   },
+  //   {
+  //     id: 2,
+  //     type: "Legal Consultation",
+  //     date: "2025-08-28",
+  //     time: "2:00 PM",
+  //     status: "scheduled",
+  //     counselor: "Attorney Mark Davis",
+  //   },
+  // {
+  //   "id": 1,
+  //     "professional_name": "",
+  //       "report_reference": "GBVC60YQO",
+  //         "appointment_type": "counseling",
+  //           "scheduled_date": "2025-08-25T10:39:28Z",
+  //             "duration_minutes": 60,
+  //               "status": "scheduled",
+  //                 "notes": "",
+  //                   "location": "",
+  //                     "is_virtual": false,
+  //                       "created_at": "2025-08-24T10:39:40.416831Z",
+  //                         "updated_at": "2025-08-24T10:39:40.416905Z",
+  //                           "report": "GBVC60YQO",
+  //                             "professional": 6
+  // }
+
+  //   {
+  //     id: 3,
+  //     type: "Medical Check-up",
+  //     date: "2025-08-20",
+  //     time: "9:00 AM",
+  //     status: "completed",
+  //     counselor: "Dr. Emily Chen",
+  //   },
+  // ]);
 
   // Case progress data
   const caseProgress = {
@@ -386,11 +412,10 @@ const SurvivorsDashboard = ({ userName }) => {
               <button
                 key={id}
                 onClick={() => setActiveTab(id)}
-                className={`flex items-center space-x-2 py-2 px-1 border-b-2 font-medium text-sm ${
-                  activeTab === id
+                className={`flex items-center space-x-2 py-2 px-1 border-b-2 font-medium text-sm ${activeTab === id
                     ? "border-purple-500 text-purple-600"
                     : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-                }`}
+                  }`}
               >
                 <Icon size={16} />
                 <span>{label}</span>
@@ -422,10 +447,10 @@ const SurvivorsDashboard = ({ userName }) => {
                     <CheckCircle className="h-8 w-8 text-blue-600" />
                     <div className="ml-3">
                       <p className="text-sm font-medium text-blue-900">
-                        Case Progress
+                        My Reports
                       </p>
                       <p className="text-2xl font-semibold text-blue-600">
-                        {caseProgress.completedSteps}/{caseProgress.totalSteps}
+                        {dashboardData?.my_reports?.total}
                       </p>
                     </div>
                   </div>
@@ -440,7 +465,7 @@ const SurvivorsDashboard = ({ userName }) => {
                       </p>
                       <p className="text-2xl font-semibold text-green-600">
                         {
-                          appointments.filter(
+                          dashboardData?.appoinntments.filter(
                             (apt) => apt.status === "scheduled"
                           ).length
                         }
@@ -515,24 +540,22 @@ const SurvivorsDashboard = ({ userName }) => {
                 {appointments.map((appointment) => (
                   <div
                     key={appointment.id}
-                    className={`border rounded-lg p-4 ${
-                      appointment.status === "completed"
+                    className={`border rounded-lg p-4 ${appointment.status === "completed"
                         ? "border-green-200 bg-green-50"
                         : "border-gray-200"
-                    }`}
+                      }`}
                   >
                     <div className="flex justify-between items-start">
                       <div className="flex-1">
                         <div className="flex items-center space-x-2 mb-2">
                           <h4 className="font-medium text-gray-900">
-                            {appointment.type}
+                            {appointment.appointment_type}
                           </h4>
                           <span
-                            className={`px-2 py-1 text-xs rounded-full ${
-                              appointment.status === "completed"
+                            className={`px-2 py-1 text-xs rounded-full ${appointment.status === "completed"
                                 ? "bg-green-100 text-green-800"
                                 : "bg-blue-100 text-blue-800"
-                            }`}
+                              }`}
                           >
                             {appointment.status}
                           </span>
@@ -541,16 +564,16 @@ const SurvivorsDashboard = ({ userName }) => {
                           <div className="flex items-center space-x-2">
                             <Calendar size={14} />
                             <span>
-                              {new Date(appointment.date).toLocaleDateString()}
+                              <span>{dayjs(appointment.scheduled_date).format("YYYY-MM-DD")}</span>
                             </span>
                           </div>
                           <div className="flex items-center space-x-2">
                             <Clock size={14} />
-                            <span>{appointment.time}</span>
+                            <span>{dayjs(appointment.scheduled_date).format("HH:MM")}</span>
                           </div>
                           <div className="flex items-center space-x-2">
                             <User size={14} />
-                            <span>{appointment.counselor}</span>
+                            <span>{appointment.professional_name}</span>
                           </div>
                         </div>
                       </div>
@@ -604,11 +627,10 @@ const SurvivorsDashboard = ({ userName }) => {
                   <div
                     className="bg-purple-600 h-2 rounded-full"
                     style={{
-                      width: `${
-                        (caseProgress.completedSteps /
+                      width: `${(caseProgress.completedSteps /
                           caseProgress.totalSteps) *
                         100
-                      }%`,
+                        }%`,
                     }}
                   ></div>
                 </div>
@@ -618,11 +640,10 @@ const SurvivorsDashboard = ({ userName }) => {
                 {caseProgress.steps.map((step, index) => (
                   <div key={index} className="flex items-center space-x-4">
                     <div
-                      className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                        step.completed
+                      className={`w-8 h-8 rounded-full flex items-center justify-center ${step.completed
                           ? "bg-green-100 text-green-600"
                           : "bg-gray-100 text-gray-400"
-                      }`}
+                        }`}
                     >
                       {step.completed ? (
                         <CheckCircle size={16} />
@@ -632,9 +653,8 @@ const SurvivorsDashboard = ({ userName }) => {
                     </div>
                     <div className="flex-1">
                       <h4
-                        className={`font-medium ${
-                          step.completed ? "text-gray-900" : "text-gray-600"
-                        }`}
+                        className={`font-medium ${step.completed ? "text-gray-900" : "text-gray-600"
+                          }`}
                       >
                         {step.name}
                       </h4>

@@ -11,6 +11,7 @@ import {
   Eye,
   EyeOff,
 } from "lucide-react";
+import { authService } from "../../services/authService";
 
 // Edit Profile Modal Component
 const EditProfileModal = ({ isOpen, onClose, user, onSave }) => {
@@ -429,7 +430,6 @@ const Header = ({
   onSidebarToggle = () => {},
   onEditProfile = () => {},
   onChangePassword = () => {},
-  onLogout = () => {},
 }) => {
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -458,14 +458,16 @@ const Header = ({
     setIsUserMenuOpen(!isUserMenuOpen);
   };
 
-  const handleMenuAction = (action) => {
+  const handleMenuAction = async (action) => {
     setIsUserMenuOpen(false);
     if (action === "edit") {
       setShowEditModal(true);
     } else if (action === "password") {
       setShowPasswordModal(true);
     } else if (action === "logout") {
-      onLogout();
+      await authService.logoutUser();
+      // window.location.href = "/login";
+
     }
   };
 
@@ -511,7 +513,7 @@ const Header = ({
                   <User className="w-4 h-4 text-white" />
                 </div>
                 <span className="hidden md:inline text-sm font-medium text-gray-700">
-                  {adminUser.name}
+                  {adminUser.username}
                 </span>
               </button>
 
@@ -526,7 +528,7 @@ const Header = ({
                       </div>
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-medium text-gray-900 truncate">
-                          {adminUser.name}
+                          {adminUser.username}
                         </p>
                         <p className="text-sm text-gray-500 truncate">
                           {adminUser.email}

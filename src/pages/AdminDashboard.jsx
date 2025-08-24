@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   Shield,
   Users,
   FileText,
-  BarChart3,
   Settings,
   Bell,
   Search,
@@ -11,45 +10,56 @@ import {
   AlertTriangle,
   Clock,
   User,
-  MapPin,
   TrendingUp,
   Activity,
   Eye,
   UserCheck,
-  Lock,
-  Menu,
   X,
-  Download,
   Plus,
   AlertCircle,
   Home,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/AdminComponents/Header";
-import useReportStats from "../hooks/useReportStats";
+import useReports from "../hooks/useReportStats";
+import getUserFromStorage from "../utils/userData";
 
 const GBVAdminDashboard = ({
-  urgentReports = [],
   stats = {},
-  reports = [],
   platformName = "GBV Reporting Platform",
-  adminUser = { name: "Admin User", role: "Super Administrator" },
-  onAssignReport = () => {},
-  onViewReport = () => {},
-  onCreateReport = () => {},
-
-  onFilterReports = () => {},
-  onSearchReports = () => {},
 }) => {
   const [activeSection, setActiveSection] = useState("dashboard");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const navigate = useNavigate();
+  const storedUser = getUserFromStorage();
+  const adminUser = storedUser || { name: "Admin User", role: "Super Administrator" };
+
   const onCreateUser = () => {
     navigate("/user-form");
   };
+
   const onCreateAppointment = () => {
     navigate("/appointment-form");
   };
+
+  // Use the updated hook
+  const {
+    dashboardData,
+    loading: reportLoading,
+    error: reportError,
+    totalReports,
+    allReports,
+    pendingReports,
+    underReviewReports,
+    resolvedReports,
+    assignedReports,
+    urgentCases,
+    refreshReports
+  } = useReports();
+
+  console.log("Dashboard data:", dashboardData);
+  console.log("Urgent cases:", urgentCases);
+
   // Default stats if not provided
   const defaultStats = {
     activeReports: 0,
@@ -58,22 +68,23 @@ const GBVAdminDashboard = ({
     closedCases: 0,
     ...stats,
   };
-    const {
-    stats: reportStats,
-    loading: reportLoading,
-    error: reportError,
-  } = useReportStats();
- console.log("report stats:", reportStats);
+
+  const onAssignReport = () => { };
+  const onViewReport = () => { };
+  const onCreateReport = () => { };
+  const onFilterReports = () => { };
+  const onSearchReports = () => { };
+
   const sidebarItems = [
     { id: "dashboard", label: "Dashboard", icon: Home },
     {
       id: "reports",
       label: "Reports",
       icon: FileText,
-      badge: reports.length > 0 ? reports.length.toString() : null,
+      badge: reportLoading ? "..." : (totalReports > 0 ? totalReports.toString() : null),
     },
     { id: "users", label: "Users", icon: Users },
-     { id: "appointments", label: "Appointments", icon: Clock },
+    { id: "appointments", label: "Appointments", icon: Clock },
     { id: "settings", label: "Settings", icon: Settings },
   ];
 
@@ -91,13 +102,16 @@ const GBVAdminDashboard = ({
           )}
         </div>
         <div
-          className={`p-3 rounded-full ${
-            color === "text-red-600"
+          className={`p-3 rounded-full ${color === "text-red-600"
               ? "bg-red-50"
               : color === "text-orange-600"
-              ? "bg-orange-50"
-              : "bg-blue-50"
-          }`}
+                ? "bg-orange-50"
+                : color === "text-green-600"
+                  ? "bg-green-50"
+                  : color === "text-purple-600"
+                    ? "bg-purple-50"
+                    : "bg-blue-50"
+            }`}
         >
           <Icon className={`w-6 h-6 ${color}`} />
         </div>
@@ -111,39 +125,20 @@ const GBVAdminDashboard = ({
         <div className="flex-1">
           <div className="flex items-center mb-2">
             <AlertTriangle className="w-5 h-5 text-red-500 mr-2" />
-            <span className="font-semibold text-gray-900">{report.id}</span>
-            <span
-              className={`ml-2 px-2 py-1 text-xs font-medium rounded-full ${
-                report.urgency === "Critical"
-                  ? "bg-red-100 text-red-800"
-                  : "bg-orange-100 text-orange-800"
-              }`}
-            >
-              {report.urgency}
+            <span className="font-semibold text-gray-900">{report.reference_code}</span>
+            <span className="ml-2 px-2 py-1 text-xs font-medium rounded-full bg-red-100 text-red-800">
+              {report.status}
             </span>
           </div>
-          <p className="text-sm text-gray-600 mb-1">{report.type}</p>
-          <div className="flex items-center text-xs text-gray-500 mb-2">
-            <MapPin className="w-3 h-3 mr-1" />
-            <span className="mr-3">{report.location}</span>
-            <Clock className="w-3 h-3 mr-1" />
-            <span>{report.timeAgo}</span>
-          </div>
-          <span
-            className={`inline-flex items-center px-2 py-1 text-xs font-medium rounded-full ${
-              report.status === "Unassigned"
-                ? "bg-gray-100 text-gray-800"
-                : "bg-blue-100 text-blue-800"
-            }`}
-          >
-            {report.status}
-          </span>
+          <p className="text-sm text-gray-600 mb-1">Name: {report.name}</p>
+          <p className="text-sm text-gray-600 mb-1">Email: {report.email}</p>
+          <p className="text-sm text-gray-600 mb-1">Phone: {report.phone}</p>
         </div>
         <button
-          onClick={() => onAssignReport(report.id)}
+          onClick={() => onAssignReport(report.reference_code)}
           className="text-blue-600 hover:text-blue-800 font-medium text-sm"
         >
-          Assign Now
+          View Details
         </button>
       </div>
     </div>
@@ -214,60 +209,51 @@ const GBVAdminDashboard = ({
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {reports.length > 0 ? (
-              reports.map((report) => (
-                <tr key={report.id} className="hover:bg-gray-50">
+            {allReports && allReports.length > 0 ? (
+              allReports.map((report, index) => (
+                <tr key={report.reference_code} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-600 hover:text-blue-800 cursor-pointer">
-                    {report.id}
+                    CASE #{index+1}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    {report.date}
+                    {new Date(report.created_at).toLocaleDateString() || 'N/A'}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    {report.type}
+                    {report.incident_type || 'N/A'}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span
-                      className={`px-2 py-1 text-xs font-medium rounded-full ${
-                        report.status === "New"
+                      className={`px-2 py-1 text-xs font-medium rounded-full ${report.status === "pending"
                           ? "bg-yellow-100 text-yellow-800"
-                          : report.status === "In Progress"
-                          ? "bg-blue-100 text-blue-800"
-                          : "bg-green-100 text-green-800"
-                      }`}
+                          : report.status === "in_progress"
+                            ? "bg-blue-100 text-blue-800"
+                            : "bg-green-100 text-green-800"
+                        }`}
                     >
                       {report.status}
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span
-                      className={`px-2 py-1 text-xs font-medium rounded-full ${
-                        report.urgency === "Critical"
-                          ? "bg-red-100 text-red-800"
-                          : report.urgency === "High"
-                          ? "bg-orange-100 text-orange-800"
-                          : "bg-gray-100 text-gray-800"
-                      }`}
-                    >
-                      {report.urgency}
+                    <span className="px-2 py-1 text-xs font-medium rounded-full bg-red-100 text-red-800">
+                      High
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    {report.location}
+                    {report.incident_location || 'N/A'}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    {report.assignedTo}
+                    {report.assigned_to || 'Unassigned'}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     <div className="flex space-x-2">
                       <button
-                        onClick={() => onViewReport(report.id)}
+                        onClick={() => onViewReport(report.reference_code)}
                         className="text-blue-600 hover:text-blue-900"
                       >
                         <Eye className="w-4 h-4" />
                       </button>
                       <button
-                        onClick={() => onAssignReport(report.id)}
+                        onClick={() => onAssignReport(report.reference_code)}
                         className="text-gray-600 hover:text-gray-900"
                       >
                         <UserCheck className="w-4 h-4" />
@@ -279,7 +265,7 @@ const GBVAdminDashboard = ({
             ) : (
               <tr>
                 <td colSpan="8" className="px-6 py-8 text-center text-gray-500">
-                  No reports available
+                  {reportLoading ? "Loading reports..." : "No reports available"}
                 </td>
               </tr>
             )}
@@ -291,9 +277,8 @@ const GBVAdminDashboard = ({
 
   const Sidebar = () => (
     <div
-      className={`fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg transform ${
-        sidebarOpen ? "translate-x-0" : "-translate-x-full"
-      } transition-transform duration-200 ease-in-out lg:translate-x-0 lg:static lg:inset-0`}
+      className={`fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg transform ${sidebarOpen ? "translate-x-0" : "-translate-x-full"
+        } transition-transform duration-200 ease-in-out lg:translate-x-0 lg:static lg:inset-0`}
     >
       <div className="flex items-center justify-between h-16 px-6 border-b border-gray-200">
         <div className="flex items-center">
@@ -321,11 +306,10 @@ const GBVAdminDashboard = ({
                   setActiveSection(item.id);
                   setSidebarOpen(false);
                 }}
-                className={`w-full flex items-center justify-between px-3 py-2 mb-1 text-sm font-medium rounded-lg transition-colors ${
-                  activeSection === item.id
+                className={`w-full flex items-center justify-between px-3 py-2 mb-1 text-sm font-medium rounded-lg transition-colors ${activeSection === item.id
                     ? "bg-blue-50 text-blue-700 border-r-2 border-blue-600"
                     : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-                }`}
+                  }`}
               >
                 <div className="flex items-center">
                   <Icon className="w-5 h-5 mr-3" />
@@ -333,11 +317,10 @@ const GBVAdminDashboard = ({
                 </div>
                 {item.badge && (
                   <span
-                    className={`px-2 py-1 text-xs font-medium rounded-full ${
-                      activeSection === item.id
+                    className={`px-2 py-1 text-xs font-medium rounded-full ${activeSection === item.id
                         ? "bg-blue-100 text-blue-800"
                         : "bg-red-100 text-red-800"
-                    }`}
+                      }`}
                   >
                     {item.badge}
                   </span>
@@ -356,50 +339,76 @@ const GBVAdminDashboard = ({
             </div>
             <div className="ml-3">
               <p className="text-sm font-medium text-gray-900">
-                {adminUser.name}
+                {adminUser.email}
               </p>
-              <p className="text-xs text-gray-500">{adminUser.role}</p>
+              <p className="text-xs text-gray-500">{adminUser.user_type}</p>
             </div>
           </div>
         </div>
       </div>
     </div>
   );
- {reportError && (
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-          {reportError}
-        </div>
-      )}
+
   const renderContent = () => {
+    // Error handling display
+    if (reportError) {
+      return (
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+          <div className="flex items-center">
+            <AlertCircle className="w-5 h-5 mr-2" />
+            <span>{reportError}</span>
+            <button
+              onClick={refreshReports}
+              className="ml-4 px-3 py-1 bg-red-600 text-white rounded text-sm hover:bg-red-700"
+            >
+              Retry
+            </button>
+          </div>
+        </div>
+      );
+    }
+
     switch (activeSection) {
       case "dashboard":
         return (
           <div className="space-y-6">
+            {/* Header with refresh button */}
+            <div className="flex items-center justify-between mb-6">
+              <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
+              <button
+                onClick={refreshReports}
+                disabled={reportLoading}
+                className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+              >
+                {reportLoading ? "Loading..." : "Refresh Data"}
+              </button>
+            </div>
+
             {/* Stats Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               <StatCard
                 title="Total Reports"
-                value={reportLoading ? "..." : reports?.total_reports?.count}
+                value={reportLoading ? "..." : totalReports}
                 icon={FileText}
                 color="text-blue-600"
                 trend={defaultStats.reportsTrend}
               />
               <StatCard
                 title="Pending Cases"
-                value={defaultStats.pendingAssignments}
+                value={reportLoading ? "..." : pendingReports}
                 icon={Clock}
                 color="text-orange-600"
               />
               <StatCard
                 title="Assigned Cases"
-                value={defaultStats.assignedCases}
-                icon={Clock}
+                value={reportLoading ? "..." : assignedReports}
+                icon={UserCheck}
                 color="text-green-600"
                 trend={defaultStats.responseTimeTrend}
               />
               <StatCard
-                title="Closed Cases"
-                value={defaultStats.clossedCases}
+                title="Resolved Cases"
+                value={reportLoading ? "..." : resolvedReports}
                 icon={FileText}
                 color="text-purple-600"
               />
@@ -416,9 +425,11 @@ const GBVAdminDashboard = ({
                     <Bell className="w-5 h-5 text-red-500" />
                   </div>
                   <div className="space-y-3">
-                    {urgentReports.length > 0 ? (
-                      urgentReports.map((report) => (
-                        <UrgentAlert key={report.id} report={report} />
+                    {reportLoading ? (
+                      <div className="text-center text-gray-500 py-4">Loading...</div>
+                    ) : urgentCases && urgentCases.length > 0 ? (
+                      urgentCases.map((report) => (
+                        <UrgentAlert key={report.reference_code} report={report} />
                       ))
                     ) : (
                       <div className="text-center text-gray-500 py-4">
@@ -427,9 +438,9 @@ const GBVAdminDashboard = ({
                       </div>
                     )}
                   </div>
-                  {urgentReports.length > 0 && (
+                  {urgentCases && urgentCases.length > 0 && (
                     <button className="w-full mt-4 text-sm text-blue-600 hover:text-blue-800 font-medium">
-                      View All Alerts
+                      View All Alerts ({urgentCases.length})
                     </button>
                   )}
                 </div>
@@ -437,33 +448,32 @@ const GBVAdminDashboard = ({
 
               <div className="lg:col-span-2">
                 <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-                  <div className="grid grid-cols-2 gap-4 mb-6"></div>
-
                   <h3 className="text-md font-medium text-gray-900 mb-3">
                     Recent Activity
                   </h3>
                   <div className="space-y-3">
-                    {reports.length > 0 ? (
-                      reports.slice(0, 3).map((report, index) => (
+                    {reportLoading ? (
+                      <div className="text-center text-gray-500 py-4">Loading activity...</div>
+                    ) : urgentCases && urgentCases.length > 0 ? (
+                      urgentCases.slice(0, 3).map((report, index) => (
                         <div
-                          key={report.id}
+                          key={report.reference_code}
                           className="flex items-center p-3 bg-gray-50 rounded-lg"
                         >
                           <div
-                            className={`w-2 h-2 rounded-full mr-3 ${
-                              index === 0
+                            className={`w-2 h-2 rounded-full mr-3 ${index === 0
                                 ? "bg-blue-500"
                                 : index === 1
-                                ? "bg-green-500"
-                                : "bg-orange-500"
-                            }`}
+                                  ? "bg-green-500"
+                                  : "bg-orange-500"
+                              }`}
                           ></div>
                           <div className="flex-1">
                             <p className="text-sm text-gray-900">
-                              Report {report.id} - {report.type}
+                              Report {report.reference_code} - {report.name}
                             </p>
                             <p className="text-xs text-gray-500">
-                              {report.date}
+                              {report.email}
                             </p>
                           </div>
                         </div>
@@ -514,10 +524,9 @@ const GBVAdminDashboard = ({
         return (
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
             <h2 className="text-2xl font-bold text-gray-900 mb-6">
-              User Management
+              Appointments Management
             </h2>
             <div className="flex space-x-1 mb-6">
-
               <button
                 onClick={onCreateAppointment}
                 className="flex items-center px-3 py-2 text-sm  text-white rounded-lg bg-gradient-to-r from-purple-600 to-blue-600"
@@ -525,18 +534,15 @@ const GBVAdminDashboard = ({
                 <Plus className="w-4 h-4 mr-2" />
                 Add Appointment
               </button>
-               <button className="px-4 py-2 text-sm font-medium text-blue-600 bg-blue-50 rounded-lg">
+              <button className="px-4 py-2 text-sm font-medium text-blue-600 bg-blue-50 rounded-lg">
                 Upcoming Appointments
               </button>
               <button className="px-4 py-2 text-sm font-medium text-blue-600 bg-red-50 hover:bg-red-100 rounded-lg">
                 Past Appointments
               </button>
-
             </div>
-           
           </div>
         );
-  
 
       case "settings":
         return (
@@ -597,7 +603,7 @@ const GBVAdminDashboard = ({
         <Header
           activeSection={activeSection}
           sidebarItems={sidebarItems}
-          urgentReports={urgentReports}
+          urgentReports={urgentCases || []}
           adminUser={adminUser}
           onSidebarToggle={() => setSidebarOpen(true)}
         />

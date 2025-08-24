@@ -18,13 +18,12 @@ export default function Login() {
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-  const credentials = { email, password };
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
 
     try {
-      const result = await authService.loginUser(credentials);
+      const result = await authService.loginUser(formData);
 
       if (result.result_code === 0) {
         const { access, refresh, user } = result.data;
@@ -32,13 +31,15 @@ export default function Login() {
         localStorage.setItem("accessToken", access);
         localStorage.setItem("refreshToken", refresh);
         localStorage.setItem("userInfo", JSON.stringify(user));
-        localStorage.setItem("userRole", user.role);
+        localStorage.setItem("userRole", user.user_type);
 
         setIsLoggedIn(true);
         setSubmitMessage(
           "Welcome back! You have successfully logged into your secure account."
         );
-        switch (user.role) {
+        console.log(user.user_type);
+        
+        switch (user.user_type) {
           case "admin":
             navigate("/admin-dashboard");
             break;

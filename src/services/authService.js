@@ -51,25 +51,25 @@ export const authService = {
 
   logoutUser: async() => {
     try {
-      const promise = api.post(API_ENDPOINTS.LOG_OUT, { "action": "logout_current_device"});
-      const res = await toast.promise(promise, {
-        loading: "Logging out...",
-        success: "Logout successful.",
-        error: (err) =>
-          err?.response?.data?.message || "Logout failed. Please try again.",
-      });
-      if (res.status === 200) {
+      // const promise = api.post(API_ENDPOINTS.LOG_OUT, { "action": "logout_current_device"});
+      // const res = await toast.promise(promise, {
+      //   loading: "Logging out...",
+      //   success: "Logout successful.",
+      //   error: (err) =>
+      //     err?.response?.data?.message || "Logout failed. Please try again.",
+      // });
+      // if (res.status === 200) {
         localStorage.removeItem("accessToken");
         localStorage.removeItem("refreshToken");
         localStorage.removeItem("userInfo");
         localStorage.removeItem("userRole");
-        window.location.href = "/loginform";
-      } else {
-        console.error("Logout failed:", res.data);
-        toast.error("Logout failed. Please try again.");
-      }
+        window.location.href = "/login";
+      // } else {
+      //   console.error("Logout failed:", res.data);
+      //   toast.error("Logout failed. Please try again.");
+      // }
     } catch (error) {
-      toast.error("Logout failed. Please try again.");
+      // toast.error("Logout failed. Please try again.");
       console.error("Error during logout:", error);
     }
     
@@ -84,6 +84,32 @@ export const authService = {
       throw (
         error.response?.data || {
           message: "Password change failed. Please try again.",
+        }
+      );
+    }
+  },
+
+  addUser: async (userData) => {
+    try {
+      const response = await api.post(API_ENDPOINTS.ADD_USER, userData);
+      return response.data;
+    } catch (error) {
+      throw (
+        error.response?.data || {
+          message: "User creation failed. Please try again.",
+        }
+      );
+    }
+  },
+
+  allUsers: async () => {
+    try {
+      const response = await api.get(API_ENDPOINTS.ALL_USERS);
+      return response.data;
+    } catch (error) {
+      throw (
+        error.response?.data || {
+          message: "Fetching users failed. Please try again.",
         }
       );
     }
