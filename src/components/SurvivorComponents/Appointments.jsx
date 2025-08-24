@@ -3,7 +3,8 @@ import { Calendar, Clock, MessageCircle, User } from 'lucide-react';
 
 const BookAppointmentForm = ({ onSubmit }) => {
   const [formData, setFormData] = useState({
-    fullName: '',
+    firstName: '',
+    lastName: '',
     email: '',
     sessionType: '',
     date: '',
@@ -21,7 +22,7 @@ const BookAppointmentForm = ({ onSubmit }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Optional: Add validation here
+    
 
     if (onSubmit) {
       onSubmit(formData);
@@ -29,7 +30,8 @@ const BookAppointmentForm = ({ onSubmit }) => {
 
     setSubmitted(true);
     setFormData({
-      fullName: '',
+      firstName: '',
+      lastName: '',
       email: '',
       sessionType: '',
       date: '',
@@ -50,23 +52,42 @@ const BookAppointmentForm = ({ onSubmit }) => {
         <form onSubmit={handleSubmit} className="space-y-4">
 
           <div>
-            <label htmlFor="fullName" className="block text-sm font-medium text-gray-700">
-              Full Name
+            <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">
+              First Name
             </label>
             <div className="mt-1 relative">
               <User className="absolute left-3 top-2.5 text-gray-400 h-5 w-5" />
               <input
                 type="text"
-                name="fullName"
-                id="fullName"
+                name="firstName"
+                id="firstName"
                 required
-                value={formData.fullName}
+                value={formData.firstName}
                 onChange={handleChange}
                 placeholder="Your full name"
                 className="pl-10 w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-purple-500 focus:border-purple-500"
               />
             </div>
           </div>
+           <div>
+            <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">
+              Last Name
+            </label>
+            <div className="mt-1 relative">
+              <User className="absolute left-3 top-2.5 text-gray-400 h-5 w-5" />
+              <input
+                type="text"
+                name="lastName"
+                id="lastName"
+                required
+                value={formData.lastName}
+                onChange={handleChange}
+                placeholder="Your full name"
+                className="pl-10 w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-purple-500 focus:border-purple-500"
+              />
+            </div>
+          </div>
+          
 
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-gray-700">

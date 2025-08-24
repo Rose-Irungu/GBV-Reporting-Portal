@@ -1,0 +1,26 @@
+{
+    "sourceFile": "src/components/hooks/useReportStats.js",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 2,
+            "patches": [
+                {
+                    "date": 1756015285828,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1756015308370,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,45 @@\n+import { useEffect, useState } from \"react\";\r\n+import { getTotalReports } from \"../services/adminDashboardService\";// <-- import your service\r\n+\r\n+const useReports = (status = null) => {\r\n+  const [reports, setReports] = useState([]);\r\n+  const [loading, setLoading] = useState(true);\r\n+  const [error, setError] = useState(null);\r\n+\r\n+  const fetchReports = async () => {\r\n+    try {\r\n+      setLoading(true);\r\n+      const data = await getReports(status);\r\n+      setReports(data);\r\n+      setError(null);\r\n+    } catch (error) {\r\n+      console.error(\"Error fetching reports:\", error);\r\n+      if (error.response) {\r\n+        console.error(\"Server responded with:\", error.response.data);\r\n+        setError(\"Server error occurred. Please try again.\");\r\n+      } else {\r\n+        setError(\"Something went wrong. Please check your connection.\");\r\n+      }\r\n+    } finally {\r\n+      setLoading(false);\r\n+    }\r\n+  };\r\n+\r\n+  useEffect(() => {\r\n+    fetchReports();\r\n+  }, [status]); \r\n+\r\n+  const refreshReports = async () => {\r\n+    await fetchReports();\r\n+  };\r\n+\r\n+  return { \r\n+    reports, \r\n+    loading, \r\n+    error, \r\n+    refreshReports,\r\n+    totalReports: reports?.length || 0,\r\n+  };\r\n+};\r\n+\r\n+export default useReports;\r\n"
+                },
+                {
+                    "date": 1756015330053,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,45 @@\n+import { useEffect, useState } from \"react\";\r\n+import { getTotalReports } from \"../services/adminDashboardService\";\r\n+\r\n+const useReports = (status = null) => {\r\n+  const [reports, setReports] = useState([]);\r\n+  const [loading, setLoading] = useState(true);\r\n+  const [error, setError] = useState(null);\r\n+\r\n+  const fetchReports = async () => {\r\n+    try {\r\n+      setLoading(true);\r\n+      const data = await getTotalReports(status);\r\n+      setReports(data);\r\n+      setError(null);\r\n+    } catch (error) {\r\n+      console.error(\"Error fetching reports:\", error);\r\n+      if (error.response) {\r\n+        console.error(\"Server responded with:\", error.response.data);\r\n+        setError(\"Server error occurred. Please try again.\");\r\n+      } else {\r\n+        setError(\"Something went wrong. Please check your connection.\");\r\n+      }\r\n+    } finally {\r\n+      setLoading(false);\r\n+    }\r\n+  };\r\n+\r\n+  useEffect(() => {\r\n+    fetchReports();\r\n+  }, [status]); \r\n+\r\n+  const refreshReports = async () => {\r\n+    await fetchReports();\r\n+  };\r\n+\r\n+  return { \r\n+    reports, \r\n+    loading, \r\n+    error, \r\n+    refreshReports,\r\n+    totalReports: reports?.length || 0,\r\n+  };\r\n+};\r\n+\r\n+export default useReports;\r\n"
+                }
+            ],
+            "date": 1756015285828,
+            "name": "Commit-0",
+            "content": "import { useEffect, useState } from \"react\";\r\nimport { getReports } from \"../services/reportService\"; // <-- import your service\r\n\r\nconst useReports = (status = null) => {\r\n  const [reports, setReports] = useState([]);\r\n  const [loading, setLoading] = useState(true);\r\n  const [error, setError] = useState(null);\r\n\r\n  const fetchReports = async () => {\r\n    try {\r\n      setLoading(true);\r\n      const data = await getReports(status);\r\n      setReports(data);\r\n      setError(null);\r\n    } catch (error) {\r\n      console.error(\"Error fetching reports:\", error);\r\n      if (error.response) {\r\n        console.error(\"Server responded with:\", error.response.data);\r\n        setError(\"Server error occurred. Please try again.\");\r\n      } else {\r\n        setError(\"Something went wrong. Please check your connection.\");\r\n      }\r\n    } finally {\r\n      setLoading(false);\r\n    }\r\n  };\r\n\r\n  useEffect(() => {\r\n    fetchReports();\r\n  }, [status]); // re-fetch if status changes\r\n\r\n  const refreshReports = async () => {\r\n    await fetchReports();\r\n  };\r\n\r\n  return { \r\n    reports, \r\n    loading, \r\n    error, \r\n    refreshReports,\r\n    totalReports: reports?.length || 0,\r\n  };\r\n};\r\n\r\nexport default useReports;\r\n"
+        }
+    ]
+}

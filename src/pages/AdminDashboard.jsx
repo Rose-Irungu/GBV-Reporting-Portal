@@ -25,7 +25,8 @@ import {
   Home,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import Header from '../components/AdminComponents/Header';
+import Header from "../components/AdminComponents/Header";
+import useReportStats from "../hooks/useReportStats";
 
 const GBVAdminDashboard = ({
   urgentReports = [],
@@ -46,16 +47,23 @@ const GBVAdminDashboard = ({
   const onCreateUser = () => {
     navigate("/user-form");
   };
-
+  const onCreateAppointment = () => {
+    navigate("/appointment-form");
+  };
   // Default stats if not provided
   const defaultStats = {
     activeReports: 0,
     pendingAssignments: 0,
     assignedCases: 0,
-    scheduledAppointment: 0,
+    closedCases: 0,
     ...stats,
   };
-
+    const {
+    stats: reportStats,
+    loading: reportLoading,
+    error: reportError,
+  } = useReportStats();
+ console.log("report stats:", reportStats);
   const sidebarItems = [
     { id: "dashboard", label: "Dashboard", icon: Home },
     {
@@ -65,6 +73,7 @@ const GBVAdminDashboard = ({
       badge: reports.length > 0 ? reports.length.toString() : null,
     },
     { id: "users", label: "Users", icon: Users },
+     { id: "appointments", label: "Appointments", icon: Clock },
     { id: "settings", label: "Settings", icon: Settings },
   ];
 
@@ -356,7 +365,11 @@ const GBVAdminDashboard = ({
       </div>
     </div>
   );
-
+ {reportError && (
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+          {reportError}
+        </div>
+      )}
   const renderContent = () => {
     switch (activeSection) {
       case "dashboard":
@@ -366,7 +379,7 @@ const GBVAdminDashboard = ({
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               <StatCard
                 title="Total Reports"
-                value={defaultStats.activeReports}
+                value={reportLoading ? "..." : reports?.total_reports?.count}
                 icon={FileText}
                 color="text-blue-600"
                 trend={defaultStats.reportsTrend}
@@ -378,15 +391,15 @@ const GBVAdminDashboard = ({
                 color="text-orange-600"
               />
               <StatCard
-                title="Scheduled Appointments"
-                value={defaultStats.scheduledAppointment}
+                title="Assigned Cases"
+                value={defaultStats.assignedCases}
                 icon={Clock}
                 color="text-green-600"
                 trend={defaultStats.responseTimeTrend}
               />
               <StatCard
-                title="Assigned Cases"
-                value={defaultStats.assignedCases}
+                title="Closed Cases"
+                value={defaultStats.clossedCases}
                 icon={FileText}
                 color="text-purple-600"
               />
@@ -479,17 +492,12 @@ const GBVAdminDashboard = ({
             </h2>
             <div className="flex space-x-1 mb-6">
               <button className="px-4 py-2 text-sm font-medium text-blue-600 bg-blue-50 rounded-lg">
-                Responders
+                Specialists
               </button>
-              <button className="px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50 rounded-lg">
-                Administrators
-              </button>
-              <button className="px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50 rounded-lg">
-                Inactive Users
-              </button>
+
               <button
                 onClick={onCreateUser}
-                className="flex items-center px-3 py-2 text-sm  text-white rounded-lg ml-[20rem] bg-gradient-to-r from-purple-600 to-blue-600"
+                className="flex items-center px-3 py-2 text-sm  text-white rounded-lg ml-[40rem] bg-gradient-to-r from-purple-600 to-blue-600"
               >
                 <Plus className="w-4 h-4 mr-2" />
                 Add User
@@ -501,6 +509,34 @@ const GBVAdminDashboard = ({
             </p>
           </div>
         );
+
+      case "appointments":
+        return (
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">
+              User Management
+            </h2>
+            <div className="flex space-x-1 mb-6">
+
+              <button
+                onClick={onCreateAppointment}
+                className="flex items-center px-3 py-2 text-sm  text-white rounded-lg bg-gradient-to-r from-purple-600 to-blue-600"
+              >
+                <Plus className="w-4 h-4 mr-2" />
+                Add Appointment
+              </button>
+               <button className="px-4 py-2 text-sm font-medium text-blue-600 bg-blue-50 rounded-lg">
+                Upcoming Appointments
+              </button>
+              <button className="px-4 py-2 text-sm font-medium text-blue-600 bg-red-50 hover:bg-red-100 rounded-lg">
+                Past Appointments
+              </button>
+
+            </div>
+           
+          </div>
+        );
+  
 
       case "settings":
         return (

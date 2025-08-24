@@ -66,7 +66,7 @@ const Services = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 ">
       <div className="max-w-7xl mx-auto">
         {/* Header Section */}
         <div className="text-center mb-16">
@@ -80,7 +80,7 @@ const Services = () => {
         </div>
 
         {/* Emergency Banner */}
-        <div className="bg-red-600 text-white rounded-lg p-6 mb-12 shadow-lg">
+        <div className="bg-red-600 text-white rounded-lg p-6 mb-12 shadow-lg hover:shadow-xl">
           <div className="flex items-center justify-between flex-wrap gap-4">
             <div className="flex items-center">
               <Phone className="h-8 w-8 mr-3" />

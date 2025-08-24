@@ -138,12 +138,10 @@ export default function GBVUserForm() {
         lastName: "",
         email: "",
         phone: "",
-        alternatePhone: "",
-        dateOfBirth: "",
+       
+       
         gender: "",
-        address: "",
-        city: "",
-        county: "",
+        
         emergencyContact: "",
         emergencyPhone: "",
         userType: "",
@@ -152,8 +150,7 @@ export default function GBVUserForm() {
         specialization: "",
         password: "",
         confirmPassword: "",
-        agreeToTerms: false,
-        consentToDataProcessing: false,
+   
       });
 
       alert("User registration successful!");

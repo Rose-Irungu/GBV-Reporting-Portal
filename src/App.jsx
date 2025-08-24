@@ -59,7 +59,7 @@ const App = () => {
         <Route path="/counselor-dashboard" element={<CounselorDashboard />} />
         <Route path="/getstarted" element={<GetStarted />} />
         <Route path="/user-form" element={<AddUser />} />
-        <Route path="/appointments-form" element={<Appointments />} />
+        <Route path="/appointment-form" element={<Appointments />} />
       </Routes>
 
       {!shouldHideNavbar && <Footer />}

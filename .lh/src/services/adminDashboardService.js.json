@@ -1,0 +1,30 @@
+{
+    "sourceFile": "src/services/adminDashboardService.js",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 3,
+            "patches": [
+                {
+                    "date": 1756014809111,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1756014815357,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,7 +1,7 @@\n import api from './api';\r\n import { API_ENDPOINTS } from '../utils/constants';\r\n \r\n-export const getCurrentVisitors = async () => {\r\n+export const get = async () => {\r\n   const res = await api.get(API_ENDPOINTS.GET_CURRENT_VISITORS);\r\n   return res.data;\r\n };\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1756014820557,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,7 @@\n+import api from './api';\r\n+import { API_ENDPOINTS } from '../utils/constants';\r\n+\r\n+export const getTotalReport = async () => {\r\n+  const res = await api.get(API_ENDPOINTS.GET_CURRENT_VISITORS);\r\n+  return res.data;\r\n+};\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1756014856171,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,7 @@\n+import api from './api';\r\n+import { API_ENDPOINTS } from '../utils/constants';\r\n+\r\n+export const getTotalReports = async () => {\r\n+  const res = await api.get(API_ENDPOINTS.GET_TOTAL_CASES: );\r\n+  return res.data;\r\n+};\n\\ No newline at end of file\n"
+                }
+            ],
+            "date": 1756014809111,
+            "name": "Commit-0",
+            "content": "import api from './api';\r\nimport { API_ENDPOINTS } from '../utils/constants';\r\n\r\nexport const getCurrentVisitors = async () => {\r\n  const res = await api.get(API_ENDPOINTS.GET_CURRENT_VISITORS);\r\n  return res.data;\r\n};"
+        }
+    ]
+}
