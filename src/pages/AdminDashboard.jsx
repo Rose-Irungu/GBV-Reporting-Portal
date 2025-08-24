@@ -26,6 +26,8 @@ import useReports from "../hooks/useReportStats";
 import getUserFromStorage from "../utils/userData";
 import UsersManagement from "../components/AdminComponents/UserManagement";
 import AppointmentsManagement from "../components/AdminComponents/AppointmentManagement";
+import dayjs from "dayjs";
+import ReportDetailModal from "../components/Report";
 
 const GBVAdminDashboard = ({
   stats = {},
@@ -36,6 +38,8 @@ const GBVAdminDashboard = ({
   const [users, setUsers] = useState([]);
   const navigate = useNavigate();
   const storedUser = getUserFromStorage();
+  const [showModal, setShowModal] = useState(false);
+  const [selectedReport, setSelectedReport] = useState(null);
   const adminUser = storedUser || { name: "Admin User", role: "Super Administrator" };
 
   const onCreateUser = () => {
@@ -64,18 +68,19 @@ const GBVAdminDashboard = ({
 
   // Use the updated hook
   const {
-    dashboardData,
+    // dashboardData,
     loading: reportLoading,
     error: reportError,
     totalReports,
     appointments,
     allReports,
     pendingReports,
-    underReviewReports,
+    // underReviewReports,
     resolvedReports,
     assignedReports,
     urgentCases,
-    refreshReports
+    refreshReports,
+    getReport,
   } = useReports();
 
   // Default stats if not provided
@@ -87,8 +92,17 @@ const GBVAdminDashboard = ({
     ...stats,
   };
 
-  const onAssignReport = () => { };
-  const onViewReport = () => { };
+  const onAssignReport = (ref_code) => {
+    console.log(ref_code);
+
+  };
+  const onViewReport = async(ref_code) => {
+    const report = await getReport(ref_code);
+    setSelectedReport(report);
+    setShowModal(true);
+    console.log(report);
+    
+  };
   const onCreateReport = () => { };
   const onFilterReports = () => { };
   const onSearchReports = () => { };
@@ -121,14 +135,14 @@ const GBVAdminDashboard = ({
         </div>
         <div
           className={`p-3 rounded-full ${color === "text-red-600"
-              ? "bg-red-50"
-              : color === "text-orange-600"
-                ? "bg-orange-50"
-                : color === "text-green-600"
-                  ? "bg-green-50"
-                  : color === "text-purple-600"
-                    ? "bg-purple-50"
-                    : "bg-blue-50"
+            ? "bg-red-50"
+            : color === "text-orange-600"
+              ? "bg-orange-50"
+              : color === "text-green-600"
+                ? "bg-green-50"
+                : color === "text-purple-600"
+                  ? "bg-purple-50"
+                  : "bg-blue-50"
             }`}
         >
           <Icon className={`w-6 h-6 ${color}`} />
@@ -153,7 +167,7 @@ const GBVAdminDashboard = ({
           <p className="text-sm text-gray-600 mb-1">Phone: {report.phone}</p>
         </div>
         <button
-          onClick={() => onAssignReport(report.reference_code)}
+          onClick={() => onViewReport(report.reference_code)}
           className="text-blue-600 hover:text-blue-800 font-medium text-sm"
         >
           View Details
@@ -231,10 +245,10 @@ const GBVAdminDashboard = ({
               allReports.map((report, index) => (
                 <tr key={report.reference_code} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-600 hover:text-blue-800 cursor-pointer">
-                    CASE #{index+1}
+                    CASE #{index + 1}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    {new Date(report.created_at).toLocaleDateString() || 'N/A'}
+                    {dayjs(report.incident_date).format("YYYY-MM-DD")}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                     {report.incident_type || 'N/A'}
@@ -242,10 +256,10 @@ const GBVAdminDashboard = ({
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span
                       className={`px-2 py-1 text-xs font-medium rounded-full ${report.status === "pending"
-                          ? "bg-yellow-100 text-yellow-800"
-                          : report.status === "in_progress"
-                            ? "bg-blue-100 text-blue-800"
-                            : "bg-green-100 text-green-800"
+                        ? "bg-yellow-100 text-yellow-800"
+                        : report.status === "in_progress"
+                          ? "bg-blue-100 text-blue-800"
+                          : "bg-green-100 text-green-800"
                         }`}
                     >
                       {report.status}
@@ -325,8 +339,8 @@ const GBVAdminDashboard = ({
                   setSidebarOpen(false);
                 }}
                 className={`w-full flex items-center justify-between px-3 py-2 mb-1 text-sm font-medium rounded-lg transition-colors ${activeSection === item.id
-                    ? "bg-blue-50 text-blue-700 border-r-2 border-blue-600"
-                    : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                  ? "bg-blue-50 text-blue-700 border-r-2 border-blue-600"
+                  : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
                   }`}
               >
                 <div className="flex items-center">
@@ -336,8 +350,8 @@ const GBVAdminDashboard = ({
                 {item.badge && (
                   <span
                     className={`px-2 py-1 text-xs font-medium rounded-full ${activeSection === item.id
-                        ? "bg-blue-100 text-blue-800"
-                        : "bg-red-100 text-red-800"
+                      ? "bg-blue-100 text-blue-800"
+                      : "bg-red-100 text-red-800"
                       }`}
                   >
                     {item.badge}
@@ -480,10 +494,10 @@ const GBVAdminDashboard = ({
                         >
                           <div
                             className={`w-2 h-2 rounded-full mr-3 ${index === 0
-                                ? "bg-blue-500"
-                                : index === 1
-                                  ? "bg-green-500"
-                                  : "bg-orange-500"
+                              ? "bg-blue-500"
+                              : index === 1
+                                ? "bg-green-500"
+                                : "bg-orange-500"
                               }`}
                           ></div>
                           <div className="flex-1">
@@ -584,6 +598,20 @@ const GBVAdminDashboard = ({
           urgentReports={urgentCases || []}
           adminUser={adminUser}
           onSidebarToggle={() => setSidebarOpen(true)}
+        />
+
+        <ReportDetailModal
+          isOpen={true}
+          onClose={() => setShowModal(false)}
+          report={selectedReport}
+          onEdit={(report) => {
+            // Handle edit action
+            console.log('Edit report:', report);
+          }}
+          onAssign={(report) => {
+            // Handle assignment
+            console.log('Assign report:', report);
+          }}
         />
 
         {/* Main Content Area */}

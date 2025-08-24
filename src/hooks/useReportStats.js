@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getDashboardStats, getAppointments, getAllReports } from "../services/adminDashboardService";
+import { getDashboardStats, getAppointments, getAllReports, getReport as gR } from "../services/adminDashboardService";
 
 const useReports = () => {
   // Initialize as null since you're expecting an object
@@ -17,9 +17,6 @@ const useReports = () => {
         getAppointments(),
         getAllReports(),
       ]);
-      // const data = await getDashboardStats();
-      // const appointmentData = await getAppointments();
-      console.log("Raw API data:", data);
       setDashboardData(data);
       setAppointments(appointments);
       setAllReports(allReports)
@@ -45,15 +42,27 @@ const useReports = () => {
     await fetchReports();
   };
 
-  console.log("Dashboard data:", dashboardData);
+  const getReport = async (ref_no) => {
+    try {
+      setLoading(true);
+      const report = await gR(ref_no);
+      return report || null;
+    } catch (error) {
+      console.error("Error fetching report:", error);
+      setError("Something went wrong while fetching the report.");
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  }
 
   return {
-    // Return the entire dashboard data object
     dashboardData,
     loading,
     error,
     setAppointments,
     refreshReports,
+    getReport,
     allReports: allReports || [],
     appointments: appointments || [],
     totalReports: dashboardData?.total_reports || 0,
@@ -63,7 +72,7 @@ const useReports = () => {
     assignedReports: dashboardData?.assigned_reports || 0,
     urgentCases: dashboardData?.urgent_cases || [],
 
-    reports: dashboardData?.urgent_cases || [], // or whatever array you need
+    reports: dashboardData?.urgent_cases || [],
   };
 };
 
