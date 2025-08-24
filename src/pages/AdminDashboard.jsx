@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Shield,
   Users,
@@ -21,8 +21,11 @@ import {
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/AdminComponents/Header";
+import { authService } from "../services/authService";
 import useReports from "../hooks/useReportStats";
 import getUserFromStorage from "../utils/userData";
+import UsersManagement from "../components/AdminComponents/UserManagement";
+import AppointmentsManagement from "../components/AdminComponents/AppointmentManagement";
 
 const GBVAdminDashboard = ({
   stats = {},
@@ -30,6 +33,7 @@ const GBVAdminDashboard = ({
 }) => {
   const [activeSection, setActiveSection] = useState("dashboard");
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [users, setUsers] = useState([]);
   const navigate = useNavigate();
   const storedUser = getUserFromStorage();
   const adminUser = storedUser || { name: "Admin User", role: "Super Administrator" };
@@ -42,12 +46,29 @@ const GBVAdminDashboard = ({
     navigate("/appointment-form");
   };
 
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const res = await authService.allUsers();
+        if (res.result_code === 0) {
+          setUsers(res.data);
+        }
+      } catch (error) {
+        console.error("Error fetching users:", error);
+      }
+    };
+
+    fetchUsers();
+  }, []);
+
+
   // Use the updated hook
   const {
     dashboardData,
     loading: reportLoading,
     error: reportError,
     totalReports,
+    appointments,
     allReports,
     pendingReports,
     underReviewReports,
@@ -56,9 +77,6 @@ const GBVAdminDashboard = ({
     urgentCases,
     refreshReports
   } = useReports();
-
-  console.log("Dashboard data:", dashboardData);
-  console.log("Urgent cases:", urgentCases);
 
   // Default stats if not provided
   const defaultStats = {
@@ -496,52 +514,12 @@ const GBVAdminDashboard = ({
 
       case "users":
         return (
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">
-              User Management
-            </h2>
-            <div className="flex space-x-1 mb-6">
-              <button className="px-4 py-2 text-sm font-medium text-blue-600 bg-blue-50 rounded-lg">
-                Specialists
-              </button>
-
-              <button
-                onClick={onCreateUser}
-                className="flex items-center px-3 py-2 text-sm  text-white rounded-lg ml-[40rem] bg-gradient-to-r from-purple-600 to-blue-600"
-              >
-                <Plus className="w-4 h-4 mr-2" />
-                Add User
-              </button>
-            </div>
-            <p className="text-gray-600">
-              User management interface would be implemented here with
-              role-based access controls and secure user data handling.
-            </p>
-          </div>
+          <UsersManagement onCreateUser={onCreateUser} Users={users} />
         );
 
       case "appointments":
         return (
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">
-              Appointments Management
-            </h2>
-            <div className="flex space-x-1 mb-6">
-              <button
-                onClick={onCreateAppointment}
-                className="flex items-center px-3 py-2 text-sm  text-white rounded-lg bg-gradient-to-r from-purple-600 to-blue-600"
-              >
-                <Plus className="w-4 h-4 mr-2" />
-                Add Appointment
-              </button>
-              <button className="px-4 py-2 text-sm font-medium text-blue-600 bg-blue-50 rounded-lg">
-                Upcoming Appointments
-              </button>
-              <button className="px-4 py-2 text-sm font-medium text-blue-600 bg-red-50 hover:bg-red-100 rounded-lg">
-                Past Appointments
-              </button>
-            </div>
-          </div>
+          <AppointmentsManagement onCreateAppointment={onCreateAppointment} appointments={appointments} />
         );
 
       case "settings":
