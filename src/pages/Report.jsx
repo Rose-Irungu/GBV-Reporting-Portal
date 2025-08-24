@@ -55,7 +55,7 @@ export default function Report() {
 
     if (name === "immediate_danger" || name === "needs_medical_attention") {
       if (checked) {
-        setShowEmergencyAlert(true);
+        // setShowEmergencyAlert(true);
       } else {
         const otherCheckbox =
           name === "immediate_danger"

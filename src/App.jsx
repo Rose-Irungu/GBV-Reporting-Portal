@@ -32,6 +32,8 @@ const App = () => {
     "/doctor-dashboard" ,
     "/lawyer-dashboard",
     "/counselor-dashboard",
+    "/appointment-form",
+    "/user-form"
 
 
    
