@@ -45,8 +45,8 @@ export default function UsersManagement({ onCreateUser, Users }) {
         return colors[role] || "bg-gray-100 text-gray-800";
     };
 
-    const getStatusBadge = (status) => {
-        return status === 'active' ? (
+    const getStatusBadge = (is_active) => {
+        return is_active ? (
             <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
                 <UserCheck className="w-3 h-3 mr-1" />
                 Active
@@ -131,8 +131,8 @@ export default function UsersManagement({ onCreateUser, Users }) {
                             key={tab.id}
                             onClick={() => setSelectedTab(tab.id)}
                             className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${selectedTab === tab.id
-                                    ? 'text-purple-600 bg-purple-50 border border-purple-200'
-                                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                                ? 'text-purple-600 bg-purple-50 border border-purple-200'
+                                : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
                                 }`}
                         >
                             {tab.label}
@@ -161,9 +161,9 @@ export default function UsersManagement({ onCreateUser, Users }) {
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Activity
                             </th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            {/* <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Last Login
-                            </th>
+                            </th> */}
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Actions
                             </th>
@@ -193,17 +193,23 @@ export default function UsersManagement({ onCreateUser, Users }) {
                                     </span>
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap">
-                                    {getStatusBadge(user.status)}
+                                    {getStatusBadge(user.is_active)}
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                     <div className="flex space-x-4">
-                                        <span className="text-blue-600">{user.appointments_count} appointments</span>
-                                        <span className="text-green-600">{user.reports_count} reports</span>
+                                        {(user.appointments_count > 0 | user.reports_count > 0) && (
+                                            <>
+                                                <span className="text-blue-600">{user.appointments_count} appointments</span>
+                                                <span className="text-green-600">{user.reports_count} reports</span>
+                                            </>
+
+                                        )}
+
                                     </div>
                                 </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                {/* <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                     {formatDate(user.last_login)}
-                                </td>
+                                </td> */}
                                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                     <div className="flex items-center space-x-2">
                                         <button className="text-blue-600 hover:text-blue-900 p-1 rounded">

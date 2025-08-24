@@ -36,51 +36,6 @@ const SurvivorsDashboard = ({ userName }) => {
     loading: reportLoading
   } = useReports();
 
-  // Mock data for appointments
-  // const [appointments, setAppointments] = useState([
-  //   {
-  //     id: 1,
-  //     type: "Counseling Session",
-  //     date: "2025-08-25",
-  //     time: "10:00 AM",
-  //     status: "scheduled",
-  //     counselor: "Dr. Sarah Johnson",
-  //   },
-  //   {
-  //     id: 2,
-  //     type: "Legal Consultation",
-  //     date: "2025-08-28",
-  //     time: "2:00 PM",
-  //     status: "scheduled",
-  //     counselor: "Attorney Mark Davis",
-  //   },
-  // {
-  //   "id": 1,
-  //     "professional_name": "",
-  //       "report_reference": "GBVC60YQO",
-  //         "appointment_type": "counseling",
-  //           "scheduled_date": "2025-08-25T10:39:28Z",
-  //             "duration_minutes": 60,
-  //               "status": "scheduled",
-  //                 "notes": "",
-  //                   "location": "",
-  //                     "is_virtual": false,
-  //                       "created_at": "2025-08-24T10:39:40.416831Z",
-  //                         "updated_at": "2025-08-24T10:39:40.416905Z",
-  //                           "report": "GBVC60YQO",
-  //                             "professional": 6
-  // }
-
-  //   {
-  //     id: 3,
-  //     type: "Medical Check-up",
-  //     date: "2025-08-20",
-  //     time: "9:00 AM",
-  //     status: "completed",
-  //     counselor: "Dr. Emily Chen",
-  //   },
-  // ]);
-
   // Case progress data
   const caseProgress = {
     totalSteps: 7,
