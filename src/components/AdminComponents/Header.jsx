@@ -168,7 +168,7 @@ const EditProfileModal = ({ isOpen, onClose, user, onSave }) => {
   );
 };
 
-// Change Password Modal Component
+
 const ChangePasswordModal = ({ isOpen, onClose, onSave }) => {
   const [formData, setFormData] = useState({
     currentPassword: "",
@@ -190,7 +190,6 @@ const ChangePasswordModal = ({ isOpen, onClose, onSave }) => {
       [name]: value,
     }));
 
-    // Clear error when user starts typing
     if (errors[name]) {
       setErrors((prev) => ({
         ...prev,

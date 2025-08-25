@@ -18,6 +18,8 @@ import {
   Plus,
   AlertCircle,
   Home,
+  Trash2,
+  
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/AdminComponents/Header";
@@ -40,8 +42,22 @@ const GBVAdminDashboard = ({
   const storedUser = getUserFromStorage();
   const [showModal, setShowModal] = useState(false);
   const [selectedReport, setSelectedReport] = useState(null);
-  const adminUser = storedUser || { name: "Admin User", role: "Super Administrator" };
+  const [showAssignModal, setShowAssignModal] = useState(false);
+  const [selectedCase, setSelectedCase] = useState(null);
+  const [assigneeName, setAssigneeName] = useState("");
+  const adminUser = storedUser || {
+    name: "Admin User",
+    role: "Super Administrator",
+  };
 
+  const teamMembers = [
+    "John Smith",
+    "Sarah Johnson",
+    "Mike Davis",
+    "Emily Chen",
+    "David Wilson",
+    "Lisa Anderson",
+  ];
   const onCreateUser = () => {
     navigate("/user-form");
   };
@@ -65,8 +81,7 @@ const GBVAdminDashboard = ({
     fetchUsers();
   }, []);
 
-
-  // Use the updated hook
+  
   const {
     // dashboardData,
     loading: reportLoading,
@@ -83,7 +98,7 @@ const GBVAdminDashboard = ({
     getReport,
   } = useReports();
 
-  // Default stats if not provided
+
   const defaultStats = {
     activeReports: 0,
     pendingAssignments: 0,
@@ -91,21 +106,50 @@ const GBVAdminDashboard = ({
     closedCases: 0,
     ...stats,
   };
-
-  const onAssignReport = (ref_code) => {
-    console.log(ref_code);
-
+  const onDeleteReport = (referenceCode) => {
+    if (window.confirm('Are you sure you want to delete this case? This action cannot be undone.')) {
+      setAllReports(prevReports => 
+        prevReports.filter(report => report.reference_code !== referenceCode)
+      );
+      alert(`Case ${referenceCode} has been deleted.`);
+    }
   };
-  const onViewReport = async(ref_code) => {
+
+    const onAssignReport = (referenceCode) => {
+    setSelectedCase(referenceCode);
+    const report = allReports.find(r => r.reference_code === referenceCode);
+    setAssigneeName(report?.assigned_to || '');
+    setShowAssignModal(true);
+  };
+  // const onAssignReport = (ref_code) => {
+  //   console.log(ref_code);
+  // };
+  const onViewReport = async (ref_code) => {
     const report = await getReport(ref_code);
     setSelectedReport(report);
     setShowModal(true);
     console.log(report);
-    
   };
-  const onCreateReport = () => { };
-  const onFilterReports = () => { };
-  const onSearchReports = () => { };
+  const onCreateReport = () => {};
+  const onFilterReports = () => {};
+  const onSearchReports = () => {};
+
+
+  const handleAssignSubmit = () => {
+    if (assigneeName.trim()) {
+      setAllReports(prevReports =>
+        prevReports.map(report =>
+          report.reference_code === selectedCase
+            ? { ...report, assigned_to: assigneeName, status: 'in_progress' }
+            : report
+        )
+      );
+      setShowAssignModal(false);
+      setSelectedCase(null);
+      setAssigneeName('');
+      alert(`Case ${selectedCase} has been assigned to ${assigneeName}`);
+    }
+  };
 
   const sidebarItems = [
     { id: "dashboard", label: "Dashboard", icon: Home },
@@ -113,7 +157,11 @@ const GBVAdminDashboard = ({
       id: "reports",
       label: "Reports",
       icon: FileText,
-      badge: reportLoading ? "..." : (totalReports > 0 ? totalReports.toString() : null),
+      badge: reportLoading
+        ? "..."
+        : totalReports > 0
+        ? totalReports.toString()
+        : null,
     },
     { id: "users", label: "Users", icon: Users },
     { id: "appointments", label: "Appointments", icon: Clock },
@@ -134,16 +182,17 @@ const GBVAdminDashboard = ({
           )}
         </div>
         <div
-          className={`p-3 rounded-full ${color === "text-red-600"
-            ? "bg-red-50"
-            : color === "text-orange-600"
+          className={`p-3 rounded-full ${
+            color === "text-red-600"
+              ? "bg-red-50"
+              : color === "text-orange-600"
               ? "bg-orange-50"
               : color === "text-green-600"
-                ? "bg-green-50"
-                : color === "text-purple-600"
-                  ? "bg-purple-50"
-                  : "bg-blue-50"
-            }`}
+              ? "bg-green-50"
+              : color === "text-purple-600"
+              ? "bg-purple-50"
+              : "bg-blue-50"
+          }`}
         >
           <Icon className={`w-6 h-6 ${color}`} />
         </div>
@@ -157,12 +206,14 @@ const GBVAdminDashboard = ({
         <div className="flex-1">
           <div className="flex items-center mb-2">
             <AlertTriangle className="w-5 h-5 text-red-500 mr-2" />
-            <span className="font-semibold text-gray-900">{report.reference_code}</span>
+            <span className="font-semibold text-gray-900">
+              {report.reference_code}
+            </span>
             <span className="ml-2 px-2 py-1 text-xs font-medium rounded-full bg-red-100 text-red-800">
               {report.status}
             </span>
           </div>
-          <p className="text-sm text-gray-600 mb-1">Name: {report.name}</p>
+          <p className="text-sm text-gray-600 mb-1">Name: {report.full_name}</p>
           <p className="text-sm text-gray-600 mb-1">Email: {report.email}</p>
           <p className="text-sm text-gray-600 mb-1">Phone: {report.phone}</p>
         </div>
@@ -251,16 +302,17 @@ const GBVAdminDashboard = ({
                     {dayjs(report.incident_date).format("YYYY-MM-DD")}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    {report.incident_type || 'N/A'}
+                    {report.incident_type || "N/A"}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span
-                      className={`px-2 py-1 text-xs font-medium rounded-full ${report.status === "pending"
-                        ? "bg-yellow-100 text-yellow-800"
-                        : report.status === "in_progress"
+                      className={`px-2 py-1 text-xs font-medium rounded-full ${
+                        report.status === "pending"
+                          ? "bg-yellow-100 text-yellow-800"
+                          : report.status === "in_progress"
                           ? "bg-blue-100 text-blue-800"
                           : "bg-green-100 text-green-800"
-                        }`}
+                      }`}
                     >
                       {report.status}
                     </span>
@@ -271,10 +323,10 @@ const GBVAdminDashboard = ({
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    {report.incident_location || 'N/A'}
+                    {report.incident_location || "N/A"}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    {report.assigned_to || 'Unassigned'}
+                    {report.assigned_to || "Unassigned"}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     <div className="flex space-x-2">
@@ -290,6 +342,13 @@ const GBVAdminDashboard = ({
                       >
                         <UserCheck className="w-4 h-4" />
                       </button>
+                      <button
+                        onClick={() => onDeleteReport(report.reference_code)}
+                        className="text-red-600 hover:text-red-900 p-1 rounded hover:bg-red-50"
+                        title="Delete Case"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
                     </div>
                   </td>
                 </tr>
@@ -297,20 +356,87 @@ const GBVAdminDashboard = ({
             ) : (
               <tr>
                 <td colSpan="8" className="px-6 py-8 text-center text-gray-500">
-                  {reportLoading ? "Loading reports..." : "No reports available"}
+                  {reportLoading
+                    ? "Loading reports..."
+                    : "No reports available"}
                 </td>
               </tr>
             )}
           </tbody>
         </table>
       </div>
+      {showAssignModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 w-full max-w-md mx-4">
+            <div className="flex items-center mb-4">
+              <User className="w-5 h-5 text-blue-600 mr-2" />
+              <h3 className="text-lg font-semibold text-gray-900">
+                Assign Case {selectedCase}
+              </h3>
+            </div>
+            
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Select Team Member
+              </label>
+              <select
+                value={assigneeName}
+                onChange={(e) => setAssigneeName(e.target.value)}
+                className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              >
+                <option value="">Select an assignee...</option>
+                {teamMembers.map((member) => (
+                  <option key={member} value={member}>
+                    {member}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Or enter custom name
+              </label>
+              <input
+                type="text"
+                value={assigneeName}
+                onChange={(e) => setAssigneeName(e.target.value)}
+                placeholder="Enter assignee name..."
+                className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              />
+            </div>
+
+            <div className="flex space-x-3">
+              <button
+                onClick={handleAssignSubmit}
+                disabled={!assigneeName.trim()}
+                className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed"
+              >
+                Assign Case
+              </button>
+              <button
+                onClick={() => {
+                  setShowAssignModal(false);
+                  setSelectedCase(null);
+                  setAssigneeName('');
+                }}
+                className="flex-1 bg-gray-300 text-gray-700 py-2 px-4 rounded-md hover:bg-gray-400"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
+   
 
   const Sidebar = () => (
     <div
-      className={`fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg transform ${sidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } transition-transform duration-200 ease-in-out lg:translate-x-0 lg:static lg:inset-0`}
+      className={`fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg transform ${
+        sidebarOpen ? "translate-x-0" : "-translate-x-full"
+      } transition-transform duration-200 ease-in-out lg:translate-x-0 lg:static lg:inset-0`}
     >
       <div className="flex items-center justify-between h-16 px-6 border-b border-gray-200">
         <div className="flex items-center">
@@ -338,10 +464,11 @@ const GBVAdminDashboard = ({
                   setActiveSection(item.id);
                   setSidebarOpen(false);
                 }}
-                className={`w-full flex items-center justify-between px-3 py-2 mb-1 text-sm font-medium rounded-lg transition-colors ${activeSection === item.id
-                  ? "bg-blue-50 text-blue-700 border-r-2 border-blue-600"
-                  : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-                  }`}
+                className={`w-full flex items-center justify-between px-3 py-2 mb-1 text-sm font-medium rounded-lg transition-colors ${
+                  activeSection === item.id
+                    ? "bg-blue-50 text-blue-700 border-r-2 border-blue-600"
+                    : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                }`}
               >
                 <div className="flex items-center">
                   <Icon className="w-5 h-5 mr-3" />
@@ -349,10 +476,11 @@ const GBVAdminDashboard = ({
                 </div>
                 {item.badge && (
                   <span
-                    className={`px-2 py-1 text-xs font-medium rounded-full ${activeSection === item.id
-                      ? "bg-blue-100 text-blue-800"
-                      : "bg-red-100 text-red-800"
-                      }`}
+                    className={`px-2 py-1 text-xs font-medium rounded-full ${
+                      activeSection === item.id
+                        ? "bg-blue-100 text-blue-800"
+                        : "bg-red-100 text-red-800"
+                    }`}
                   >
                     {item.badge}
                   </span>
@@ -410,13 +538,12 @@ const GBVAdminDashboard = ({
               <button
                 onClick={refreshReports}
                 disabled={reportLoading}
-                className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+                className="flex items-center px-4 py-2 bg-gradient-to-r from-purple-600 to-blue-600 hover:shadow-lg transition-all text-white rounded-lg disabled:opacity-50"
               >
                 {reportLoading ? "Loading..." : "Refresh Data"}
               </button>
             </div>
 
-            {/* Stats Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               <StatCard
                 title="Total Reports"
@@ -458,10 +585,15 @@ const GBVAdminDashboard = ({
                   </div>
                   <div className="space-y-3">
                     {reportLoading ? (
-                      <div className="text-center text-gray-500 py-4">Loading...</div>
+                      <div className="text-center text-gray-500 py-4">
+                        Loading...
+                      </div>
                     ) : urgentCases && urgentCases.length > 0 ? (
                       urgentCases.map((report) => (
-                        <UrgentAlert key={report.reference_code} report={report} />
+                        <UrgentAlert
+                          key={report.reference_code}
+                          report={report}
+                        />
                       ))
                     ) : (
                       <div className="text-center text-gray-500 py-4">
@@ -485,7 +617,9 @@ const GBVAdminDashboard = ({
                   </h3>
                   <div className="space-y-3">
                     {reportLoading ? (
-                      <div className="text-center text-gray-500 py-4">Loading activity...</div>
+                      <div className="text-center text-gray-500 py-4">
+                        Loading activity...
+                      </div>
                     ) : urgentCases && urgentCases.length > 0 ? (
                       urgentCases.slice(0, 3).map((report, index) => (
                         <div
@@ -493,16 +627,18 @@ const GBVAdminDashboard = ({
                           className="flex items-center p-3 bg-gray-50 rounded-lg"
                         >
                           <div
-                            className={`w-2 h-2 rounded-full mr-3 ${index === 0
-                              ? "bg-blue-500"
-                              : index === 1
+                            className={`w-2 h-2 rounded-full mr-3 ${
+                              index === 0
+                                ? "bg-blue-500"
+                                : index === 1
                                 ? "bg-green-500"
                                 : "bg-orange-500"
-                              }`}
+                            }`}
                           ></div>
                           <div className="flex-1">
                             <p className="text-sm text-gray-900">
-                              Report {report.reference_code} - {report.name}
+                              Report {report.reference_code} -{" "}
+                              {report.full_name}
                             </p>
                             <p className="text-xs text-gray-500">
                               {report.email}
@@ -527,13 +663,14 @@ const GBVAdminDashboard = ({
         return <ReportsTable />;
 
       case "users":
-        return (
-          <UsersManagement onCreateUser={onCreateUser} Users={users} />
-        );
+        return <UsersManagement onCreateUser={onCreateUser} Users={users} />;
 
       case "appointments":
         return (
-          <AppointmentsManagement onCreateAppointment={onCreateAppointment} appointments={appointments} />
+          <AppointmentsManagement
+            onCreateAppointment={onCreateAppointment}
+            appointments={appointments}
+          />
         );
 
       case "settings":
@@ -601,16 +738,16 @@ const GBVAdminDashboard = ({
         />
 
         <ReportDetailModal
-          isOpen={true}
+          isOpen={showModal}
           onClose={() => setShowModal(false)}
           report={selectedReport}
           onEdit={(report) => {
             // Handle edit action
-            console.log('Edit report:', report);
+            console.log("Edit report:", report);
           }}
           onAssign={(report) => {
             // Handle assignment
-            console.log('Assign report:', report);
+            console.log("Assign report:", report);
           }}
         />
 

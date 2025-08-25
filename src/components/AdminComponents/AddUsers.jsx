@@ -258,14 +258,14 @@ export default function GBVUserForm() {
             </div>
 
             {/* Role Selection */}
-            <div className="mb-8">
+            <div className="mb-8 ">
               <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
                 <Shield className="h-5 w-5 mr-2 text-purple-600" />
                 User Role *
               </h2>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
-                <label
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {/* <label
                   className={`cursor-pointer p-4 border-2 rounded-lg transition-all ${formData.role === "survivor"
                       ? "border-purple-500 bg-purple-50"
                       : "border-gray-200 hover:border-purple-300"
@@ -286,7 +286,7 @@ export default function GBVUserForm() {
                       Seeking support and resources
                     </p>
                   </div>
-                </label>
+                </label> */}
 
                 <label
                   className={`cursor-pointer p-4 border-2 rounded-lg transition-all ${formData.role === "admin"

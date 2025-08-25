@@ -37,9 +37,10 @@ export default function Report() {
     immediate_danger: false,
     needs_medical_attention: false,
 
-    name: "",
-    email: "",
-    phone: "",
+    reporter_first_name: "",
+    reporter_last_name: "",
+    reporter_email: "",
+    reporter_phone: "",
   });
 
   const handleEmergencyExit = () => {
@@ -221,12 +222,25 @@ export default function Report() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Full Name *
+                      First Name *
                     </label>
                     <input
                       type="text"
-                      name="name"
-                      value={formData.name}
+                      name="reporter_first_name"
+                      value={formData.reporter_first_name}
+                      onChange={handleInputChange}
+                      className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Last Name *
+                    </label>
+                    <input
+                      type="text"
+                      name="reporter_last_name"
+                      value={formData.reporter_last_name}
                       onChange={handleInputChange}
                       className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                       required
@@ -239,8 +253,8 @@ export default function Report() {
                     </label>
                     <input
                       type="tel"
-                      name="phone"
-                      value={formData.phone}
+                      name="reporter_phone"
+                      value={formData.reporter_phone}
                       onChange={handleInputChange}
                       placeholder="e.g., +254 700 123 456"
                       className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-purple-500 focus:border-transparent"
@@ -255,8 +269,8 @@ export default function Report() {
                   </label>
                   <input
                     type="email"
-                    name="email"
-                    value={formData.email}
+                    name="reporter_email"
+                    value={formData.reporter_email}
                     onChange={handleInputChange}
                     className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                     required
