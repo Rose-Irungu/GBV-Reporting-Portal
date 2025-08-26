@@ -3,7 +3,7 @@
     "activeCommit": 0,
     "commits": [
         {
-            "activePatchIndex": 2,
+            "activePatchIndex": 3,
             "patches": [
                 {
                     "date": 1756016875671,
@@ -16,6 +16,10 @@
                 {
                     "date": 1756016906195,
                     "content": "Index: \n===================================================================\n--- \n+++ \n@@ -14,9 +14,9 @@\n       setError(null);\r\n     } catch (error) {\r\n       // console.error(\"Error fetching reports:\", error);\r\n       if (error.response) {\r\n-        console.error(\"Server responded with:\", error.response.data);\r\n+        // console.error(\"Server responded with:\", error.response.data);\r\n         setError(\"Server error occurred. Please try again.\");\r\n       } else {\r\n         setError(\"Something went wrong. Please check your connection.\");\r\n       }\r\n"
+                },
+                {
+                    "date": 1756196860989,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,79 @@\n+import { useEffect, useState } from \"react\";\r\n+import { getDashboardStats, getAppointments, getAllReports, getReport as gR } from \"../services/adminDashboardService\";\r\n+\r\n+const useReports = () => {\r\n+\r\n+  const [dashboardData, setDashboardData] = useState(null);\r\n+  const [allReports, setAllReports] = useState([]);\r\n+  const [appointments, setAppointments] = useState(null);\r\n+  const [loading, setLoading] = useState(true);\r\n+  const [error, setError] = useState(null);\r\n+\r\n+  const fetchReports = async () => {\r\n+    try {\r\n+      setLoading(true);\r\n+      const [data, appointments, allReports] = await Promise.all([\r\n+        getDashboardStats(),\r\n+        getAppointments(),\r\n+        getAllReports(),\r\n+      ]);\r\n+      setDashboardData(data);\r\n+      setAppointments(appointments);\r\n+      setAllReports(allReports)\r\n+      setError(null);\r\n+    } catch (error) {\r\n+      console.error(\"Error fetching reports:\", error);\r\n+      if (error.response) {\r\n+        console.error(\"Server responded with:\", error.response.data);\r\n+        setError(\"Server error occurred. Please try again.\");\r\n+      } else {\r\n+        setError(\"Something went wrong. Please check your connection.\");\r\n+      }\r\n+    } finally {\r\n+      setLoading(false);\r\n+    }\r\n+  };\r\n+\r\n+  useEffect(() => {\r\n+    fetchReports();\r\n+  }, []);\r\n+\r\n+  const refreshReports = async () => {\r\n+    await fetchReports();\r\n+  };\r\n+\r\n+  const getReport = async (ref_no) => {\r\n+    try {\r\n+      setLoading(true);\r\n+      const report = await gR(ref_no);\r\n+      return report || null;\r\n+    } catch (error) {\r\n+      console.error(\"Error fetching report:\", error);\r\n+      setError(\"Something went wrong while fetching the report.\");\r\n+      return null;\r\n+    } finally {\r\n+      setLoading(false);\r\n+    }\r\n+  }\r\n+\r\n+  return {\r\n+    dashboardData,\r\n+    loading,\r\n+    error,\r\n+    setAppointments,\r\n+    refreshReports,\r\n+    getReport,\r\n+    allReports: allReports || [],\r\n+    appointments: appointments || [],\r\n+    totalReports: dashboardData?.total_reports || 0,\r\n+    pendingReports: dashboardData?.pending_reports || 0,\r\n+    underReviewReports: dashboardData?.under_review_reports || 0,\r\n+    resolvedReports: dashboardData?.resolved_reports || 0,\r\n+    assignedReports: dashboardData?.assigned_reports || 0,\r\n+    urgentCases: dashboardData?.urgent_cases || [],\r\n+\r\n+    reports: dashboardData?.urgent_cases || [],\r\n+  };\r\n+};\r\n+\r\n+export default useReports;\n\\ No newline at end of file\n"
                 }
             ],
             "date": 1756016875671,

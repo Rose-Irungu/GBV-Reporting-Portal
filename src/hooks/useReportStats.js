@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { getDashboardStats, getAppointments, getAllReports, getReport as gR } from "../services/adminDashboardService";
 
 const useReports = () => {
-  // Initialize as null since you're expecting an object
+
   const [dashboardData, setDashboardData] = useState(null);
   const [allReports, setAllReports] = useState([]);
   const [appointments, setAppointments] = useState(null);

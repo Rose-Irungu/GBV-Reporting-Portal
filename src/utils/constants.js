@@ -12,10 +12,8 @@ ALL_REPORTS: '/reports/',
 GET_TOTAL_CASES: '/reports/get_reports',
 DASHBOARD_STATS: '/dashboard/',
 APPOINTMENTS: '/appointments/',
-// GET_PENDING_CASES: 
-// GET_ASSIGNED_CASES:
-// GET_CLOSED_CASES:
-// GET_URGENT_CASES:
+
+
 
 
 

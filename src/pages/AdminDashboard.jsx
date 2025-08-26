@@ -19,7 +19,6 @@ import {
   AlertCircle,
   Home,
   Trash2,
-  
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/AdminComponents/Header";
@@ -83,7 +82,7 @@ const GBVAdminDashboard = ({
 
   const handleLogout = () => {
     authService.logoutUser();
-  }
+  };
   const {
     // dashboardData,
     loading: reportLoading,
@@ -100,7 +99,6 @@ const GBVAdminDashboard = ({
     getReport,
   } = useReports();
 
-
   const defaultStats = {
     activeReports: 0,
     pendingAssignments: 0,
@@ -109,18 +107,22 @@ const GBVAdminDashboard = ({
     ...stats,
   };
   const onDeleteReport = (referenceCode) => {
-    if (window.confirm('Are you sure you want to delete this case? This action cannot be undone.')) {
-      setAllReports(prevReports => 
-        prevReports.filter(report => report.reference_code !== referenceCode)
+    if (
+      window.confirm(
+        "Are you sure you want to delete this case? This action cannot be undone."
+      )
+    ) {
+      setAllReports((prevReports) =>
+        prevReports.filter((report) => report.reference_code !== referenceCode)
       );
       alert(`Case ${referenceCode} has been deleted.`);
     }
   };
 
-    const onAssignReport = (referenceCode) => {
+  const onAssignReport = (referenceCode) => {
     setSelectedCase(referenceCode);
-    const report = allReports.find(r => r.reference_code === referenceCode);
-    setAssigneeName(report?.assigned_to || '');
+    const report = allReports.find((r) => r.reference_code === referenceCode);
+    setAssigneeName(report?.assigned_to || "");
     setShowAssignModal(true);
   };
   // const onAssignReport = (ref_code) => {
@@ -136,19 +138,18 @@ const GBVAdminDashboard = ({
   const onFilterReports = () => {};
   const onSearchReports = () => {};
 
-
   const handleAssignSubmit = () => {
     if (assigneeName.trim()) {
-      setAllReports(prevReports =>
-        prevReports.map(report =>
+      setAllReports((prevReports) =>
+        prevReports.map((report) =>
           report.reference_code === selectedCase
-            ? { ...report, assigned_to: assigneeName, status: 'in_progress' }
+            ? { ...report, assigned_to: assigneeName, status: "in_progress" }
             : report
         )
       );
       setShowAssignModal(false);
       setSelectedCase(null);
-      setAssigneeName('');
+      setAssigneeName("");
       alert(`Case ${selectedCase} has been assigned to ${assigneeName}`);
     }
   };
@@ -236,16 +237,7 @@ const GBVAdminDashboard = ({
           <h3 className="text-lg font-semibold text-gray-900">
             Recent Reports
           </h3>
-          <div className="flex space-x-2">
-            
-            {/* <button
-              onClick={onCreateReport}
-              className="flex items-center px-3 py-2 text-sm  text-white rounded-lg bg-gradient-to-r from-purple-600 to-blue-600"
-            >
-              <Plus className="w-4 h-4 mr-2" />
-              New Report
-            </button> */}
-          </div>
+          <div className="flex space-x-2"></div>
         </div>
         <div className="relative">
           <Search className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
@@ -265,6 +257,9 @@ const GBVAdminDashboard = ({
                 Case ID
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Full Name
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Date
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -273,9 +268,7 @@ const GBVAdminDashboard = ({
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Status
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Urgency
-              </th>
+
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Location
               </th>
@@ -289,10 +282,13 @@ const GBVAdminDashboard = ({
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
             {allReports && allReports.length > 0 ? (
-              allReports.map((report, index) => (
+              allReports.map((report) => (
                 <tr key={report.reference_code} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-600 hover:text-blue-800 cursor-pointer">
-                    CASE #{index + 1}
+                    {report.reference_code}
+                  </td>
+                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    {report.full_name || "N/A"}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                     {dayjs(report.incident_date).format("YYYY-MM-DD")}
@@ -313,11 +309,7 @@ const GBVAdminDashboard = ({
                       {report.status}
                     </span>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className="px-2 py-1 text-xs font-medium rounded-full bg-red-100 text-red-800">
-                      High
-                    </span>
-                  </td>
+                  {/*  */}
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                     {report.incident_location || "N/A"}
                   </td>
@@ -370,7 +362,7 @@ const GBVAdminDashboard = ({
                 Assign Case {selectedCase}
               </h3>
             </div>
-            
+
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Select Team Member
@@ -414,7 +406,7 @@ const GBVAdminDashboard = ({
                 onClick={() => {
                   setShowAssignModal(false);
                   setSelectedCase(null);
-                  setAssigneeName('');
+                  setAssigneeName("");
                 }}
                 className="flex-1 bg-gray-300 text-gray-700 py-2 px-4 rounded-md hover:bg-gray-400"
               >
@@ -426,7 +418,6 @@ const GBVAdminDashboard = ({
       )}
     </div>
   );
-   
 
   const Sidebar = () => (
     <div
@@ -711,10 +702,8 @@ const GBVAdminDashboard = ({
 
   return (
     <div className="flex h-screen bg-gray-50">
-    
       <Sidebar />
 
-   
       {sidebarOpen && (
         <div
           className="fixed inset-0 z-40 bg-black bg-opacity-50 lg:hidden"
@@ -722,9 +711,7 @@ const GBVAdminDashboard = ({
         />
       )}
 
-     
       <div className="flex-1 flex flex-col overflow-hidden">
-       
         <Header
           activeSection={activeSection}
           sidebarItems={sidebarItems}
