@@ -23,8 +23,14 @@ import {
   Home
 } from 'lucide-react';
 
+import Header from '../components/DoctorsComponents/Header';
+import { getAssignments } from '../services/assignment';
+
+
+
+
 const DoctorDashboard = () => {
-  // Sample data - in a real app this would come from an API
+
   const [reports, setReports] = useState([
     {
       id: 1,
@@ -303,31 +309,7 @@ const DoctorDashboard = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-4">
-            <div className="flex items-center space-x-3">
-              <div className="p-2 bg-blue-100 rounded-lg">
-                <Stethoscope className="h-6 w-6 text-blue-600" />
-              </div>
-              <div>
-                <h1 className="text-2xl font-bold text-gray-900">Medical Dashboard</h1>
-                <p className="text-sm text-gray-500">Review and manage medical reports</p>
-              </div>
-            </div>
-            <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-2 text-sm text-gray-600">
-                <Activity className="h-4 w-4" />
-                <span>{filteredReports.length} Active Cases</span>
-              </div>
-              <div className="flex items-center space-x-2 text-sm text-red-600">
-                <AlertTriangle className="h-4 w-4" />
-                <span>{filteredReports.filter(r => r.priority === 'critical').length} Critical</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+    <Header />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <div className="flex gap-6">

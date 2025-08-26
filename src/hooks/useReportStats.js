@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import { getDashboardStats, getAppointments, getAllReports, getReport as gR } from "../services/adminDashboardService";
+import { getDashboardStats, getAppointments, getAllReports, getReport as gR, getProfessionals, } from "../services/adminDashboardService";
 
 const useReports = () => {
 
   const [dashboardData, setDashboardData] = useState(null);
   const [allReports, setAllReports] = useState([]);
+  const [proffessionals, setProfessionals] = useState([]);
   const [appointments, setAppointments] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -12,14 +13,16 @@ const useReports = () => {
   const fetchReports = async () => {
     try {
       setLoading(true);
-      const [data, appointments, allReports] = await Promise.all([
+      const [data, appointments, allReports, professionals] = await Promise.all([
         getDashboardStats(),
         getAppointments(),
         getAllReports(),
+        getProfessionals(),
       ]);
       setDashboardData(data);
       setAppointments(appointments);
       setAllReports(allReports)
+      setProfessionals(professionals);
       setError(null);
     } catch (error) {
       console.error("Error fetching reports:", error);
@@ -63,6 +66,7 @@ const useReports = () => {
     setAppointments,
     refreshReports,
     getReport,
+    proffessionals: proffessionals || [],
     allReports: allReports || [],
     appointments: appointments || [],
     totalReports: dashboardData?.total_reports || 0,

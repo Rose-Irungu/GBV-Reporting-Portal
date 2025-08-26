@@ -3,7 +3,7 @@
     "activeCommit": 0,
     "commits": [
         {
-            "activePatchIndex": 3,
+            "activePatchIndex": 5,
             "patches": [
                 {
                     "date": 1756014809111,
@@ -20,6 +20,14 @@
                 {
                     "date": 1756014856171,
                     "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,7 @@\n+import api from './api';\r\n+import { API_ENDPOINTS } from '../utils/constants';\r\n+\r\n+export const getTotalReports = async () => {\r\n+  const res = await api.get(API_ENDPOINTS.GET_TOTAL_CASES: );\r\n+  return res.data;\r\n+};\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1756211354394,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -25,4 +25,5 @@\n   const res = await api.get(`${API_ENDPOINTS.ALL_REPORTS}${ref_no}/`);\r\n   return res.data;\r\n }\r\n \r\n+e\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1756211368115,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,32 @@\n+import api from './api';\r\n+import { API_ENDPOINTS } from '../utils/constants';\r\n+\r\n+export const getTotalReports = async () => {\r\n+  const res = await api.get(API_ENDPOINTS.GET_TOTAL_CASES);\r\n+  return res.data;\r\n+};\r\n+\r\n+export const getDashboardStats = async () => {\r\n+  const res = await api.get(API_ENDPOINTS.DASHBOARD_STATS);\r\n+  return res.data;\r\n+}\r\n+\r\n+export const getAppointments = async () => {\r\n+  const res = await api.get(API_ENDPOINTS.APPOINTMENTS);\r\n+  return res.data;\r\n+};\r\n+\r\n+export const getAllReports = async () => {\r\n+  const res = await api.get(API_ENDPOINTS.ALL_REPORTS);\r\n+  return res.data;\r\n+}\r\n+\r\n+export const getReport = async (ref_no) => {\r\n+  const res = await api.get(`${API_ENDPOINTS.ALL_REPORTS}${ref_no}/`);\r\n+  return res.data;\r\n+}\r\n+\r\n+export const getProfessionals = async () => {\r\n+  const res = await api.get();\r\n+  return res.data;\r\n+}\n\\ No newline at end of file\n"
                 }
             ],
             "date": 1756014809111,

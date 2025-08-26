@@ -25,3 +25,8 @@ export const getReport = async (ref_no) => {
   const res = await api.get(`${API_ENDPOINTS.ALL_REPORTS}${ref_no}/`);
   return res.data;
 }
+
+export const getProfessionals = async () => {
+  const res = await api.get(API_ENDPOINTS.PROFESSIONALS);
+  return res.data;
+}

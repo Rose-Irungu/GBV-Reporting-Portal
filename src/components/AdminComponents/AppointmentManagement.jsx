@@ -17,6 +17,8 @@ import {
   XCircle,
   AlertCircle,
 } from "lucide-react";
+import useReports from "../../hooks/useReportStats";
+
 
 export default function AppointmentsManagement({
   onCreateAppointment,
@@ -24,7 +26,7 @@ export default function AppointmentsManagement({
 }) {
   const [selectedTab, setSelectedTab] = useState("upcoming");
   const [searchTerm, setSearchTerm] = useState("");
-  // const [selectedAppointments, setSelectedAppointments] = useState([]);
+
 
   const getAppointmentTypeColor = (type) => {
     const colors = {

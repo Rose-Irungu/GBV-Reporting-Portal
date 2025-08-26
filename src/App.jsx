@@ -19,6 +19,7 @@ import Footer from "./components/Footer";
 import GetStarted from "./components/GetStarted";
 import AddUser from "./components/AdminComponents/AddUsers";
 import Appointments from "./components/SurvivorComponents/Appointments";
+// import ReportModal from "./components/ReportModal";
 
 
 const App = () => {
@@ -62,6 +63,7 @@ const App = () => {
         <Route path="/getstarted" element={<GetStarted />} />
         <Route path="/user-form" element={<AddUser />} />
         <Route path="/appointment-form" element={<Appointments />} />
+        {/* <Route path="/report-modal" element={<ReportModal />} /> */}
       </Routes>
 
       {!shouldHideNavbar && <Footer />}

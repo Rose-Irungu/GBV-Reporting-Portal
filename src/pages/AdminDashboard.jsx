@@ -28,7 +28,7 @@ import getUserFromStorage from "../utils/userData";
 import UsersManagement from "../components/AdminComponents/UserManagement";
 import AppointmentsManagement from "../components/AdminComponents/AppointmentManagement";
 import dayjs from "dayjs";
-import ReportDetailModal from "../components/Report";
+import ReportDetailModal from "../components/ReportModal";
 
 const GBVAdminDashboard = ({
   stats = {},
@@ -95,6 +95,7 @@ const GBVAdminDashboard = ({
     resolvedReports,
     assignedReports,
     urgentCases,
+    proffessionals,
     refreshReports,
     getReport,
   } = useReports();
@@ -309,7 +310,7 @@ const GBVAdminDashboard = ({
                       {report.status}
                     </span>
                   </td>
-                  {/*  */}
+               
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                     {report.incident_location || "N/A"}
                   </td>

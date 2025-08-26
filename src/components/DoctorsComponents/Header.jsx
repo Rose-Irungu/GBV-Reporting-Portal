@@ -420,7 +420,6 @@ const ChangePasswordModal = ({ isOpen, onClose, onSave }) => {
   );
 };
 
-// Main Header Component
 const Header = ({
   activeSection = "dashboard",
   sidebarItems = [],
@@ -437,9 +436,9 @@ const Header = ({
 
   const activeLabel =
     sidebarItems.find((item) => item.id === activeSection)?.label ||
-    " Admin Dashboard";
+    "Doctors Dashboard";
 
-  // Close dropdown when clicking outside
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (userMenuRef.current && !userMenuRef.current.contains(event.target)) {

@@ -33,24 +33,13 @@ const SurvivorsDashboard = ({ userName }) => {
     dashboardData,
     appointments,
     setAppointments,
-    loading: reportLoading
+    allReports,
+    proffessionals,
+    loading: reportLoading,
   } = useReports();
 
-  // Case progress data
-  const caseProgress = {
-    totalSteps: 7,
-    completedSteps: 4,
-    currentStep: "Legal Consultation",
-    steps: [
-      { name: "Initial Report Filed", completed: true, date: "2025-08-10" },
-      { name: "Medical Examination", completed: true, date: "2025-08-12" },
-      { name: "Counseling Started", completed: true, date: "2025-08-15" },
-      { name: "Evidence Collection", completed: true, date: "2025-08-18" },
-      { name: "Legal Consultation", completed: false, date: "2025-08-28" },
-      { name: "Case Review", completed: false, date: null },
-      { name: "Court Proceedings", completed: false, date: null },
-    ],
-  };
+
+  const caseProgress = {};
 
   const educationalContent = [
     {
@@ -214,6 +203,26 @@ const SurvivorsDashboard = ({ userName }) => {
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label className="block text-sm font-medium mb-1">
+                Report
+              </label>
+              <select
+                value={formData.report}
+                onChange={(e) =>
+                  setFormData({ ...formData, report_id: e.target.value })
+                }
+                className="w-full border border-gray-300 rounded-md px-3 py-2"
+                required
+              >
+                <option value="">Select Report...</option>
+                {
+                  allReports.map((report) => (
+                    <option key={report.id} value={report.id}>{report.reference_code}</option>
+                  ))
+                }
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">
                 Appointment Type
               </label>
               <select
@@ -262,16 +271,14 @@ const SurvivorsDashboard = ({ userName }) => {
               <label className="block text-sm font-medium mb-1">
                 Professional
               </label>
-              <input
-                type="text"
-                value={formData.counselor}
-                onChange={(e) =>
-                  setFormData({ ...formData, counselor: e.target.value })
-                }
-                placeholder="e.g., Dr. Smith, Attorney Johnson"
-                className="w-full border border-gray-300 rounded-md px-3 py-2"
-                required
-              />
+              <select className="w-full border border-gray-300 rounded-md px-3 py-2">
+                <option value="">Select a professional...</option>
+                {proffessionals.map((pro) => (
+                  <option key={pro.id} value={pro.id}>
+                    {pro.first_name} {pro.last_name}- {pro.role}
+                  </option>
+                ))}
+              </select>
             </div>
 
             <div className="flex gap-3 pt-4">
@@ -361,16 +368,17 @@ const SurvivorsDashboard = ({ userName }) => {
             {[
               { id: "overview", label: "Overview", icon: Home },
               { id: "appointments", label: "Appointments", icon: Calendar },
-              { id: "progress", label: "Case Progress", icon: CheckCircle },
+              { id: "reports", label: "Case Progress", icon: CheckCircle },
               { id: "education", label: "Resources", icon: BookOpen },
             ].map(({ id, label, icon: Icon }) => (
               <button
                 key={id}
                 onClick={() => setActiveTab(id)}
-                className={`flex items-center space-x-2 py-2 px-1 border-b-2 font-medium text-sm ${activeTab === id
+                className={`flex items-center space-x-2 py-2 px-1 border-b-2 font-medium text-sm ${
+                  activeTab === id
                     ? "border-purple-500 text-purple-600"
                     : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-                  }`}
+                }`}
               >
                 <Icon size={16} />
                 <span>{label}</span>
@@ -495,10 +503,11 @@ const SurvivorsDashboard = ({ userName }) => {
                 {appointments.map((appointment) => (
                   <div
                     key={appointment.id}
-                    className={`border rounded-lg p-4 ${appointment.status === "completed"
+                    className={`border rounded-lg p-4 ${
+                      appointment.status === "completed"
                         ? "border-green-200 bg-green-50"
                         : "border-gray-200"
-                      }`}
+                    }`}
                   >
                     <div className="flex justify-between items-start">
                       <div className="flex-1">
@@ -507,10 +516,11 @@ const SurvivorsDashboard = ({ userName }) => {
                             {appointment.appointment_type}
                           </h4>
                           <span
-                            className={`px-2 py-1 text-xs rounded-full ${appointment.status === "completed"
+                            className={`px-2 py-1 text-xs rounded-full ${
+                              appointment.status === "completed"
                                 ? "bg-green-100 text-green-800"
                                 : "bg-blue-100 text-blue-800"
-                              }`}
+                            }`}
                           >
                             {appointment.status}
                           </span>
@@ -519,12 +529,20 @@ const SurvivorsDashboard = ({ userName }) => {
                           <div className="flex items-center space-x-2">
                             <Calendar size={14} />
                             <span>
-                              <span>{dayjs(appointment.scheduled_date).format("YYYY-MM-DD")}</span>
+                              <span>
+                                {dayjs(appointment.scheduled_date).format(
+                                  "YYYY-MM-DD"
+                                )}
+                              </span>
                             </span>
                           </div>
                           <div className="flex items-center space-x-2">
                             <Clock size={14} />
-                            <span>{dayjs(appointment.scheduled_date).format("HH:MM")}</span>
+                            <span>
+                              {dayjs(appointment.scheduled_date).format(
+                                "HH:MM"
+                              )}
+                            </span>
                           </div>
                           <div className="flex items-center space-x-2">
                             <User size={14} />
@@ -562,67 +580,67 @@ const SurvivorsDashboard = ({ userName }) => {
           </div>
         )}
 
-        {/* Progress Tab */}
-        {activeTab === "progress" && (
+        {activeTab === "reports" && (
           <div className="space-y-6">
             <div className="bg-white rounded-lg shadow p-6">
               <h2 className="text-lg font-medium text-gray-900 mb-4">
-                Case Progress
+                My Reports
               </h2>
-
-              <div className="mb-6">
-                <div className="flex justify-between text-sm text-gray-600 mb-2">
-                  <span>Overall Progress</span>
-                  <span>
-                    {caseProgress.completedSteps} of {caseProgress.totalSteps}{" "}
-                    completed
-                  </span>
+              {allReports && allReports.length > 0 ? (
+                <div className="overflow-x-auto">
+                  <table className="min-w-full border border-gray-200 rounded-lg">
+                    <thead className="bg-gray-100">
+                      <tr>
+                        <th className="px-4 py-2 text-left text-sm font-medium text-gray-600">
+                          Report ID
+                        </th>
+                        <th className="px-4 py-2 text-left text-sm font-medium text-gray-600">
+                          Type
+                        </th>
+                        <th className="px-4 py-2 text-left text-sm font-medium text-gray-600">
+                          Status
+                        </th>
+                        <th className="px-4 py-2 text-left text-sm font-medium text-gray-600">
+                          Date Submitted
+                        </th>
+                        <th className="px-4 py-2 text-left text-sm font-medium text-gray-600">
+                          Assigned to
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {allReports.map((report, index) => (
+                        <tr key={report.reference_code} className="border-t">
+                          <td className="px-4 py-2 text-sm text-gray-700">
+                            {report.reference_code}
+                          </td>
+                          <td className="px-4 py-2 text-sm text-gray-700">
+                            {report.incident_type || "N/A"}
+                          </td>
+                          <td className="px-4 py-2 text-sm">
+                            <span
+                              className={`px-2 py-1 rounded-full text-xs font-medium ${
+                                report.status === "Completed"
+                                  ? "bg-green-100 text-green-700"
+                                  : "bg-yellow-100 text-yellow-700"
+                              }`}
+                            >
+                              {report.status}
+                            </span>
+                          </td>
+                          <td className="px-4 py-2 text-sm text-gray-600">
+                            {dayjs(report.incident_date).format("YYYY-MM-DD")}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
                 </div>
-                <div className="w-full bg-gray-200 rounded-full h-2">
-                  <div
-                    className="bg-purple-600 h-2 rounded-full"
-                    style={{
-                      width: `${(caseProgress.completedSteps /
-                          caseProgress.totalSteps) *
-                        100
-                        }%`,
-                    }}
-                  ></div>
-                </div>
-              </div>
-
-              <div className="space-y-4">
-                {caseProgress.steps.map((step, index) => (
-                  <div key={index} className="flex items-center space-x-4">
-                    <div
-                      className={`w-8 h-8 rounded-full flex items-center justify-center ${step.completed
-                          ? "bg-green-100 text-green-600"
-                          : "bg-gray-100 text-gray-400"
-                        }`}
-                    >
-                      {step.completed ? (
-                        <CheckCircle size={16} />
-                      ) : (
-                        <Circle size={16} />
-                      )}
-                    </div>
-                    <div className="flex-1">
-                      <h4
-                        className={`font-medium ${step.completed ? "text-gray-900" : "text-gray-600"
-                          }`}
-                      >
-                        {step.name}
-                      </h4>
-                      {step.date && (
-                        <p className="text-sm text-gray-500">
-                          {step.completed ? "Completed on" : "Scheduled for"}{" "}
-                          {new Date(step.date).toLocaleDateString()}
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
+              ) : (
+                <p className="text-gray-500 text-sm">
+                  No reports submitted yet.
+                </p>
+              )}
             </div>
           </div>
         )}
