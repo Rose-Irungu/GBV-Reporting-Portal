@@ -30,13 +30,13 @@ export default function Resources() {
   const [viewMode, setViewMode] = useState('grid'); // grid or list
 
   const categories = [
-    { id: 'all', name: 'All Resources', icon: Globe, count: 24 },
-    { id: 'emergency', name: 'Emergency Help', icon: Phone, count: 6 },
-    { id: 'legal', name: 'Legal Support', icon: Scale, count: 5 },
-    { id: 'counseling', name: 'Counseling', icon: Heart, count: 8 },
-    { id: 'shelters', name: 'Safe Houses', icon: Shield, count: 4 },
-    { id: 'education', name: 'Educational', icon: BookOpen, count: 7 },
-    { id: 'support-groups', name: 'Support Groups', icon: Users, count: 3 }
+    { id: 'all', name: 'All Resources', icon: Globe, count: 11 },
+    { id: 'emergency', name: 'Emergency Help', icon: Phone, count: 3 },
+    { id: 'legal', name: 'Legal Support', icon: Scale, count: 2 },
+    { id: 'counseling', name: 'Counseling', icon: Heart, count: 2 },
+    { id: 'shelters', name: 'Safe Houses', icon: Shield, count: 1 },
+    { id: 'education', name: 'Educational', icon: BookOpen, count: 2 },
+    { id: 'support-groups', name: 'Support Groups', icon: Users, count: 1 }
   ];
 
   const resources = [

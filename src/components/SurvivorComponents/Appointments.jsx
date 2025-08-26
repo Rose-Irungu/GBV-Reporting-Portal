@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Calendar, Clock, MessageCircle, User } from 'lucide-react';
 
+
 const BookAppointmentForm = ({ onSubmit }) => {
   const [formData, setFormData] = useState({
     firstName: '',
@@ -42,7 +43,7 @@ const BookAppointmentForm = ({ onSubmit }) => {
 
   return (
     <div className="max-w-2xl mx-auto bg-white shadow-md rounded-lg p-6">
-      <h2 className="text-2xl font-bold mb-4 text-purple-700">Book an Appointment</h2>
+      <h2 className="text-2xl font-bold mb-4 text-purple-900">Book an Appointment</h2>
 
       {submitted ? (
         <div className="bg-green-100 text-green-700 p-4 rounded-lg">
@@ -183,7 +184,7 @@ const BookAppointmentForm = ({ onSubmit }) => {
           <div>
             <button
               type="submit"
-              className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 px-4 rounded-md transition-colors"
+              className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:shadow-lg transition-all text-white font-semibold py-2 px-4 rounded-md"
             >
               Book Appointment
             </button>

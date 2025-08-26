@@ -81,7 +81,9 @@ const GBVAdminDashboard = ({
     fetchUsers();
   }, []);
 
-  
+  const handleLogout = () => {
+    authService.logoutUser();
+  }
   const {
     // dashboardData,
     loading: reportLoading,
@@ -235,20 +237,14 @@ const GBVAdminDashboard = ({
             Recent Reports
           </h3>
           <div className="flex space-x-2">
-            <button
-              onClick={onFilterReports}
-              className="flex items-center px-3 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50"
-            >
-              <Filter className="w-4 h-4 mr-2" />
-              Filter
-            </button>
-            <button
+            
+            {/* <button
               onClick={onCreateReport}
               className="flex items-center px-3 py-2 text-sm  text-white rounded-lg bg-gradient-to-r from-purple-600 to-blue-600"
             >
               <Plus className="w-4 h-4 mr-2" />
               New Report
-            </button>
+            </button> */}
           </div>
         </div>
         <div className="relative">
@@ -696,7 +692,7 @@ const GBVAdminDashboard = ({
                   </div>
                   <div className="flex items-center justify-between">
                     <button
-                      onClick={onCreateReport}
+                      onClick={handleLogout}
                       className="flex items-center px-3 py-2 text-sm bg-red-600 text-white rounded-lg hover:bg-red-900"
                     >
                       LOGOUT
@@ -715,10 +711,10 @@ const GBVAdminDashboard = ({
 
   return (
     <div className="flex h-screen bg-gray-50">
-      {/* Sidebar */}
+    
       <Sidebar />
 
-      {/* Mobile overlay */}
+   
       {sidebarOpen && (
         <div
           className="fixed inset-0 z-40 bg-black bg-opacity-50 lg:hidden"
@@ -726,9 +722,9 @@ const GBVAdminDashboard = ({
         />
       )}
 
-      {/* Main Content */}
+     
       <div className="flex-1 flex flex-col overflow-hidden">
-        {/* Top Navigation */}
+       
         <Header
           activeSection={activeSection}
           sidebarItems={sidebarItems}

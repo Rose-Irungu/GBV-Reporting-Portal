@@ -52,14 +52,11 @@ export default function GBVUserForm() {
       newErrors.first_name = "First name is required";
     if (!formData.last_name.trim())
       newErrors.last_name = "Last name is required";
-    if (!formData.email.trim())
-      newErrors.email = "Email is required";
+    if (!formData.email.trim()) newErrors.email = "Email is required";
     if (!formData.phone_number.trim())
       newErrors.phone_number = "Phone number is required";
-    if (!formData.role)
-      newErrors.role = "Role is required";
-    if (!formData.password)
-      newErrors.password = "Password is required";
+    if (!formData.role) newErrors.role = "Role is required";
+    if (!formData.password) newErrors.password = "Password is required";
     if (!formData.confirmPassword)
       newErrors.confirmPassword = "Please confirm password";
 
@@ -170,10 +167,11 @@ export default function GBVUserForm() {
                     name="first_name"
                     value={formData.first_name}
                     onChange={handleInputChange}
-                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all ${errors.first_name
+                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all ${
+                      errors.first_name
                         ? "border-red-500 bg-red-50"
                         : "border-gray-300"
-                      }`}
+                    }`}
                     placeholder="Enter first name"
                   />
                   {errors.first_name && (
@@ -192,10 +190,11 @@ export default function GBVUserForm() {
                     name="last_name"
                     value={formData.last_name}
                     onChange={handleInputChange}
-                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all ${errors.last_name
+                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all ${
+                      errors.last_name
                         ? "border-red-500 bg-red-50"
                         : "border-gray-300"
-                      }`}
+                    }`}
                     placeholder="Enter last name"
                   />
                   {errors.last_name && (
@@ -224,10 +223,11 @@ export default function GBVUserForm() {
                     name="email"
                     value={formData.email}
                     onChange={handleInputChange}
-                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all ${errors.email
+                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all ${
+                      errors.email
                         ? "border-red-500 bg-red-50"
                         : "border-gray-300"
-                      }`}
+                    }`}
                     placeholder="Enter email address"
                   />
                   {errors.email && (
@@ -244,14 +244,17 @@ export default function GBVUserForm() {
                     name="phone_number"
                     value={formData.phone_number}
                     onChange={handleInputChange}
-                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all ${errors.phone_number
+                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all ${
+                      errors.phone_number
                         ? "border-red-500 bg-red-50"
                         : "border-gray-300"
-                      }`}
+                    }`}
                     placeholder="+254 700 000 000"
                   />
                   {errors.phone_number && (
-                    <p className="mt-1 text-sm text-red-600">{errors.phone_number}</p>
+                    <p className="mt-1 text-sm text-red-600">
+                      {errors.phone_number}
+                    </p>
                   )}
                 </div>
               </div>
@@ -265,34 +268,14 @@ export default function GBVUserForm() {
               </h2>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                {/* <label
-                  className={`cursor-pointer p-4 border-2 rounded-lg transition-all ${formData.role === "survivor"
-                      ? "border-purple-500 bg-purple-50"
-                      : "border-gray-200 hover:border-purple-300"
-                    }`}
-                >
-                  <input
-                    type="radio"
-                    name="role"
-                    value="survivor"
-                    checked={formData.role === "survivor"}
-                    onChange={handleInputChange}
-                    className="sr-only"
-                  />
-                  <div className="text-center">
-                    <User className="h-6 w-6 mx-auto mb-2 text-purple-600" />
-                    <h3 className="font-medium text-gray-800">Survivor</h3>
-                    <p className="text-sm text-gray-600 mt-1">
-                      Seeking support and resources
-                    </p>
-                  </div>
-                </label> */}
+               
 
                 <label
-                  className={`cursor-pointer p-4 border-2 rounded-lg transition-all ${formData.role === "admin"
+                  className={`cursor-pointer p-4 border-2 rounded-lg transition-all ${
+                    formData.role === "admin"
                       ? "border-purple-500 bg-purple-50"
                       : "border-gray-200 hover:border-purple-300"
-                    }`}
+                  }`}
                 >
                   <input
                     type="radio"
@@ -304,9 +287,7 @@ export default function GBVUserForm() {
                   />
                   <div className="text-center">
                     <AlertTriangle className="h-6 w-6 mx-auto mb-2 text-purple-600" />
-                    <h3 className="font-medium text-gray-800">
-                      Administrator
-                    </h3>
+                    <h3 className="font-medium text-gray-800">Administrator</h3>
                     <p className="text-sm text-gray-600 mt-1">
                       System administration access
                     </p>
@@ -314,10 +295,11 @@ export default function GBVUserForm() {
                 </label>
 
                 <label
-                  className={`cursor-pointer p-4 border-2 rounded-lg transition-all ${formData.role === "doctor"
+                  className={`cursor-pointer p-4 border-2 rounded-lg transition-all ${
+                    formData.role === "doctor"
                       ? "border-purple-500 bg-purple-50"
                       : "border-gray-200 hover:border-purple-300"
-                    }`}
+                  }`}
                 >
                   <input
                     type="radio"
@@ -329,9 +311,7 @@ export default function GBVUserForm() {
                   />
                   <div className="text-center">
                     <Shield className="h-6 w-6 mx-auto mb-2 text-purple-600" />
-                    <h3 className="font-medium text-gray-800">
-                      Doctor
-                    </h3>
+                    <h3 className="font-medium text-gray-800">Doctor</h3>
                     <p className="text-sm text-gray-600 mt-1">
                       Medical professional
                     </p>
@@ -339,10 +319,11 @@ export default function GBVUserForm() {
                 </label>
 
                 <label
-                  className={`cursor-pointer p-4 border-2 rounded-lg transition-all ${formData.role === "counselor"
+                  className={`cursor-pointer p-4 border-2 rounded-lg transition-all ${
+                    formData.role === "counselor"
                       ? "border-purple-500 bg-purple-50"
                       : "border-gray-200 hover:border-purple-300"
-                    }`}
+                  }`}
                 >
                   <input
                     type="radio"
@@ -354,9 +335,7 @@ export default function GBVUserForm() {
                   />
                   <div className="text-center">
                     <User className="h-6 w-6 mx-auto mb-2 text-purple-600" />
-                    <h3 className="font-medium text-gray-800">
-                      Counselor
-                    </h3>
+                    <h3 className="font-medium text-gray-800">Counselor</h3>
                     <p className="text-sm text-gray-600 mt-1">
                       Mental health support
                     </p>
@@ -364,10 +343,11 @@ export default function GBVUserForm() {
                 </label>
 
                 <label
-                  className={`cursor-pointer p-4 border-2 rounded-lg transition-all ${formData.role === "lawyer"
+                  className={`cursor-pointer p-4 border-2 rounded-lg transition-all ${
+                    formData.role === "lawyer"
                       ? "border-purple-500 bg-purple-50"
                       : "border-gray-200 hover:border-purple-300"
-                    }`}
+                  }`}
                 >
                   <input
                     type="radio"
@@ -379,9 +359,7 @@ export default function GBVUserForm() {
                   />
                   <div className="text-center">
                     <Shield className="h-6 w-6 mx-auto mb-2 text-purple-600" />
-                    <h3 className="font-medium text-gray-800">
-                      Lawyer
-                    </h3>
+                    <h3 className="font-medium text-gray-800">Lawyer</h3>
                     <p className="text-sm text-gray-600 mt-1">
                       Legal assistance
                     </p>
@@ -411,10 +389,11 @@ export default function GBVUserForm() {
                       name="password"
                       value={formData.password}
                       onChange={handleInputChange}
-                      className={`w-full px-4 py-3 pr-12 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all ${errors.password
+                      className={`w-full px-4 py-3 pr-12 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all ${
+                        errors.password
                           ? "border-red-500 bg-red-50"
                           : "border-gray-300"
-                        }`}
+                      }`}
                       placeholder="Enter password"
                     />
                     <button
@@ -449,10 +428,11 @@ export default function GBVUserForm() {
                       name="confirmPassword"
                       value={formData.confirmPassword}
                       onChange={handleInputChange}
-                      className={`w-full px-4 py-3 pr-12 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all ${errors.confirmPassword
+                      className={`w-full px-4 py-3 pr-12 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all ${
+                        errors.confirmPassword
                           ? "border-red-500 bg-red-50"
                           : "border-gray-300"
-                        }`}
+                      }`}
                       placeholder="Confirm password"
                     />
                     <button
@@ -479,21 +459,15 @@ export default function GBVUserForm() {
             </div>
 
             {/* Submit Button */}
-            <div className="flex justify-center space-x-4">
-              <button
-                type="button"
-                onClick={() => window.history.back()}
-                className="px-8 py-4 rounded-lg font-semibold text-gray-600 border border-gray-300 hover:bg-gray-50 transition-all"
-              >
-                Cancel
-              </button>
+            <div className="flex justify-between ">
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className={`px-8 py-4 rounded-lg font-semibold text-white transition-all ${isSubmitting
+                className={`px-8 py-4 rounded-lg font-semibold text-white transition-all ${
+                  isSubmitting
                     ? "bg-gray-400 cursor-not-allowed"
                     : "bg-gradient-to-r from-purple-600 to-blue-600 transform hover:scale-105"
-                  } focus:ring-4 focus:ring-purple-200`}
+                } focus:ring-4 focus:ring-purple-200`}
               >
                 {isSubmitting ? (
                   <div className="flex items-center space-x-2">
@@ -503,6 +477,14 @@ export default function GBVUserForm() {
                 ) : (
                   "Create User Account"
                 )}
+              </button>
+
+              <button
+                type="button"
+                onClick={() => window.history.back()}
+                className="px-10 py-4 rounded-lg font-semibold text-gray-600 border border-gray-400 hover:bg-gray-30 transition-all focus:ring-4 focus:ring-purple-200"
+              >
+                Cancel
               </button>
             </div>
           </form>

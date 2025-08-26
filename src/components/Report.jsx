@@ -38,7 +38,7 @@ export default function ReportDetailModal({ isOpen, onClose, report, onEdit, onA
         actions: true
     });
 
-    // Mock data - in real app, this would come from props
+  
     const mockReport = report || {
         reference_code: "GBV3RQP1Y",
         name: "Jessy Senger",
@@ -57,7 +57,7 @@ export default function ReportDetailModal({ isOpen, onClose, report, onEdit, onA
         assigned_to: null
     };
 
-    // Mock additional data that might be fetched
+  
     const mockAdditionalData = {
         reporter_details: {
             id: 1,
@@ -195,7 +195,7 @@ export default function ReportDetailModal({ isOpen, onClose, report, onEdit, onA
         
         <div className="fixed inset-0 z-[9999] flex items-center justify-center">
             <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-                {/* Background overlay */}
+              
                 <div
                     className="absolute inset-0 bg-gray-500 bg-opacity-75"
                     onClick={onClose}
