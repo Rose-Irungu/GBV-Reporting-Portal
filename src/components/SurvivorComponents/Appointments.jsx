@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Calendar, Clock, MessageCircle, User } from 'lucide-react';
-import useReports from "../../hooks/useReportStats";
+import { useEffect } from "react";
+
+
 
 
 const BookAppointmentForm = ({ onSubmit }) => {
@@ -14,6 +16,9 @@ const BookAppointmentForm = ({ onSubmit }) => {
     message: '',
   });
 
+ 
+
+  
   const [submitted, setSubmitted] = useState(false);
 
   const handleChange = (e) => {
@@ -41,7 +46,8 @@ const BookAppointmentForm = ({ onSubmit }) => {
       message: '',
     });
   };
-
+ 
+  
   return (
     <div className="max-w-2xl mx-auto bg-white shadow-md rounded-lg p-6">
       <h2 className="text-2xl font-bold mb-4 text-purple-900">Book an Appointment</h2>

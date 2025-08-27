@@ -12,7 +12,8 @@ ALL_REPORTS: '/reports/',
 
 GET_TOTAL_CASES: '/reports/get_reports',
 DASHBOARD_STATS: '/dashboard/',
-APPOINTMENTS: '/appointments/',
+GET_APPOINTMENTS: '/appointments/',
+
 ASSIGNMENTS: '/assignments/',
 
 

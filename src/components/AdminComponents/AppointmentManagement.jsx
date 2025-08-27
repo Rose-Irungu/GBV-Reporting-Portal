@@ -19,14 +19,10 @@ import {
 } from "lucide-react";
 import useReports from "../../hooks/useReportStats";
 
-
-export default function AppointmentsManagement({
-  onCreateAppointment,
-  appointments,
-}) {
+export default function AppointmentsManagement({ appointments }) {
   const [selectedTab, setSelectedTab] = useState("upcoming");
   const [searchTerm, setSearchTerm] = useState("");
-
+  const { getAppointments } = useReports();
 
   const getAppointmentTypeColor = (type) => {
     const colors = {
@@ -99,7 +95,6 @@ export default function AppointmentsManagement({
       appointment.professional_name
         .toLowerCase()
         .includes(searchTerm.toLowerCase()) ||
-   
       appointment.report_reference
         .toLowerCase()
         .includes(searchTerm.toLowerCase());

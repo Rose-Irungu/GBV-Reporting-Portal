@@ -211,22 +211,21 @@ export default function ReportDetailModal({
   };
 
   const tabs = [
-    { id: "details", label: "Case Details", icon: FileText },
-    { id: "timeline", label: "Timeline", icon: Clock },
+    { id: "details", label: "Case Details", icon: FileText },   
     { id: "notes", label: "Case Notes", icon: MessageSquare },
     { id: "actions", label: "Actions", icon: Activity },
   ];
 
   return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center">
+    <div className="fixed inset-0 z-50 flex items-center justify-center">
       <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
         <div
-          className="absolute inset-0 bg-gray-500 bg-opacity-75"
+          className="absolute  inset-0 bg-opacity-50 transition-opacity"
           onClick={onClose}
         ></div>
 
         {/* Modal */}
-        <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-4xl sm:w-full">
+         <div className="relative inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-4xl sm:w-full">
           {/* Header */}
           <div className="bg-gradient-to-r from-purple-600 to-blue-600 px-6 py-4">
             <div className="flex items-center justify-between">
@@ -260,7 +259,7 @@ export default function ReportDetailModal({
               <div className="flex space-x-2">
                 <button
                   onClick={() => onEdit && onEdit(report)}
-                  className="flex items-center px-3 py-1.5 text-sm text-white bg-white bg-opacity-20 hover:bg-opacity-30 rounded-lg transition-colors"
+                  className="flex items-center px-3 py-1.5 text-sm text-white bg-blue bg-opacity-20 hover:bg-opacity-30 rounded-lg transition-colors"
                 >
                   <Edit className="w-4 h-4 mr-1" />
                   Edit
@@ -268,7 +267,7 @@ export default function ReportDetailModal({
                 {!report.assigned_to && (
                   <button
                     onClick={() => onAssign && onAssign(report)}
-                    className="flex items-center px-3 py-1.5 text-sm text-white bg-white bg-opacity-20 hover:bg-opacity-30 rounded-lg transition-colors"
+                    className="flex items-center px-3 py-1.5 text-sm text-white bg-blue bg-opacity-20 hover:bg-opacity-30 rounded-lg transition-colors"
                   >
                     <UserCheck className="w-4 h-4 mr-1" />
                     Assign
@@ -525,7 +524,7 @@ export default function ReportDetailModal({
               </div>
             )}
 
-            {activeTab === "timeline" && (
+            {/* {activeTab === "timeline" && (
               <div className="space-y-4">
                 <h4 className="text-lg font-semibold text-gray-900">
                   Case Timeline
@@ -571,7 +570,7 @@ export default function ReportDetailModal({
                   </ul>
                 </div>
               </div>
-            )}
+            )} */}
 
             {activeTab === "notes" && (
               <div className="space-y-4">

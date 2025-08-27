@@ -58,7 +58,34 @@ const useReports = () => {
       setLoading(false);
     }
   }
-
+   const getAppointments = async () => {
+    try {
+      setLoading(true);
+      const data = await getAppointments();
+      setAppointments(data || []);
+      return data;
+    } catch (err) {
+      console.error("Error fetching appointments:", err);
+      setError("Something went wrong while fetching appointments.");
+      return [];
+    } finally {
+      setLoading(false);
+    }
+  };
+    const getAppointment = async (id) => {
+    try {
+      setLoading(true);
+      const data = await getAppointment(id);
+      setAppointment(data || null);
+      return data;
+    } catch (err) {
+      console.error("Error fetching appointment:", err);
+      setError("Something went wrong while fetching appointment.");
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  };
   return {
     dashboardData,
     loading,
@@ -66,6 +93,8 @@ const useReports = () => {
     setAppointments,
     refreshReports,
     getReport,
+    getAppointments,
+    getAppointment,
     proffessionals: proffessionals || [],
     allReports: allReports || [],
     appointments: appointments || [],
