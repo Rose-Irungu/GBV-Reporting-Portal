@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { use, useEffect, useState } from "react";
 import {
   Clock,
   Plus,
@@ -17,12 +17,34 @@ import {
   XCircle,
   AlertCircle,
 } from "lucide-react";
-import useReports from "../../hooks/useReportStats";
 
-export default function AppointmentsManagement({ appointments }) {
+import useAppointments from "../../hooks/useAppointment";
+
+export default function AppointmentsManagement() {
+  const { appointments, loading, error } = useAppointments();
   const [selectedTab, setSelectedTab] = useState("upcoming");
   const [searchTerm, setSearchTerm] = useState("");
-  const { getAppointments } = useReports();
+  const [appointment, setAppointment] = useState(null);
+
+  useEffect(() => {
+      const getAppointment = async (id) => {
+    try {
+      setLoading(true);
+      const data = await getAppointment(id);
+      setAppointment(data);
+      return data;
+    } catch (err) {
+      console.error("Error fetching appointment:", err);
+      setError("Something went wrong while fetching appointment.");
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  };
+     getAppointment();
+  }, []);
+
+  // const { getAppointments } = useReports();
 
   const getAppointmentTypeColor = (type) => {
     const colors = {

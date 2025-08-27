@@ -1,4 +1,4 @@
-// Cards.jsx - All card components
+
 import React from 'react';
 import { TrendingUp, AlertTriangle, MapPin, Clock, Bell } from 'lucide-react';
 

@@ -15,6 +15,10 @@ export const getAppointments = async () => {
   const res = await api.get(API_ENDPOINTS.APPOINTMENTS);
   return res.data;
 };
+export const getAppointmentTypes = async () => {
+  const res = await api.get(API_ENDPOINTS.APPOINTMENT_TYPES);       
+  return res.data;
+};
 
 export const getAllReports = async () => {
   const res = await api.get(API_ENDPOINTS.ALL_REPORTS);

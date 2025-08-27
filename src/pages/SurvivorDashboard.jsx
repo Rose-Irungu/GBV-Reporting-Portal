@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import useReports from "../hooks/useReportStats";
 import dayjs from "dayjs";
+import Header from "../components/SurvivorComponents/Header";
 
 const SurvivorsDashboard = ({ userName }) => {
   const [activeTab, setActiveTab] = useState("overview");
@@ -37,9 +38,16 @@ const SurvivorsDashboard = ({ userName }) => {
     proffessionals,
     loading: reportLoading,
   } = useReports();
+  const [uploadedFiles, setUploadedFiles] = useState([]);
 
+  const handleFileUpload = (e) => {
+    const files = Array.from(e.target.files);
+    setUploadedFiles((prev) => [...prev, ...files]);
+  };
 
-  const caseProgress = {};
+  const removeFile = (index) => {
+    setUploadedFiles((prev) => prev.filter((_, i) => i !== index));
+  };
 
   const educationalContent = [
     {
@@ -202,9 +210,7 @@ const SurvivorsDashboard = ({ userName }) => {
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium mb-1">
-                Report
-              </label>
+              <label className="block text-sm font-medium mb-1">Report</label>
               <select
                 value={formData.report}
                 onChange={(e) =>
@@ -214,11 +220,11 @@ const SurvivorsDashboard = ({ userName }) => {
                 required
               >
                 <option value="">Select Report...</option>
-                {
-                  allReports.map((report) => (
-                    <option key={report.id} value={report.id}>{report.reference_code}</option>
-                  ))
-                }
+                {allReports.map((report) => (
+                  <option key={report.id} value={report.id}>
+                    {report.reference_code}
+                  </option>
+                ))}
               </select>
             </div>
             <div>
@@ -234,10 +240,12 @@ const SurvivorsDashboard = ({ userName }) => {
                 required
               >
                 <option value="">Select type...</option>
-                <option value="Counseling Session">Counseling Session</option>
-                <option value="Legal Consultation">Legal Consultation</option>
-                <option value="Medical Check-up">Medical Check-up</option>
-                <option value="Support Group">Support Group</option>
+                {Array.isArray(appointments) &&
+                  appointments.map((t) => (
+                    <option key={t.id} value={t.id}>
+                      {t.name ?? t.appointment_type}
+                    </option>
+                  ))}
               </select>
             </div>
 
@@ -341,25 +349,7 @@ const SurvivorsDashboard = ({ userName }) => {
         <X className="w-5 h-5" />
         Quick Exit
       </button>
-      {/* Header */}
-      <header className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center space-x-4">
-              <Heart className="h-8 w-8 text-purple-600" />
-              <h1 className="text-xl font-semibold text-gray-900">
-                Survivor Support Dashboard
-              </h1>
-            </div>
-            <div className="flex items-center space-x-4">
-              <Bell className="h-6 w-6 text-gray-600" />
-              <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
-                <User className="h-5 w-5 text-purple-600" />
-              </div>
-            </div>
-          </div>
-        </div>
-      </header>
+      <Header />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         {/* Navigation Tabs */}
@@ -452,33 +442,40 @@ const SurvivorsDashboard = ({ userName }) => {
                 </div>
               </div>
             </div>
-
-            {/* Recent Activity */}
             <div className="bg-gray-200 rounded-lg shadow-xl p-6">
+              {" "}
               <h3 className="text-lg font-bold text-gray-900 mb-4">
-                Recent Activity
-              </h3>
+                {" "}
+                Recent Activity{" "}
+              </h3>{" "}
               <div className="space-y-3">
+                {" "}
                 <div className="flex items-center space-x-3">
-                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  {" "}
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>{" "}
                   <span className="text-sm text-gray-600">
-                    Medical examination completed on Aug 20
-                  </span>
-                </div>
+                    {" "}
+                    Medical examination completed on Aug 20{" "}
+                  </span>{" "}
+                </div>{" "}
                 <div className="flex items-center space-x-3">
-                  <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                  {" "}
+                  <div className="w-2 h-2 bg-blue-500 rounded-full"></div>{" "}
                   <span className="text-sm text-gray-600">
-                    Counseling session scheduled for Aug 25
-                  </span>
-                </div>
+                    {" "}
+                    Counseling session scheduled for Aug 25{" "}
+                  </span>{" "}
+                </div>{" "}
                 <div className="flex items-center space-x-3">
-                  <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
+                  {" "}
+                  <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>{" "}
                   <span className="text-sm text-gray-600">
-                    Legal consultation upcoming on Aug 28
-                  </span>
-                </div>
-              </div>
-            </div>
+                    {" "}
+                    Legal consultation upcoming on Aug 28{" "}
+                  </span>{" "}
+                </div>{" "}
+              </div>{" "}
+            </div>{" "}
           </div>
         )}
 
@@ -500,81 +497,82 @@ const SurvivorsDashboard = ({ userName }) => {
               </div>
 
               <div className="space-y-4">
-                {appointments.map((appointment) => (
-                  <div
-                    key={appointment.id}
-                    className={`border rounded-lg p-4 ${
-                      appointment.status === "completed"
-                        ? "border-green-200 bg-green-50"
-                        : "border-gray-200"
-                    }`}
-                  >
-                    <div className="flex justify-between items-start">
-                      <div className="flex-1">
-                        <div className="flex items-center space-x-2 mb-2">
-                          <h4 className="font-medium text-gray-900">
-                            {appointment.appointment_type}
-                          </h4>
-                          <span
-                            className={`px-2 py-1 text-xs rounded-full ${
-                              appointment.status === "completed"
-                                ? "bg-green-100 text-green-800"
-                                : "bg-blue-100 text-blue-800"
-                            }`}
-                          >
-                            {appointment.status}
-                          </span>
-                        </div>
-                        <div className="text-sm text-gray-600 space-y-1">
-                          <div className="flex items-center space-x-2">
-                            <Calendar size={14} />
-                            <span>
+                {Array.isArray(appointments) &&
+                  appointments.map((appointment) => (
+                    <div
+                      key={appointment.id}
+                      className={`border rounded-lg p-4 ${
+                        appointment.status === "completed"
+                          ? "border-green-200 bg-green-50"
+                          : "border-gray-200"
+                      }`}
+                    >
+                      <div className="flex justify-between items-start">
+                        <div className="flex-1">
+                          <div className="flex items-center space-x-2 mb-2">
+                            <h4 className="font-medium text-gray-900">
+                              {appointment.appointment_type}
+                            </h4>
+                            <span
+                              className={`px-2 py-1 text-xs rounded-full ${
+                                appointment.status === "completed"
+                                  ? "bg-green-100 text-green-800"
+                                  : "bg-blue-100 text-blue-800"
+                              }`}
+                            >
+                              {appointment.status}
+                            </span>
+                          </div>
+                          <div className="text-sm text-gray-600 space-y-1">
+                            <div className="flex items-center space-x-2">
+                              <Calendar size={14} />
+                              <span>
+                                <span>
+                                  {dayjs(appointment.scheduled_date).format(
+                                    "YYYY-MM-DD"
+                                  )}
+                                </span>
+                              </span>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                              <Clock size={14} />
                               <span>
                                 {dayjs(appointment.scheduled_date).format(
-                                  "YYYY-MM-DD"
+                                  "HH:MM"
                                 )}
                               </span>
-                            </span>
-                          </div>
-                          <div className="flex items-center space-x-2">
-                            <Clock size={14} />
-                            <span>
-                              {dayjs(appointment.scheduled_date).format(
-                                "HH:MM"
-                              )}
-                            </span>
-                          </div>
-                          <div className="flex items-center space-x-2">
-                            <User size={14} />
-                            <span>{appointment.professional_name}</span>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                              <User size={14} />
+                              <span>{appointment.professional_name}</span>
+                            </div>
                           </div>
                         </div>
-                      </div>
 
-                      {appointment.status === "scheduled" && (
-                        <div className="flex space-x-2">
-                          <button
-                            onClick={() => {
-                              setEditingAppointment(appointment);
-                              setShowAppointmentModal(true);
-                            }}
-                            className="text-blue-600 hover:text-blue-800 p-1"
-                          >
-                            <Edit size={16} />
-                          </button>
-                          <button
-                            onClick={() =>
-                              handleCancelAppointment(appointment.id)
-                            }
-                            className="text-red-600 hover:text-red-800 p-1"
-                          >
-                            <Trash2 size={16} />
-                          </button>
-                        </div>
-                      )}
+                        {appointment.status === "scheduled" && (
+                          <div className="flex space-x-2">
+                            <button
+                              onClick={() => {
+                                setEditingAppointment(appointment);
+                                setShowAppointmentModal(true);
+                              }}
+                              className="text-blue-600 hover:text-blue-800 p-1"
+                            >
+                              <Edit size={16} />
+                            </button>
+                            <button
+                              onClick={() =>
+                                handleCancelAppointment(appointment.id)
+                              }
+                              className="text-red-600 hover:text-red-800 p-1"
+                            >
+                              <Trash2 size={16} />
+                            </button>
+                          </div>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
               </div>
             </div>
           </div>
@@ -609,7 +607,7 @@ const SurvivorsDashboard = ({ userName }) => {
                       </tr>
                     </thead>
                     <tbody>
-                      {allReports.map((report, index) => (
+                      {allReports.map((report) => (
                         <tr key={report.reference_code} className="border-t">
                           <td className="px-4 py-2 text-sm text-gray-700">
                             {report.reference_code}
@@ -630,6 +628,9 @@ const SurvivorsDashboard = ({ userName }) => {
                           </td>
                           <td className="px-4 py-2 text-sm text-gray-600">
                             {dayjs(report.incident_date).format("YYYY-MM-DD")}
+                          </td>
+                          <td className="px-4 py-2 text-sm text-gray-600">
+                            {report.assigned_to || "Unassigned" }
                           </td>
                         </tr>
                       ))}
