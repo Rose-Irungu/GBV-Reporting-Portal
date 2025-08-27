@@ -20,14 +20,11 @@ import {
 import useReports from "../../hooks/useReportStats";
 import AppointmentModal from "../modals/AppointmentModal";
 import { updateAppointment } from "../../services/appointments";
-import {fetchReport} from "../../services/reportService";
+import { fetchReport } from "../../services/reportService";
 
 export default function AppointmentsManagement({ appointments_, allReports, proffessionals }) {
-// import useAppointments from "../../hooks/useAppointment";
-
-// export default function AppointmentsManagement() {
-//   const { appointments, loading, error } = useAppointments();
   const [selectedTab, setSelectedTab] = useState("upcoming");
+  const [appointments, setAppointments] = useState(appointments_);
   const [searchTerm, setSearchTerm] = useState("");
   const [showAppointmentModal, setShowAppointmentModal] = useState(false);
   const [editingAppointment, setEditingAppointment] = useState(null);
@@ -37,28 +34,22 @@ export default function AppointmentsManagement({ appointments_, allReports, prof
   const [reportContent, setReportContent] = useState(null);
   const [showReportModal, setShowReportModal] = useState(false);
 
-    const { getAppointments } = useReports();
-  const [appointment, setAppointment] = useState(null);
+  const { getAppointments } = useReports();
 
   useEffect(() => {
-      const getAppointment = async (id) => {
-    try {
-      setLoading(true);
-      const data = await getAppointment(id);
-      setAppointment(data);
-      return data;
-    } catch (err) {
-      console.error("Error fetching appointment:", err);
-      setError("Something went wrong while fetching appointment.");
-      return null;
-    } finally {
-      setLoading(false);
-    }
-  };
-     getAppointment();
-  }, []);
+    if (showReportModal && selectedAppointment?.report_reference) {
+      const fetchReport = async () => {
+        try {
+          const res = await fetchReport(selectedAppointment?.report_reference);
+          setReportContent(res);
+        } catch (err) {
+          console.error("Failed to fetch report:", err);
+        }
+      };
 
-  // const { getAppointments } = useReports();
+      fetchReport();
+    }
+  }, [showReportModal, selectedAppointment]);
 
   const getAppointmentTypeColor = (type) => {
     const colors = {
@@ -96,6 +87,7 @@ export default function AppointmentsManagement({ appointments_, allReports, prof
     const config = statusConfig[status] || statusConfig.scheduled;
     const IconComponent = config.icon;
 
+
     return (
       <span
         className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${config.color}`}
@@ -104,6 +96,23 @@ export default function AppointmentsManagement({ appointments_, allReports, prof
         {config.label}
       </span>
     );
+  };
+
+  const handleCancelAppointment = async (id) => {
+    const confirmed = confirm("Are you sure you want to cancel this appointment?");
+    if (!confirmed) return;
+
+    try {
+      const res = await updateAppointment({ status: 'cancelled' }, id);
+
+      const updated = await res;
+
+      setAppointments(prev =>
+        prev.map(appt => appt.id === id ? updated : appt)
+      );
+    } catch (error) {
+      console.error("Failed to cancel appointment:", error);
+    }
   };
 
   const formatDateTime = (dateString) => {
@@ -186,7 +195,7 @@ export default function AppointmentsManagement({ appointments_, allReports, prof
             </div>
           </div>
           <button
-            onClick={() => window.open("/appointment-form", "_blank")}
+            onClick={() => setShowAppointmentModal(true)}
             className="flex items-center px-4 py-2 text-sm font-medium text-white rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 hover:shadow-lg transition-all"
           >
             <Plus className="w-4 h-4 mr-2" />
@@ -222,11 +231,10 @@ export default function AppointmentsManagement({ appointments_, allReports, prof
             <button
               key={tab.id}
               onClick={() => setSelectedTab(tab.id)}
-              className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
-                selectedTab === tab.id
+              className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${selectedTab === tab.id
                   ? "text-purple-600 bg-purple-50 border border-purple-200"
                   : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
-              }`}
+                }`}
             >
               {tab.label}
               <span className="ml-2 px-2 py-0.5 text-xs bg-gray-200 rounded-full">
@@ -248,9 +256,9 @@ export default function AppointmentsManagement({ appointments_, allReports, prof
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Professional
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Client
-              </th>
+              {/*<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">*/}
+              {/*  Client*/}
+              {/*</th>*/}
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Type
               </th>
@@ -296,18 +304,18 @@ export default function AppointmentsManagement({ appointments_, allReports, prof
                       ID: {appointment.professional}
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="flex items-center">
-                      <div className="h-8 w-8 rounded-full bg-gray-300 flex items-center justify-center text-gray-600 font-semibold text-xs">
-                        {/* {appointment.client_name.split(' ').map(n => n[0]).join('')} */}
-                      </div>
-                      <div className="ml-3">
-                        <div className="text-sm font-medium text-gray-900">
-                          {appointment.client_name}
-                        </div>
-                      </div>
-                    </div>
-                  </td>
+                  {/*<td className="px-6 py-4 whitespace-nowrap">*/}
+                  {/*  <div className="flex items-center">*/}
+                  {/*    <div className="h-8 w-8 rounded-full bg-gray-300 flex items-center justify-center text-gray-600 font-semibold text-xs">*/}
+                  {/*      /!* {appointment.client_name.split(' ').map(n => n[0]).join('')} *!/*/}
+                  {/*    </div>*/}
+                  {/*    <div className="ml-3">*/}
+                  {/*      <div className="text-sm font-medium text-gray-900">*/}
+                  {/*        {appointment.client_name}*/}
+                  {/*      </div>*/}
+                  {/*    </div>*/}
+                  {/*  </div>*/}
+                  {/*</td>*/}
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span
                       className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium capitalize ${getAppointmentTypeColor(
@@ -348,24 +356,39 @@ export default function AppointmentsManagement({ appointments_, allReports, prof
                       <button
                         className="text-blue-600 hover:text-blue-900 p-1 rounded"
                         title="View Details"
+                        onClick={() => {
+                          setSelectedAppointment(appointment);
+                          setViewShowAppointmentModal(true);
+                        }}
                       >
                         <Eye className="w-4 h-4" />
                       </button>
+
                       <button
                         className="text-gray-600 hover:text-gray-900 p-1 rounded"
                         title="Edit Appointment"
+                        onClick={() => {
+                          setEditingAppointment(appointment)
+                          setShowAppointmentModal(true)
+                        }}
                       >
                         <Edit className="w-4 h-4" />
                       </button>
                       <button
                         className="text-green-600 hover:text-green-900 p-1 rounded"
                         title="View Report"
+                        onClick={() => {
+                          setSelectedAppointment(appointment);
+                          setShowReportModal(true);
+                        }}
                       >
                         <FileText className="w-4 h-4" />
                       </button>
+
                       <button
                         className="text-red-600 hover:text-red-900 p-1 rounded"
                         title="Cancel Appointment"
+                        onClick={() => handleCancelAppointment(appointment.id)}
                       >
                         <Trash2 className="w-4 h-4" />
                       </button>
@@ -399,7 +422,7 @@ export default function AppointmentsManagement({ appointments_, allReports, prof
           {!searchTerm && (
             <div className="mt-6">
               <button
-                onClick={() => window.open("/appointment-form", "_blank")}
+                onClick={() => setShowAppointmentModal(true)}
                 className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-gradient-to-r from-purple-600 to-blue-600 hover:shadow-lg transition-all"
               >
                 <Plus className="w-4 h-4 mr-2" />
@@ -516,85 +539,84 @@ export default function AppointmentsManagement({ appointments_, allReports, prof
           </div>
         </div>
       </div>
-        {showAppointmentModal && (
-            <AppointmentModal
-                isOpen={showAppointmentModal}
-                onClose={() => {
-                    setShowAppointmentModal(false);
-                    setEditingAppointment(null);
-                }}
-                onSubmit={(formData) => {
-                    console.log(formData);
-                    if (editingAppointment) {
-                        // handleEditAppointment(formData);
-                    } else {
-                        console.log("Submitting appointment");
-                        // handleCreateAppointment(formData);
-                    }
-                }}
-                editingAppointment={editingAppointment}
-                allReports={allReports}
-                professionals={proffessionals}
-            />
-        )}
-        {showViewAppointmentModal && selectedAppointment && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center">
-                {/* Blurred and dimmed background */}
-                <div
-                    className="fixed inset-0 bg-black/30 backdrop-blur-sm transition-opacity"
-                    onClick={() => setViewShowAppointmentModal(false)}
-                />
+      {showAppointmentModal && (
+        <AppointmentModal
+          isOpen={showAppointmentModal}
+          onClose={() => {
+            setShowAppointmentModal(false);
+            setEditingAppointment(null);
+          }}
+          onSubmit={(formData) => {
+            console.log(formData);
+            if (editingAppointment) {
+              // handleEditAppointment(formData);
+            } else {
+              console.log("Submitting appointment");
+              // handleCreateAppointment(formData);
+            }
+          }}
+          editingAppointment={editingAppointment}
+          allReports={allReports}
+          professionals={proffessionals}
+        />
+      )}
+      {showViewAppointmentModal && selectedAppointment && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          {/* Blurred and dimmed background */}
+          <div
+            className="fixed inset-0 bg-black/30 backdrop-blur-sm transition-opacity"
+            onClick={() => setViewShowAppointmentModal(false)}
+          />
 
-                {/* Modal box */}
-                <div className="relative bg-white rounded-xl shadow-xl w-full max-w-md p-6 z-50 animate-fadeIn">
-                    {/* Close button */}
-                    <button
-                        className="absolute top-3 right-3 text-gray-400 hover:text-gray-700"
-                        onClick={() => setViewShowAppointmentModal(false)}
-                    >
-                        ✕
-                    </button>
+          {/* Modal box */}
+          <div className="relative bg-white rounded-xl shadow-xl w-full max-w-md p-6 z-50 animate-fadeIn">
+            {/* Close button */}
+            <button
+              className="absolute top-3 right-3 text-gray-400 hover:text-gray-700"
+              onClick={() => setViewShowAppointmentModal(false)}
+            >
+              ✕
+            </button>
 
-                    {/* Header */}
-                    <h2 className="text-xl font-semibold mb-4">Appointment #{selectedAppointment.id}</h2>
+            {/* Header */}
+            <h2 className="text-xl font-semibold mb-4">Appointment #{selectedAppointment.id}</h2>
 
-                    {/* Body */}
-                    <div className="space-y-3 text-sm text-gray-700">
-                        <p><span className="font-semibold">Reference:</span> {selectedAppointment.report_reference}</p>
-                        <p><span className="font-semibold">Type:</span> {selectedAppointment.appointment_type}</p>
-                        <p><span className="font-semibold">Professional:</span> {selectedAppointment.professional_name}</p>
-                        <p>
-                            <span className="font-semibold">Date:</span> {formatDateTime(selectedAppointment.scheduled_date).date}
-                        </p>
-                        <p>
-                            <span className="font-semibold">Time:</span> {formatDateTime(selectedAppointment.scheduled_date).time}
-                        </p>
-                        <p><span className="font-semibold">Duration:</span> {selectedAppointment.duration_minutes} minutes</p>
+            {/* Body */}
+            <div className="space-y-3 text-sm text-gray-700">
+              <p><span className="font-semibold">Reference:</span> {selectedAppointment.report_reference}</p>
+              <p><span className="font-semibold">Type:</span> {selectedAppointment.appointment_type}</p>
+              <p><span className="font-semibold">Professional:</span> {selectedAppointment.professional_name}</p>
+              <p>
+                <span className="font-semibold">Date:</span> {formatDateTime(selectedAppointment.scheduled_date).date}
+              </p>
+              <p>
+                <span className="font-semibold">Time:</span> {formatDateTime(selectedAppointment.scheduled_date).time}
+              </p>
+              <p><span className="font-semibold">Duration:</span> {selectedAppointment.duration_minutes} minutes</p>
 
-                        <p>
-                            <span className="font-semibold">Status:</span>{' '}
-                            <span
-                                className={`inline-block px-2 py-0.5 rounded-full text-xs font-medium ${
-                                    selectedAppointment.status === 'cancelled'
-                                        ? 'bg-red-100 text-red-600'
-                                        : 'bg-green-100 text-green-600'
-                                }`}
-                            >
-            {selectedAppointment.status}
-          </span>
-                        </p>
+              <p>
+                <span className="font-semibold">Status:</span>{' '}
+                <span
+                  className={`inline-block px-2 py-0.5 rounded-full text-xs font-medium ${selectedAppointment.status === 'cancelled'
+                      ? 'bg-red-100 text-red-600'
+                      : 'bg-green-100 text-green-600'
+                    }`}
+                >
+                  {selectedAppointment.status}
+                </span>
+              </p>
 
-                        <p><span className="font-semibold">Location:</span>{' '}
-                            {selectedAppointment.is_virtual
-                                ? 'Virtual'
-                                : selectedAppointment.location || 'Not specified'}
-                        </p>
+              <p><span className="font-semibold">Location:</span>{' '}
+                {selectedAppointment.is_virtual
+                  ? 'Virtual'
+                  : selectedAppointment.location || 'Not specified'}
+              </p>
 
-                        <p><span className="font-semibold">Notes:</span> {selectedAppointment.notes || 'None'}</p>
-                    </div>
-                </div>
+              <p><span className="font-semibold">Notes:</span> {selectedAppointment.notes || 'None'}</p>
             </div>
-        )}
+          </div>
+        </div>
+      )}
 
 
 
