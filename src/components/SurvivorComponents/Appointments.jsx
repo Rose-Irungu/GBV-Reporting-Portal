@@ -2,9 +2,6 @@ import React, { useState } from 'react';
 import { Calendar, Clock, MessageCircle, User } from 'lucide-react';
 import { useEffect } from "react";
 
-
-
-
 const BookAppointmentForm = ({ onSubmit }) => {
   const [formData, setFormData] = useState({
     firstName: '',

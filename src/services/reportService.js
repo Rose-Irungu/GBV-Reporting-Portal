@@ -5,3 +5,8 @@ export const submitReport = async (formData) => {
   const response = await api.post(API_ENDPOINTS.SUBMIT_REPORT, formData);
   return response.data;
 };
+
+export const fetchReport = async (ref_no) => {
+    const response = await api.get(`${API_ENDPOINTS.ALL_REPORTS}${ref_no}/`);
+    return response.data;
+}

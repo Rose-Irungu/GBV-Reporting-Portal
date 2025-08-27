@@ -1,4 +1,4 @@
-import { use, useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Clock,
   Plus,
@@ -17,13 +17,27 @@ import {
   XCircle,
   AlertCircle,
 } from "lucide-react";
+import useReports from "../../hooks/useReportStats";
+import AppointmentModal from "../modals/AppointmentModal";
+import { updateAppointment } from "../../services/appointments";
+import {fetchReport} from "../../services/reportService";
 
-import useAppointments from "../../hooks/useAppointment";
+export default function AppointmentsManagement({ appointments_, allReports, proffessionals }) {
+// import useAppointments from "../../hooks/useAppointment";
 
-export default function AppointmentsManagement() {
-  const { appointments, loading, error } = useAppointments();
+// export default function AppointmentsManagement() {
+//   const { appointments, loading, error } = useAppointments();
   const [selectedTab, setSelectedTab] = useState("upcoming");
   const [searchTerm, setSearchTerm] = useState("");
+  const [showAppointmentModal, setShowAppointmentModal] = useState(false);
+  const [editingAppointment, setEditingAppointment] = useState(null);
+  const [selectedAppointment, setSelectedAppointment] = useState(null);
+  const [showViewAppointmentModal, setViewShowAppointmentModal] = useState(false);
+
+  const [reportContent, setReportContent] = useState(null);
+  const [showReportModal, setShowReportModal] = useState(false);
+
+    const { getAppointments } = useReports();
   const [appointment, setAppointment] = useState(null);
 
   useEffect(() => {
@@ -502,6 +516,88 @@ export default function AppointmentsManagement() {
           </div>
         </div>
       </div>
+        {showAppointmentModal && (
+            <AppointmentModal
+                isOpen={showAppointmentModal}
+                onClose={() => {
+                    setShowAppointmentModal(false);
+                    setEditingAppointment(null);
+                }}
+                onSubmit={(formData) => {
+                    console.log(formData);
+                    if (editingAppointment) {
+                        // handleEditAppointment(formData);
+                    } else {
+                        console.log("Submitting appointment");
+                        // handleCreateAppointment(formData);
+                    }
+                }}
+                editingAppointment={editingAppointment}
+                allReports={allReports}
+                professionals={proffessionals}
+            />
+        )}
+        {showViewAppointmentModal && selectedAppointment && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center">
+                {/* Blurred and dimmed background */}
+                <div
+                    className="fixed inset-0 bg-black/30 backdrop-blur-sm transition-opacity"
+                    onClick={() => setViewShowAppointmentModal(false)}
+                />
+
+                {/* Modal box */}
+                <div className="relative bg-white rounded-xl shadow-xl w-full max-w-md p-6 z-50 animate-fadeIn">
+                    {/* Close button */}
+                    <button
+                        className="absolute top-3 right-3 text-gray-400 hover:text-gray-700"
+                        onClick={() => setViewShowAppointmentModal(false)}
+                    >
+                        ✕
+                    </button>
+
+                    {/* Header */}
+                    <h2 className="text-xl font-semibold mb-4">Appointment #{selectedAppointment.id}</h2>
+
+                    {/* Body */}
+                    <div className="space-y-3 text-sm text-gray-700">
+                        <p><span className="font-semibold">Reference:</span> {selectedAppointment.report_reference}</p>
+                        <p><span className="font-semibold">Type:</span> {selectedAppointment.appointment_type}</p>
+                        <p><span className="font-semibold">Professional:</span> {selectedAppointment.professional_name}</p>
+                        <p>
+                            <span className="font-semibold">Date:</span> {formatDateTime(selectedAppointment.scheduled_date).date}
+                        </p>
+                        <p>
+                            <span className="font-semibold">Time:</span> {formatDateTime(selectedAppointment.scheduled_date).time}
+                        </p>
+                        <p><span className="font-semibold">Duration:</span> {selectedAppointment.duration_minutes} minutes</p>
+
+                        <p>
+                            <span className="font-semibold">Status:</span>{' '}
+                            <span
+                                className={`inline-block px-2 py-0.5 rounded-full text-xs font-medium ${
+                                    selectedAppointment.status === 'cancelled'
+                                        ? 'bg-red-100 text-red-600'
+                                        : 'bg-green-100 text-green-600'
+                                }`}
+                            >
+            {selectedAppointment.status}
+          </span>
+                        </p>
+
+                        <p><span className="font-semibold">Location:</span>{' '}
+                            {selectedAppointment.is_virtual
+                                ? 'Virtual'
+                                : selectedAppointment.location || 'Not specified'}
+                        </p>
+
+                        <p><span className="font-semibold">Notes:</span> {selectedAppointment.notes || 'None'}</p>
+                    </div>
+                </div>
+            </div>
+        )}
+
+
+
     </div>
   );
 }

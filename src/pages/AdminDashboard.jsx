@@ -657,7 +657,9 @@ const GBVAdminDashboard = ({
         return (
           <AppointmentsManagement
             onCreateAppointment={onCreateAppointment}
-            appointments={appointments}
+            appointments_={appointments}
+            allReports={allReports}
+            proffessionals={proffessionals}
           />
         );
 

@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
-import { getDashboardStats, getAllReports, getReport as gR, getProfessionals,getAppointments} from "../services/adminDashboardService";
+import { getDashboardStats, getAppointments, getAllReports, getReport as gR, getProfessionals, } from "../services/adminDashboardService";
 
 const useReports = () => {
 
   const [dashboardData, setDashboardData] = useState(null);
   const [allReports, setAllReports] = useState([]);
   const [proffessionals, setProfessionals] = useState([]);
-  const [appointments, setAppointments] = useState([]);
-  const [appointment, setAppointment] = useState(null);
+  const [appointments, setAppointments] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -59,20 +58,6 @@ const useReports = () => {
       setLoading(false);
     }
   }
-   const fetchAppointments = async () => {
-    try {
-      setLoading(true);
-      const data = await getAppointments();
-      setAppointments(data || []);
-      return data;
-    } catch (err) {
-      console.error("Error fetching appointments:", err);
-      setError("Something went wrong while fetching appointments.");
-      return [];
-    } finally {
-      setLoading(false);
-    }
-  };
     const getAppointment = async (id) => {
     try {
       setLoading(true);
@@ -94,7 +79,7 @@ const useReports = () => {
     setAppointments,
     refreshReports,
     getReport,
-    fetchAppointments,
+    getAppointments,
     getAppointment,
     proffessionals: proffessionals || [],
     allReports: allReports || [],
