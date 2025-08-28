@@ -16,6 +16,7 @@ APPOINTMENTS: '/appointments/',
 MY_APPOINTMENTS: '/appointments/my_appointments/',
 // APPOINTMENT_TYPES: '/appointments/',
 ASSIGNMENTS: '/assignments/',
+ASSIGN_REPORT: '/assignments/assign/',
 
 
 
