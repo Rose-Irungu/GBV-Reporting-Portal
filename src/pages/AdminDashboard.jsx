@@ -28,7 +28,7 @@ import getUserFromStorage from "../utils/userData";
 import UsersManagement from "../components/AdminComponents/UserManagement";
 import AppointmentsManagement from "../components/AdminComponents/AppointmentManagement";
 import dayjs from "dayjs";
-import ReportDetailModal from "../components/ReportModal";
+import ReportModal from "../components/ReportModal";
 
 const GBVAdminDashboard = ({
   stats = {},
@@ -42,6 +42,7 @@ const GBVAdminDashboard = ({
   const [showModal, setShowModal] = useState(false);
   const [selectedReport, setSelectedReport] = useState(null);
   const [showAssignModal, setShowAssignModal] = useState(false);
+  const [showReportModal, setShowReportModal] = useState(false);
   const [selectedCase, setSelectedCase] = useState(null);
   const [assigneeName, setAssigneeName] = useState("");
   const adminUser = storedUser || {
@@ -107,6 +108,12 @@ const GBVAdminDashboard = ({
     closedCases: 0,
     ...stats,
   };
+
+  const handleViewReport = (report) => {
+    setSelectedReport(report);
+    setShowReportModal(true);
+  };
+
   const onDeleteReport = (referenceCode) => {
     if (
       window.confirm(
@@ -222,7 +229,7 @@ const GBVAdminDashboard = ({
           <p className="text-sm text-gray-600 mb-1">Phone: {report.phone}</p>
         </div>
         <button
-          onClick={() => onViewReport(report.reference_code)}
+          onClick={() => handleViewReport(report)}
           className="text-blue-600 hover:text-blue-800 font-medium text-sm"
         >
           View Details
@@ -231,7 +238,7 @@ const GBVAdminDashboard = ({
     </div>
   );
 
-  const ReportsTable = () => (
+  const ReportsTable = ({onView}) => (
     <div className="bg-white rounded-lg shadow-sm border border-gray-200">
       <div className="px-6 py-4 border-b border-gray-200">
         <div className="flex items-center justify-between mb-4">
@@ -320,7 +327,7 @@ const GBVAdminDashboard = ({
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     <div className="flex space-x-2">
                       <button
-                        onClick={() => onViewReport(report.reference_code)}
+                        onClick={() => onView(report)}
                         className="text-blue-600 hover:text-blue-900"
                       >
                         <Eye className="w-4 h-4" />
@@ -648,7 +655,7 @@ const GBVAdminDashboard = ({
         );
 
       case "reports":
-        return <ReportsTable />;
+        return <ReportsTable onView={handleViewReport} />;
 
       case "users":
         return <UsersManagement onCreateUser={onCreateUser} Users={users} />;
@@ -723,18 +730,11 @@ const GBVAdminDashboard = ({
           onSidebarToggle={() => setSidebarOpen(true)}
         />
 
-        <ReportDetailModal
-          isOpen={showModal}
-          onClose={() => setShowModal(false)}
-          report={selectedReport}
-          onEdit={(report) => {
-            // Handle edit action
-            console.log("Edit report:", report);
-          }}
-          onAssign={(report) => {
-            // Handle assignment
-            console.log("Assign report:", report);
-          }}
+        <ReportModal
+          isOpen={showReportModal}
+          reportContent={selectedReport}
+          onClose={() => {setSelectedReport(null); setShowReportModal(false);}}
+          onExport={() => {}}
         />
 
         {/* Main Content Area */}

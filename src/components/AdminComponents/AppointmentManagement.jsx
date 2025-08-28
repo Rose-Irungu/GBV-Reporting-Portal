@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import useReports from "../../hooks/useReportStats";
 import AppointmentModal from "../modals/AppointmentModal";
+import ReportModal from "../ReportModal";
 import { updateAppointment } from "../../services/appointments";
 import { fetchReport } from "../../services/reportService";
 
@@ -43,7 +44,7 @@ export default function AppointmentsManagement({
 
   useEffect(() => {
     if (showReportModal && selectedAppointment?.report_reference) {
-      const fetchReport = async () => {
+      const fetch_Report = async () => {
         try {
           const res = await fetchReport(selectedAppointment?.report_reference);
           setReportContent(res);
@@ -52,7 +53,7 @@ export default function AppointmentsManagement({
         }
       };
 
-      fetchReport();
+      fetch_Report();
     }
   }, [showReportModal, selectedAppointment]);
 
@@ -848,6 +849,21 @@ export default function AppointmentsManagement({
             </div>
           </div>
         </div>
+      )}
+
+      {showReportModal && selectedAppointment && (
+        <ReportModal
+          isOpen={showReportModal}
+          reportContent={reportContent}
+          onClose={() => {
+            setShowReportModal(false);
+            setReportContent(null);
+            setSelectedAppointment(null);
+          }}
+          onExport={() => {
+            // Implement export functionality if needed
+          }}
+        />
       )}
     </div>
   );
