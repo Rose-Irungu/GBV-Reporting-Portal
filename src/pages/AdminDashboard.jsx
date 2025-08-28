@@ -22,6 +22,8 @@ import {
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/AdminComponents/Header";
+import { assignReport } from "../services/assignment";
+import { deleteReport } from "../services/reportService";
 import { authService } from "../services/authService";
 import useReports from "../hooks/useReportStats";
 import getUserFromStorage from "../utils/userData";
@@ -50,14 +52,6 @@ const GBVAdminDashboard = ({
     role: "Super Administrator",
   };
 
-  const teamMembers = [
-    "John Smith",
-    "Sarah Johnson",
-    "Mike Davis",
-    "Emily Chen",
-    "David Wilson",
-    "Lisa Anderson",
-  ];
   const onCreateUser = () => {
     navigate("/user-form");
   };
@@ -99,6 +93,7 @@ const GBVAdminDashboard = ({
     proffessionals,
     refreshReports,
     getReport,
+    setAllReports,
   } = useReports();
 
   const defaultStats = {
@@ -114,12 +109,13 @@ const GBVAdminDashboard = ({
     setShowReportModal(true);
   };
 
-  const onDeleteReport = (referenceCode) => {
+  const onDeleteReport = async (referenceCode) => {
     if (
       window.confirm(
         "Are you sure you want to delete this case? This action cannot be undone."
       )
     ) {
+      await deleteReport(referenceCode);
       setAllReports((prevReports) =>
         prevReports.filter((report) => report.reference_code !== referenceCode)
       );
@@ -146,20 +142,27 @@ const GBVAdminDashboard = ({
   const onFilterReports = () => {};
   const onSearchReports = () => {};
 
-  const handleAssignSubmit = () => {
-    if (assigneeName.trim()) {
-      setAllReports((prevReports) =>
-        prevReports.map((report) =>
-          report.reference_code === selectedCase
-            ? { ...report, assigned_to: assigneeName, status: "in_progress" }
-            : report
-        )
-      );
-      setShowAssignModal(false);
-      setSelectedCase(null);
-      setAssigneeName("");
-      alert(`Case ${selectedCase} has been assigned to ${assigneeName}`);
+  const handleAssignSubmit = async() => {
+    if (assigneeName) {
+      try {
+        await assignReport(selectedCase, assigneeName)
+        setAllReports((prevReports) =>
+          prevReports.map((report) =>
+            report.reference_code === selectedCase
+              ? { ...report, assigned_to: assigneeName, status: "under_review" }
+              : report
+          )
+        );
+        setShowAssignModal(false);
+        setSelectedCase(null);
+        setAssigneeName("");
+        alert(`Case ${selectedCase} has been assigned to ${assigneeName}`);
+      
+      } catch (error) {
+        console.error("Error assigning report:", error);
+      }
     }
+      
   };
 
   const sidebarItems = [
@@ -309,7 +312,7 @@ const GBVAdminDashboard = ({
                       className={`px-2 py-1 text-xs font-medium rounded-full ${
                         report.status === "pending"
                           ? "bg-yellow-100 text-yellow-800"
-                          : report.status === "in_progress"
+                        : report.status === "under_review"
                           ? "bg-blue-100 text-blue-800"
                           : "bg-green-100 text-green-800"
                       }`}
@@ -322,7 +325,7 @@ const GBVAdminDashboard = ({
                     {report.incident_location || "N/A"}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    {report.assigned_to || "Unassigned"}
+                    {report.assigned_to_name || "Unassigned"}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     <div className="flex space-x-2">
@@ -373,7 +376,7 @@ const GBVAdminDashboard = ({
 
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Select Team Member
+                Select a proffesional
               </label>
               <select
                 value={assigneeName}
@@ -381,15 +384,15 @@ const GBVAdminDashboard = ({
                 className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               >
                 <option value="">Select an assignee...</option>
-                {teamMembers.map((member) => (
-                  <option key={member} value={member}>
-                    {member}
+                {proffessionals.map((member) => (
+                  <option key={member} value={member.id}>
+                    {member.first_name} {member.last_name} ( {member.role} )
                   </option>
                 ))}
               </select>
             </div>
 
-            <div className="mb-4">
+            {/* <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Or enter custom name
               </label>
@@ -400,12 +403,12 @@ const GBVAdminDashboard = ({
                 placeholder="Enter assignee name..."
                 className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               />
-            </div>
+            </div> */}
 
             <div className="flex space-x-3">
               <button
                 onClick={handleAssignSubmit}
-                disabled={!assigneeName.trim()}
+                disabled={!assigneeName}
                 className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed"
               >
                 Assign Case

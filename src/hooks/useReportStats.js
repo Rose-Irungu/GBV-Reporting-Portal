@@ -58,11 +58,12 @@ const useReports = () => {
       setLoading(false);
     }
   }
-    const getAppointment = async (id) => {
+  
+  const getAppointment = async (id) => {
     try {
       setLoading(true);
       const data = await getAppointment(id);
-      setAppointment(data || null);
+      // setAppointment(data || null);
       return data;
     } catch (err) {
       console.error("Error fetching appointment:", err);
@@ -80,6 +81,7 @@ const useReports = () => {
     refreshReports,
     getReport,
     getAppointments,
+    setAllReports,
     getAppointment,
     proffessionals: proffessionals || [],
     allReports: allReports || [],
