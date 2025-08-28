@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { Calendar, Clock, FileText, MessageCircle, UserCheck, Upload, Phone, Video, Mail, Download, Plus, Edit, Check, AlertCircle, Heart, Shield, BookOpen, Users } from 'lucide-react';
-import { Link, useNavigate } from "react-router-dom";
 import dayjs from 'dayjs';
-import Header from '../components/CounselorComponents/Header';
+import Header from '../components/AdminComponents/Header';
 import useReports from '../hooks/useReportStats';
 
 const CounselorDashboard = () => {
@@ -11,13 +10,9 @@ const CounselorDashboard = () => {
   const [showNewSession, setShowNewSession] = useState(false);
   const [showScheduleForm, setShowScheduleForm] = useState(false);
   const [newSessionNotes, setNewSessionNotes] = useState('');
-  const navigate = useNavigate();
 
     const {
-      dashboardData,
       allReports,
-      proffessionals,
-      loading: reportLoading,
     } = useReports();
 
   // Mock data for demonstration
@@ -122,16 +117,7 @@ const CounselorDashboard = () => {
       default: return 'bg-gray-100 text-gray-800 border-gray-200';
     }
   };
-
-  const getPriorityColor = (priority) => {
-    switch(priority) {
-      case 'High': return 'bg-red-500';
-      case 'Medium': return 'bg-yellow-500';
-      case 'Low': return 'bg-green-500';
-      default: return 'bg-gray-500';
-    }
-  };
-
+  
   const handleAddSession = () => {
     if (newSessionNotes.trim() && selectedVictim) {
       const newSession = {
@@ -151,7 +137,7 @@ const CounselorDashboard = () => {
     }
   };
 
-  const VictimDetailsModal = ({ victim, onClose }) => (
+  const VictimDetailsModal = ({ victim, onClose, report }) => (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
         <div className="p-6 border-b border-gray-200">
@@ -412,7 +398,7 @@ const CounselorDashboard = () => {
                   <div className="flex items-start justify-between mb-4">
                     <div>
                       <h3 className="text-lg font-semibold text-gray-900">Session {session.id}</h3>
-                      <p className="text-sm text-gray-600">Client: {reports.find(r => r.id === session.victimId)?.victimName}</p>
+                      <p className="text-sm text-gray-600">Client: {allReports.find(r => r.id === session.victimId)?.victimName}</p>
                     </div>
                     <span className={`px-3 py-1 rounded-full text-xs ${
                       session.status === 'Completed' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
@@ -492,7 +478,7 @@ const CounselorDashboard = () => {
                       </div>
                       <div>
                         <h3 className="text-lg font-semibold text-gray-900">
-                          {reports.find(r => r.id === appointment.victimId)?.victimName}
+                          {allReports.find(r => r.id === appointment.victimId)?.victimName}
                         </h3>
                         <p className="text-sm text-gray-600">{appointment.type}</p>
                       </div>
@@ -630,6 +616,7 @@ const CounselorDashboard = () => {
         <VictimDetailsModal 
           victim={selectedVictim}
           onClose={() => setSelectedVictim(null)}
+          report={{}}
         />
       )}
 
@@ -642,7 +629,7 @@ const CounselorDashboard = () => {
       {showScheduleForm && (
         <ScheduleAppointmentModal 
           onClose={() => setShowScheduleForm(false)}
-          reports={reports}
+          reports={allReports}
           setAppointments={setAppointments}
         />
       )}

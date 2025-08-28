@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useState } from "react";
 import {
   Calendar,
@@ -20,7 +21,7 @@ import {
 import useReports from "../hooks/useReportStats";
 import dayjs from "dayjs";
 import AppointmentModal from "../components/modals/AppointmentModal.jsx";
-import Header from "../components/SurvivorComponents/Header";
+import Header from "../components/AdminComponents/Header";
 
 const SurvivorsDashboard = ({ userName }) => {
   const [activeTab, setActiveTab] = useState("overview");
@@ -200,24 +201,10 @@ const SurvivorsDashboard = ({ userName }) => {
         Quick Exit
       </button>
       {/* Header */}
-      <header className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center space-x-4">
-              <Heart className="h-8 w-8 text-purple-600" />
-              <h1 className="text-xl font-semibold text-gray-900">
-                Survivor Support Dashboard
-              </h1>
-            </div>
-            <div className="flex items-center space-x-4">
-              <Bell className="h-6 w-6 text-gray-600" />
-              <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
-                <User className="h-5 w-5 text-purple-600" />
-              </div>
-            </div>
-          </div>
-        </div>
-      </header>
+      <Header
+          // activeSection={activeSection}
+          // sidebarItems={sidebarItems}
+        />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         {/* Navigation Tabs */}

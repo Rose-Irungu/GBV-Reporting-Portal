@@ -424,20 +424,16 @@ const ChangePasswordModal = ({ isOpen, onClose, onSave }) => {
 const Header = ({
   activeSection = "dashboard",
   sidebarItems = [],
-  urgentReports = [],
-  adminUser = {},
-  onSidebarToggle = () => {},
-  onEditProfile = () => {},
-  onChangePassword = () => {},
 }) => {
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const [currentUser, setCurrentUser] = useState({});
   const [showEditModal, setShowEditModal] = useState(false);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const userMenuRef = useRef(null);
 
   const activeLabel =
     sidebarItems.find((item) => item.id === activeSection)?.label ||
-    " Admin Dashboard";
+    "Dashboard";
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -452,6 +448,20 @@ const Header = ({
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  useEffect(() => {
+    const user = localStorage.getItem("userInfo");
+    if (!user) {
+      window.location.href = "/login";
+    }
+    setCurrentUser(JSON.parse(user));
+    console.log("Current User:", currentUser);
+  
+  }, [])
+
+  const onSidebarToggle = () => {};
+  const onEditProfile = () => {};
+  const onChangePassword = () => {};
 
   const handleUserMenuToggle = () => {
     setIsUserMenuOpen(!isUserMenuOpen);
@@ -495,12 +505,6 @@ const Header = ({
           </div>
 
           <div className="flex items-center space-x-4">
-            <button className="relative p-2 text-gray-600 hover:text-gray-900">
-              <Bell className="w-5 h-5" />
-              {urgentReports.length > 0 && (
-                <span className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
-              )}
-            </button>
 
             {/* User Profile Dropdown */}
             <div className="relative" ref={userMenuRef}>
@@ -512,7 +516,7 @@ const Header = ({
                   <User className="w-4 h-4 text-white" />
                 </div>
                 <span className="hidden md:inline text-sm font-medium text-gray-700">
-                  {adminUser.username}
+                  {currentUser.full_name}
                 </span>
               </button>
 
@@ -527,14 +531,14 @@ const Header = ({
                       </div>
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-medium text-gray-900 truncate">
-                          {adminUser.username}
+                          {currentUser.full_name}
                         </p>
                         <p className="text-sm text-gray-500 truncate">
-                          {adminUser.email}
+                          {currentUser.email}
                         </p>
-                        {adminUser.role && (
+                        {currentUser.role && (
                           <p className="text-xs text-blue-600 font-medium">
-                            {adminUser.role}
+                            {currentUser.role}
                           </p>
                         )}
                       </div>
@@ -581,7 +585,7 @@ const Header = ({
       <EditProfileModal
         isOpen={showEditModal}
         onClose={() => setShowEditModal(false)}
-        user={adminUser}
+        user={currentUser}
         onSave={handleSaveProfile}
       />
 
