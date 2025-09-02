@@ -132,7 +132,6 @@ export const QuickActionsCard = ({ activities }) => {
 };
 
 // Table.jsx - Reports table component
-import React from 'react';
 import { Filter, Plus, Search, Eye, UserCheck } from 'lucide-react';
 
 export const ReportsTable = ({ reports, onFilterClick, onNewReport, onViewReport, onAssignReport }) => {
@@ -267,7 +266,7 @@ export const ReportsTable = ({ reports, onFilterClick, onNewReport, onViewReport
 };
 
 // Sidebar.jsx - Navigation sidebar
-import React from 'react';
+
 import { Shield, User, X } from 'lucide-react';
 
 export const Sidebar = ({ 
@@ -334,7 +333,7 @@ export const Sidebar = ({
       <div className="absolute bottom-6 left-6 right-6">
         <div className="bg-gray-50 rounded-lg p-3">
           <div className="flex items-center">
-            <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
+            <div className="w-8 h-8 bg-gradient-to-r from-purple-600 to-blue-600 rounded-full flex items-center justify-center">
               <User className="w-4 h-4 text-white" />
             </div>
             <div className="ml-3">

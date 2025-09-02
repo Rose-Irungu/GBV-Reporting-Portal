@@ -222,14 +222,8 @@ export default function AppointmentsManagement({
               className="pl-10 pr-4 py-2 w-full border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
             />
           </div>
-          <button className="flex items-center px-4 py-2 text-sm font-medium text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50">
-            <Filter className="w-4 h-4 mr-2" />
-            Filter
-          </button>
-          <button className="flex items-center px-4 py-2 text-sm font-medium text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50">
-            <Calendar className="w-4 h-4 mr-2" />
-            Date Range
-          </button>
+        
+         
         </div>
 
         {/* Tabs */}
@@ -264,9 +258,7 @@ export default function AppointmentsManagement({
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Professional
               </th>
-              {/*<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">*/}
-              {/*  Client*/}
-              {/*</th>*/}
+             
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Type
               </th>
@@ -312,18 +304,7 @@ export default function AppointmentsManagement({
                       ID: {appointment.professional}
                     </div>
                   </td>
-                  {/*<td className="px-6 py-4 whitespace-nowrap">*/}
-                  {/*  <div className="flex items-center">*/}
-                  {/*    <div className="h-8 w-8 rounded-full bg-gray-300 flex items-center justify-center text-gray-600 font-semibold text-xs">*/}
-                  {/*      /!* {appointment.client_name.split(' ').map(n => n[0]).join('')} *!/*/}
-                  {/*    </div>*/}
-                  {/*    <div className="ml-3">*/}
-                  {/*      <div className="text-sm font-medium text-gray-900">*/}
-                  {/*        {appointment.client_name}*/}
-                  {/*      </div>*/}
-                  {/*    </div>*/}
-                  {/*  </div>*/}
-                  {/*</td>*/}
+                 
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span
                       className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium capitalize ${getAppointmentTypeColor(
@@ -861,7 +842,7 @@ export default function AppointmentsManagement({
             setSelectedAppointment(null);
           }}
           onExport={() => {
-            // Implement export functionality if needed
+            
           }}
         />
       )}

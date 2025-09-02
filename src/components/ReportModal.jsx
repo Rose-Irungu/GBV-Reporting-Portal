@@ -1,19 +1,19 @@
 import React from "react";
 
-export default function ReportModal({ isOpen, reportContent, onClose, onExport }) {
+export default function ReportModal({ isOpen, reportContent, onClose,  }) {
   if (!isOpen || !reportContent) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      {/* Backdrop */}
+     
       <div
         className="fixed inset-0 bg-black/50 backdrop-blur-md transition-opacity duration-200"
         onClick={onClose}
       />
 
-      {/* Modal Container */}
+   
       <div className="relative bg-white rounded-xl shadow-2xl w-full max-w-3xl max-h-[90vh] overflow-hidden transform transition-all duration-200 scale-100">
-        {/* Header Section */}
+     
         <div className="bg-gradient-to-r from-slate-50 to-gray-50 border-b border-gray-200 px-6 py-4">
           <div className="flex items-center justify-between">
             <div>
@@ -134,12 +134,7 @@ export default function ReportModal({ isOpen, reportContent, onClose, onExport }
           >
             Close
           </button>
-          <button
-            onClick={onExport}
-            className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700"
-          >
-            Export Report
-          </button>
+          
         </div>
       </div>
     </div>

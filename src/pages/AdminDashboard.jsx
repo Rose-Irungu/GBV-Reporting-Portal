@@ -19,6 +19,7 @@ import {
   AlertCircle,
   Home,
   Trash2,
+  Icon,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/AdminComponents/Header";
@@ -41,7 +42,7 @@ const GBVAdminDashboard = ({
   const [users, setUsers] = useState([]);
   const navigate = useNavigate();
   const storedUser = getUserFromStorage();
-  const [showModal, setShowModal] = useState(false);
+
   const [selectedReport, setSelectedReport] = useState(null);
   const [showAssignModal, setShowAssignModal] = useState(false);
   const [showReportModal, setShowReportModal] = useState(false);
@@ -92,7 +93,6 @@ const GBVAdminDashboard = ({
     urgentCases,
     proffessionals,
     refreshReports,
-    getReport,
     setAllReports,
   } = useReports();
 
@@ -129,23 +129,13 @@ const GBVAdminDashboard = ({
     setAssigneeName(report?.assigned_to || "");
     setShowAssignModal(true);
   };
-  // const onAssignReport = (ref_code) => {
-  //   console.log(ref_code);
-  // };
-  const onViewReport = async (ref_code) => {
-    const report = await getReport(ref_code);
-    setSelectedReport(report);
-    setShowModal(true);
-    console.log(report);
-  };
-  const onCreateReport = () => {};
-  const onFilterReports = () => {};
+  
   const onSearchReports = () => {};
 
-  const handleAssignSubmit = async() => {
+  const handleAssignSubmit = async () => {
     if (assigneeName) {
       try {
-        await assignReport(selectedCase, assigneeName)
+        await assignReport(selectedCase, assigneeName);
         setAllReports((prevReports) =>
           prevReports.map((report) =>
             report.reference_code === selectedCase
@@ -157,12 +147,10 @@ const GBVAdminDashboard = ({
         setSelectedCase(null);
         setAssigneeName("");
         alert(`Case ${selectedCase} has been assigned to ${assigneeName}`);
-      
       } catch (error) {
         console.error("Error assigning report:", error);
       }
     }
-      
   };
 
   const sidebarItems = [
@@ -241,7 +229,7 @@ const GBVAdminDashboard = ({
     </div>
   );
 
-  const ReportsTable = ({onView}) => (
+  const ReportsTable = ({ onView }) => (
     <div className="bg-white rounded-lg shadow-sm border border-gray-200">
       <div className="px-6 py-4 border-b border-gray-200">
         <div className="flex items-center justify-between mb-4">
@@ -298,7 +286,7 @@ const GBVAdminDashboard = ({
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-600 hover:text-blue-800 cursor-pointer">
                     {report.reference_code}
                   </td>
-                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                     {report.full_name || "N/A"}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
@@ -312,7 +300,7 @@ const GBVAdminDashboard = ({
                       className={`px-2 py-1 text-xs font-medium rounded-full ${
                         report.status === "pending"
                           ? "bg-yellow-100 text-yellow-800"
-                        : report.status === "under_review"
+                          : report.status === "under_review"
                           ? "bg-blue-100 text-blue-800"
                           : "bg-green-100 text-green-800"
                       }`}
@@ -320,7 +308,7 @@ const GBVAdminDashboard = ({
                       {report.status}
                     </span>
                   </td>
-               
+
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                     {report.incident_location || "N/A"}
                   </td>
@@ -392,24 +380,11 @@ const GBVAdminDashboard = ({
               </select>
             </div>
 
-            {/* <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Or enter custom name
-              </label>
-              <input
-                type="text"
-                value={assigneeName}
-                onChange={(e) => setAssigneeName(e.target.value)}
-                placeholder="Enter assignee name..."
-                className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              />
-            </div> */}
-
             <div className="flex space-x-3">
               <button
                 onClick={handleAssignSubmit}
                 disabled={!assigneeName}
-                className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed"
+                className="flex-1 bg-gradient-to-r from-purple-600 to-blue-600 text-white py-2 px-4 rounded-md  disabled:bg-gray-300 disabled:cursor-not-allowed"
               >
                 Assign Case
               </button>
@@ -492,7 +467,7 @@ const GBVAdminDashboard = ({
       <div className="absolute bottom-6 left-6 right-6">
         <div className="bg-gray-50 rounded-lg p-3">
           <div className="flex items-center">
-            <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
+            <div className="w-8 h-8 bg-gradient-to-r from-purple-600 to-blue-600 rounded-full flex items-center justify-center">
               <User className="w-4 h-4 text-white" />
             </div>
             <div className="ml-3">
@@ -736,7 +711,10 @@ const GBVAdminDashboard = ({
         <ReportModal
           isOpen={showReportModal}
           reportContent={selectedReport}
-          onClose={() => {setSelectedReport(null); setShowReportModal(false);}}
+          onClose={() => {
+            setSelectedReport(null);
+            setShowReportModal(false);
+          }}
           onExport={() => {}}
         />
 

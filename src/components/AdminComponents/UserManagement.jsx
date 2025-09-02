@@ -16,11 +16,14 @@ import {
   Heart,
   User,
 } from "lucide-react";
+import UserModal from "../UserModal";
 
 export default function UsersManagement({ onCreateUser, Users }) {
   const [selectedTab, setSelectedTab] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
-  // const [selectedUsers, setSelectedUsers] = useState([]);
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [showUserModal, setShowUserModal] = useState(false);
+  const [modalType,] = useState(null);
 
   const getRoleIcon = (role) => {
     const icons = {
@@ -59,13 +62,13 @@ export default function UsersManagement({ onCreateUser, Users }) {
     );
   };
 
-  const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    });
-  };
+  // const formatDate = (dateString) => {
+  //   return new Date(dateString).toLocaleDateString("en-US", {
+  //     year: "numeric",
+  //     month: "short",
+  //     day: "numeric",
+  //   });
+  // };
 
   const filteredUsers = Users.filter((user) => {
     const matchesSearch =
@@ -117,9 +120,6 @@ export default function UsersManagement({ onCreateUser, Users }) {
               <h2 className="text-2xl font-bold text-gray-900">
                 User Management
               </h2>
-              <p className="text-gray-600">
-                Manage platform users and their roles
-              </p>
             </div>
           </div>
           <button
@@ -143,10 +143,6 @@ export default function UsersManagement({ onCreateUser, Users }) {
               className="pl-10 pr-4 py-2 w-full border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
             />
           </div>
-          <button className="flex items-center px-4 py-2 text-sm font-medium text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50">
-            <Filter className="w-4 h-4 mr-2" />
-            Filter
-          </button>
         </div>
 
         {/* Tabs */}
@@ -187,9 +183,7 @@ export default function UsersManagement({ onCreateUser, Users }) {
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Activity
               </th>
-              {/* <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Last Login
-                            </th> */}
+             
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Actions
               </th>
@@ -243,22 +237,38 @@ export default function UsersManagement({ onCreateUser, Users }) {
                     )}
                   </div>
                 </td>
-                {/* <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    {formatDate(user.last_login)}
-                                </td> */}
+               
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                   <div className="flex items-center space-x-2">
-                    <button className="text-blue-600 hover:text-blue-900 p-1 rounded">
+                    <button
+                      title="View User"
+                      onClick={() => {
+                        setSelectedUser(user);                        
+                        setShowUserModal(true);
+                      }}
+                      className="text-blue-600 hover:text-blue-900 p-1 rounded"
+                    >
                       <Eye className="w-4 h-4" />
                     </button>
-                    <button className="text-gray-600 hover:text-gray-900 p-1 rounded">
+                    <button
+                      title="Edit User"
+                      onClick={() => {
+                        setSelectedUser(user);
+                        setShowUserModal(true);
+                      }}
+                      className="text-gray-600 hover:text-gray-900 p-1 rounded"
+                    >
                       <Edit className="w-4 h-4" />
                     </button>
-                    <button className="text-red-600 hover:text-red-900 p-1 rounded">
+                    <button
+                      title="Delete User"
+                      onClick={() => {
+                        setSelectedUser(user);                       
+                        setShowUserModal(true);
+                      }}
+                      className="text-red-600 hover:text-red-900 p-1 rounded"
+                    >
                       <Trash2 className="w-4 h-4" />
-                    </button>
-                    <button className="text-gray-400 hover:text-gray-600 p-1 rounded">
-                      <MoreHorizontal className="w-4 h-4" />
                     </button>
                   </div>
                 </td>
@@ -267,6 +277,21 @@ export default function UsersManagement({ onCreateUser, Users }) {
           </tbody>
         </table>
       </div>
+
+      <UserModal
+        isOpen={showUserModal}
+        onClose={() => setShowUserModal(false)}
+        type={modalType}
+        user={selectedUser}
+        onSave={(updatedUser) => {
+          console.log("Save user:", updatedUser);
+          setShowUserModal(false);
+        }}
+        onDelete={(id) => {
+          console.log("Delete user id:", id);
+          setShowUserModal(false);
+        }}
+      />
 
       {/* Footer with pagination */}
       <div className="px-6 py-4 border-t border-gray-200 bg-gray-50">
