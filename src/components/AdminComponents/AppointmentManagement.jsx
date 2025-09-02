@@ -142,22 +142,25 @@ export default function AppointmentsManagement({
     return new Date(dateString) > new Date();
   };
 
-  const filteredAppointments = appointments.filter((appointment) => {
-    const matchesSearch =
-      appointment.professional_name
-        .toLowerCase()
-        .includes(searchTerm.toLowerCase()) ||
-      appointment.report_reference
-        .toLowerCase()
-        .includes(searchTerm.toLowerCase());
+const safeIncludes = (field, term) =>
+  (field || "").toLowerCase().includes((term || "").toLowerCase());
 
-    if (selectedTab === "all") return matchesSearch;
-    if (selectedTab === "upcoming")
-      return matchesSearch && isUpcoming(appointment.scheduled_date);
-    if (selectedTab === "past")
-      return matchesSearch && !isUpcoming(appointment.scheduled_date);
-    return matchesSearch && appointment.status === selectedTab;
-  });
+const filteredAppointments = appointments.filter((appointment) => {
+  const matchesSearch =
+    safeIncludes(appointment.professional_name, searchTerm) ||
+    safeIncludes(appointment.report_reference, searchTerm);
+
+  if (selectedTab === "all") return matchesSearch;
+
+  if (selectedTab === "upcoming")
+    return matchesSearch && isUpcoming(appointment.scheduled_date);
+
+  if (selectedTab === "past")
+    return matchesSearch && !isUpcoming(appointment.scheduled_date);
+
+  return matchesSearch && appointment.status === selectedTab;
+});
+
 
   const tabs = [
     {
