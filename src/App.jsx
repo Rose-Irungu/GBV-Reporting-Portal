@@ -19,6 +19,7 @@ import Footer from "./components/Footer";
 import GetStarted from "./components/GetStarted";
 import AddUser from "./components/AdminComponents/AddUsers";
 import Appointments from "./components/SurvivorComponents/Appointments";
+import { Toaster } from "react-hot-toast";
 // import ReportModal from "./components/ReportModal";
 
 
@@ -65,6 +66,26 @@ const App = () => {
         <Route path="/appointment-form" element={<Appointments />} />
         {/* <Route path="/report-modal" element={<ReportModal />} /> */}
       </Routes>
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          duration: 4000,
+          style: {
+            // background: '#363636',
+            color: '#fff',
+          },
+          success: {
+            style: {
+              background: '#4caf50',
+            },
+          },
+          error: {
+            style: {
+              background: '#f44336',
+            },
+          },
+        }}
+      />
 
       {!shouldHideNavbar && <Footer />}
     </div>

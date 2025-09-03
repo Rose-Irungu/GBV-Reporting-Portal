@@ -16,14 +16,14 @@ import {
   Heart,
   User,
 } from "lucide-react";
-import UserModal from "../UserModal";
+import { UserModal } from "../UserModal";
 
-export default function UsersManagement({ onCreateUser, Users }) {
+export default function UsersManagement({ Users }) {
   const [selectedTab, setSelectedTab] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedUser, setSelectedUser] = useState(null);
   const [showUserModal, setShowUserModal] = useState(false);
-  const [modalType,] = useState(null);
+  const [modalType, setModalType] = useState(null);
 
   const getRoleIcon = (role) => {
     const icons = {
@@ -237,14 +237,16 @@ export default function UsersManagement({ onCreateUser, Users }) {
                     )}
                   </div>
                 </td>
-               
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                   <div className="flex items-center space-x-2">
                     <button
                       title="View User"
                       onClick={() => {
+                        
                         setSelectedUser(user);                        
+                        setModalType("view");
                         setShowUserModal(true);
+                        console.log("Hello", selectedUser);
                       }}
                       className="text-blue-600 hover:text-blue-900 p-1 rounded"
                     >
@@ -253,8 +255,11 @@ export default function UsersManagement({ onCreateUser, Users }) {
                     <button
                       title="Edit User"
                       onClick={() => {
+                        console.log(user);
                         setSelectedUser(user);
+                        setModalType("edit");
                         setShowUserModal(true);
+                        
                       }}
                       className="text-gray-600 hover:text-gray-900 p-1 rounded"
                     >
@@ -263,7 +268,8 @@ export default function UsersManagement({ onCreateUser, Users }) {
                     <button
                       title="Delete User"
                       onClick={() => {
-                        setSelectedUser(user);                       
+                        setSelectedUser(user); 
+                        setModalType("delete");                      
                         setShowUserModal(true);
                       }}
                       className="text-red-600 hover:text-red-900 p-1 rounded"

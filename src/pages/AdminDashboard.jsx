@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useEffect, useState } from "react";
 import {
   Shield,
@@ -32,6 +33,7 @@ import UsersManagement from "../components/AdminComponents/UserManagement";
 import AppointmentsManagement from "../components/AdminComponents/AppointmentManagement";
 import dayjs from "dayjs";
 import ReportModal from "../components/ReportModal";
+import toast from "react-hot-toast";
 
 const GBVAdminDashboard = ({
   stats = {},
@@ -119,7 +121,7 @@ const GBVAdminDashboard = ({
       setAllReports((prevReports) =>
         prevReports.filter((report) => report.reference_code !== referenceCode)
       );
-      alert(`Case ${referenceCode} has been deleted.`);
+      toast.success(`Case ${referenceCode} has been deleted.`);
     }
   };
 
@@ -146,7 +148,7 @@ const GBVAdminDashboard = ({
         setShowAssignModal(false);
         setSelectedCase(null);
         setAssigneeName("");
-        alert(`Case ${selectedCase} has been assigned to ${assigneeName}`);
+        toast.success(`Case ${selectedCase} has been assigned to ${assigneeName}`);
       } catch (error) {
         console.error("Error assigning report:", error);
       }

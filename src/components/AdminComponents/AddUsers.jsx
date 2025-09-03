@@ -11,6 +11,7 @@ import {
   EyeOff,
 } from "lucide-react";
 import { authService } from "../../services/authService";
+import toast from "react-hot-toast";
 
 export default function GBVUserForm() {
   const [formData, setFormData] = useState({
@@ -115,15 +116,15 @@ export default function GBVUserForm() {
           password: "",
           confirmPassword: "",
         });
-        alert("User registration successful!");
+        toast.success("User registration successful!");
       } else {
         const errorData = await response.json();
         console.error("Registration failed:", errorData);
-        alert("Registration failed. Please try again.");
+        toast.error("Registration failed. Please try again.");
       }
     } catch (error) {
       console.error("Registration error:", error);
-      alert("Registration failed. Please check your connection.");
+      toast.error("Registration failed. Please check your connection.");
     } finally {
       setIsSubmitting(false);
     }

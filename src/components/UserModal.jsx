@@ -1,21 +1,13 @@
 import { useState } from "react";
 import {
-  Users as UserIcon,
-  Plus,
-  Search,
   Eye,
   Edit,
   Trash2,
   UserCheck,
   UserX,
-  Shield,
-  Stethoscope,
-  Scale,
-  Heart,
-  User,
 } from "lucide-react";
 
-   function UserModal({ isOpen, onClose, type, user, onSave, onDelete }) {
+  export function UserModal({ isOpen, onClose, type, user, onSave, onDelete }) {
   if (!isOpen || !user) return null;
 
   return (
@@ -139,7 +131,7 @@ import {
   );
 }
 
-export default function UsersManagement({onCreateUser, Users }) {
+export default function UsersManagement({Users }) {
   const [selectedUser, setSelectedUser] = useState(null);
   const [modalType, setModalType] = useState(null);
 
