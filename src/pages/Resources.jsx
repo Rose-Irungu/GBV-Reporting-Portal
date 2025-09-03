@@ -27,7 +27,7 @@ import {
 export default function Resources() {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
-  const [viewMode, setViewMode] = useState('grid'); // grid or list
+
 
   const categories = [
     { id: 'all', name: 'All Resources', icon: Globe, count: 11 },
