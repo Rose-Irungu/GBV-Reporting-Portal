@@ -17,13 +17,26 @@ import {
   User,
 } from "lucide-react";
 import { UserModal } from "../UserModal";
+import { authService } from "../../services/authService";
+import toast from "react-hot-toast";
 
-export default function UsersManagement({ Users }) {
+export default function UsersManagement({ Users, fetchUsers }) {
   const [selectedTab, setSelectedTab] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedUser, setSelectedUser] = useState(null);
   const [showUserModal, setShowUserModal] = useState(false);
   const [modalType, setModalType] = useState(null);
+
+  const handleDeleteUser = async (userId) => {
+    try {
+      await authService.delete_user(userId);
+      await fetchUsers();
+    } catch (error) {
+      toast.error(
+        error?.message || "Failed to delete user. Please try again."
+      );
+    }
+  };
 
   const getRoleIcon = (role) => {
     const icons = {
@@ -292,10 +305,12 @@ export default function UsersManagement({ Users }) {
         onSave={(updatedUser) => {
           console.log("Save user:", updatedUser);
           setShowUserModal(false);
+          setSelectedUser(null);
         }}
         onDelete={(id) => {
-          console.log("Delete user id:", id);
+          handleDeleteUser(id);
           setShowUserModal(false);
+          setSelectedUser(null);
         }}
       />
 

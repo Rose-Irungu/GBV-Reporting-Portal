@@ -1,5 +1,6 @@
 import api from './api';
 import { API_ENDPOINTS } from "../utils/constants";
+import toast from 'react-hot-toast';
 
 
 export const authService = {
@@ -9,7 +10,7 @@ export const authService = {
         API_ENDPOINTS.SENT_PASSWORD_RESET,
         formData
       );
-    
+
       return response.data;
     } catch (error) {
       console.error("Error during sent email:", error);
@@ -28,6 +29,21 @@ export const authService = {
       throw error;
     }
   },
+  delete_user: async (user_id) => {
+    try {
+      const promise = api.delete(`${API_ENDPOINTS.DELETE_USER}?user_id=${user_id}`);
+      const response = await toast.promise(promise, {
+        loading: "Deleting user...",
+        success: "User deleted successfully!",
+        error: (err) =>
+          err?.response?.data?.message || "User deletion failed. Please try again.",
+      })
+      return response.data;
+    } catch (error) {
+      console.error("Error during delete user:", error);
+      throw error;
+    }
+  },
   loginUser: async (credentials) => {
     try {
       const response = await api.post(API_ENDPOINTS.LOGIN, credentials);
@@ -38,8 +54,8 @@ export const authService = {
       //   error: (err) =>
       //     err?.response?.data?.message || "Login failed. Please try again.",
       // });
-// console.log("Login response:", response.data);
-// return
+      // console.log("Login response:", response.data);
+      // return
       return response.data;
     } catch (error) {
       throw (
@@ -49,7 +65,7 @@ export const authService = {
   },
 
 
-  logoutUser: async() => {
+  logoutUser: async () => {
     try {
       // const promise = api.post(API_ENDPOINTS.LOG_OUT, { "action": "logout_current_device"});
       // const res = await toast.promise(promise, {
@@ -59,11 +75,11 @@ export const authService = {
       //     err?.response?.data?.message || "Logout failed. Please try again.",
       // });
       // if (res.status === 200) {
-        localStorage.removeItem("accessToken");
-        localStorage.removeItem("refreshToken");
-        localStorage.removeItem("userInfo");
-        localStorage.removeItem("userRole");
-        window.location.href = "/login";
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
+      localStorage.removeItem("userInfo");
+      localStorage.removeItem("userRole");
+      window.location.href = "/login";
       // } else {
       //   console.error("Logout failed:", res.data);
       //   toast.error("Logout failed. Please try again.");
@@ -72,7 +88,7 @@ export const authService = {
       // toast.error("Logout failed. Please try again.");
       console.error("Error during logout:", error);
     }
-    
+
   },
 
   changePassword: async (formData) => {

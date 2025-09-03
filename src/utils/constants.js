@@ -5,6 +5,7 @@ export const API_ENDPOINTS = {
   LOGIN: '/auth/?action=login',
   ALL_USERS: '/auth/users/',
   PROFESSIONALS: '/professionals/',
+  DELETE_USER: '/auth/',
 
 //REPORTS
 

@@ -63,18 +63,18 @@ const GBVAdminDashboard = ({
     navigate("/appointment-form");
   };
 
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const res = await authService.allUsers();
-        if (res.result_code === 0) {
-          setUsers(res.data);
-        }
-      } catch (error) {
-        console.error("Error fetching users:", error);
+  const fetchUsers = async () => {
+    try {
+      const res = await authService.allUsers();
+      if (res.result_code === 0) {
+        setUsers(res.data);
       }
-    };
+    } catch (error) {
+      console.error("Error fetching users:", error);
+    }
+  };
 
+  useEffect(() => {
     fetchUsers();
   }, []);
 
@@ -638,7 +638,7 @@ const GBVAdminDashboard = ({
         return <ReportsTable onView={handleViewReport} />;
 
       case "users":
-        return <UsersManagement onCreateUser={onCreateUser} Users={users} />;
+        return <UsersManagement Users={users} fetchUsers={fetchUsers} />;
 
       case "appointments":
         return (
