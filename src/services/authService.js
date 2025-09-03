@@ -130,5 +130,23 @@ export const authService = {
       );
     }
   },
+  updateUser: async (userId, userData) => {
+    try {
+      const promise = api.put(`${API_ENDPOINTS.ALL_USERS}?user_id=${userId}`, userData);
+      const response = await toast.promise(promise, {
+        loading: "Updating user...",
+        success: "User updated successfully!",
+        error: (err) =>
+          err?.response?.data?.message || "Updating user failed. Please try again.",
+      });
+      return response.data;
+    } catch (error) {
+      throw (
+        error.response?.data.detail || {
+          message: "Updating user failed. Please try again.",
+        }
+      );
+    }
+  },
 };
 

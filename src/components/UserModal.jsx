@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Eye,
   Edit,
@@ -7,13 +7,23 @@ import {
   UserX,
 } from "lucide-react";
 
-  export function UserModal({ isOpen, onClose, type, user, onSave, onDelete }) {
+export function UserModal({ isOpen, onClose, type, user, onSave, onDelete, loading }) {
+  const [editedUser, setEditedUser] = useState(user || {});
+
+  useEffect(() => {
+    setEditedUser(user || {});
+  }, [user]);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onSave(editedUser);
+  };
   if (!isOpen || !user) return null;
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
       <div className="bg-white w-full max-w-lg rounded-2xl shadow-lg p-6 relative">
-        
+
         <button
           onClick={onClose}
           className="absolute top-3 right-3 text-gray-400 hover:text-gray-600"
@@ -45,18 +55,13 @@ import {
         {type === "edit" && (
           <>
             <h2 className="text-xl font-bold mb-4">Edit User</h2>
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                onSave({ ...user }); // handle updated values
-              }}
-              className="space-y-4"
-            >
+            <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium">First Name</label>
                 <input
                   type="text"
-                  defaultValue={user.first_name}
+                  value={editedUser.first_name}
+                  onChange={(e) => setEditedUser({ ...editedUser, first_name: e.target.value })}
                   className="w-full border rounded-lg px-3 py-2"
                 />
               </div>
@@ -64,7 +69,8 @@ import {
                 <label className="block text-sm font-medium">Last Name</label>
                 <input
                   type="text"
-                  defaultValue={user.last_name}
+                  value={editedUser.last_name}
+                  onChange={(e) => setEditedUser({ ...editedUser, last_name: e.target.value })}
                   className="w-full border rounded-lg px-3 py-2"
                 />
               </div>
@@ -72,14 +78,25 @@ import {
                 <label className="block text-sm font-medium">Email</label>
                 <input
                   type="email"
-                  defaultValue={user.email}
+                  value={editedUser.email}
+                  onChange={(e) => setEditedUser({ ...editedUser, email: e.target.value })}
+                  className="w-full border rounded-lg px-3 py-2"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium">Phone</label>
+                <input
+                  type="text"
+                  value={editedUser.phone_number}
+                  onChange={(e) => setEditedUser({ ...editedUser, phone_number: e.target.value })}
                   className="w-full border rounded-lg px-3 py-2"
                 />
               </div>
               <div>
                 <label className="block text-sm font-medium">Role</label>
                 <select
-                  defaultValue={user.role}
+                  value={editedUser.role}
+                  onChange={(e) => setEditedUser({ ...editedUser, role: e.target.value })}
                   className="w-full border rounded-lg px-3 py-2"
                 >
                   <option value="survivor">Survivor</option>
@@ -93,6 +110,7 @@ import {
               <button
                 type="submit"
                 className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:shadow"
+                disabled={loading}
               >
                 Save Changes
               </button>
@@ -119,6 +137,7 @@ import {
               </button>
               <button
                 onClick={() => onDelete(user.id)}
+                disabled={loading}
                 className="px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700"
               >
                 Delete
@@ -131,7 +150,7 @@ import {
   );
 }
 
-export default function UsersManagement({Users }) {
+export default function UsersManagement({ Users }) {
   const [selectedUser, setSelectedUser] = useState(null);
   const [modalType, setModalType] = useState(null);
 

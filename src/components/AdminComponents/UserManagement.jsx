@@ -26,15 +26,43 @@ export default function UsersManagement({ Users, fetchUsers }) {
   const [selectedUser, setSelectedUser] = useState(null);
   const [showUserModal, setShowUserModal] = useState(false);
   const [modalType, setModalType] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const handleDeleteUser = async (userId) => {
     try {
+      setLoading(true);
       await authService.delete_user(userId);
       await fetchUsers();
     } catch (error) {
       toast.error(
         error?.message || "Failed to delete user. Please try again."
       );
+    } finally {
+      setLoading(false);
+      setShowUserModal(false);
+      setSelectedUser(null);
+    }
+  };
+
+  const handleUpdateUser = async (updatedUser) => {
+    try {
+      const formData = new FormData();
+      formData.append("first_name", updatedUser.first_name);
+      formData.append("last_name", updatedUser.last_name);
+      formData.append("email", updatedUser.email);
+      formData.append("phone_number", updatedUser.phone_number);
+      formData.append("role", updatedUser.role);
+      setLoading(true);
+      await authService.updateUser(updatedUser.id, formData);
+
+      await fetchUsers();
+      console.log("User updated successfully:", updatedUser);
+    } catch (error) {
+      console.error("Error updating user:", error);
+    } finally {
+      setLoading(false);
+      setShowUserModal(false);
+      setSelectedUser(null);
     }
   };
 
@@ -300,17 +328,18 @@ export default function UsersManagement({ Users, fetchUsers }) {
       <UserModal
         isOpen={showUserModal}
         onClose={() => setShowUserModal(false)}
+        loading={loading}
         type={modalType}
         user={selectedUser}
         onSave={(updatedUser) => {
-          console.log("Save user:", updatedUser);
-          setShowUserModal(false);
-          setSelectedUser(null);
+          handleUpdateUser(updatedUser);
+          // setShowUserModal(false);
+          // setSelectedUser(null);
         }}
         onDelete={(id) => {
           handleDeleteUser(id);
-          setShowUserModal(false);
-          setSelectedUser(null);
+          // setShowUserModal(false);
+          // setSelectedUser(null);
         }}
       />
 
