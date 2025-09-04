@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { getAppointments } from "../services/appointments";
 
-export default function useAppointments() {
+const useAppointments = () => {
   const [appointments, setAppointments] = useState([]);
   const [appointment, setAppointment] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -46,3 +46,4 @@ export default function useAppointments() {
     appointment,
   };
 }
+export default useAppointments;

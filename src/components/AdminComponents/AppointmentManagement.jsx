@@ -26,7 +26,7 @@ import { fetchReport } from "../../services/reportService";
 export default function AppointmentsManagement({
   appointments_,
   allReports,
-  proffessionals,
+  proffessionals, 
 }) {
   const [selectedTab, setSelectedTab] = useState("upcoming");
   const [appointments, setAppointments] = useState(appointments_);
@@ -51,6 +51,9 @@ export default function AppointmentsManagement({
           setReportContent(res);
         } catch (err) {
           console.error("Failed to fetch report:", err);
+
+
+
         }
       };
 
