@@ -21,7 +21,7 @@ export function UserModal({ isOpen, onClose, type, user, onSave, onDelete, loadi
   if (!isOpen || !user) return null;
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
+    <div className="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-md transition-opacity duration-200 bg-opacity-40 z-50">
       <div className="bg-white w-full max-w-lg rounded-2xl shadow-lg p-6 relative">
 
         <button

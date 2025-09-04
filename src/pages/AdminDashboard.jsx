@@ -21,6 +21,7 @@ import {
   Home,
   Trash2,
   Icon,
+  CheckCircle,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/AdminComponents/Header";
@@ -33,6 +34,7 @@ import UsersManagement from "../components/AdminComponents/UserManagement";
 import AppointmentsManagement from "../components/AdminComponents/AppointmentManagement";
 import dayjs from "dayjs";
 import ReportModal from "../components/ReportModal";
+import ResolveModal from "../components/modals/ResolveModal";
 import toast from "react-hot-toast";
 
 const GBVAdminDashboard = ({
@@ -50,6 +52,8 @@ const GBVAdminDashboard = ({
   const [showReportModal, setShowReportModal] = useState(false);
   const [selectedCase, setSelectedCase] = useState(null);
   const [assigneeName, setAssigneeName] = useState("");
+  const [showResolveModal, setShowResolveModal] = useState(false);
+  const [selectedAppointment, setSelectedAppointment] = useState(null);
   const adminUser = storedUser || {
     name: "Admin User",
     role: "Super Administrator",
@@ -131,7 +135,60 @@ const GBVAdminDashboard = ({
     setAssigneeName(report?.assigned_to || "");
     setShowAssignModal(true);
   };
-  
+
+  const onResolveReport = (referenceCode) => {
+    setSelectedCase(referenceCode);
+    const report = allReports.find((r) => r.reference_code === referenceCode);
+    setShowResolveModal(true);
+  };
+
+  // Add this function to handle the actual resolution
+  const handleResolveCase = async ({
+    referenceCode,
+    resolutionType,
+    resolutionNotes,
+    resolvedAt,
+  }) => {
+    try {
+      // API call to update the case
+      const response = await fetch(`/api/reports/${referenceCode}/resolve`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          status: "resolved",
+          resolution_type: resolutionType,
+          resolution_notes: resolutionNotes,
+          resolved_at: resolvedAt,
+        }),
+      });
+
+      if (!response.ok) throw new Error("Failed to resolve case");
+
+      // Update local state
+      setAllReports((prevReports) =>
+        prevReports.map((report) =>
+          report.reference_code === referenceCode
+            ? {
+                ...report,
+                status: "resolved",
+                resolution_type: resolutionType,
+                resolution_notes: resolutionNotes,
+                resolved_at: resolvedAt,
+              }
+            : report
+        )
+      );
+
+      // Optional: Show success message
+      toast.success("Case resolved successfully");
+    } catch (error) {
+      console.error("Error resolving case:", error);
+      throw error; // Re-throw to handle in modal
+    }
+  };
+
   const onSearchReports = () => {};
 
   const handleAssignSubmit = async () => {
@@ -148,7 +205,9 @@ const GBVAdminDashboard = ({
         setShowAssignModal(false);
         setSelectedCase(null);
         setAssigneeName("");
-        toast.success(`Case ${selectedCase} has been assigned to ${assigneeName}`);
+        toast.success(
+          `Case ${selectedCase} has been assigned to ${assigneeName}`
+        );
       } catch (error) {
         console.error("Error assigning report:", error);
       }
@@ -269,7 +328,6 @@ const GBVAdminDashboard = ({
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Status
               </th>
-
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Location
               </th>
@@ -304,13 +362,14 @@ const GBVAdminDashboard = ({
                           ? "bg-yellow-100 text-yellow-800"
                           : report.status === "under_review"
                           ? "bg-blue-100 text-blue-800"
-                          : "bg-green-100 text-green-800"
+                          : report.status === "resolved"
+                          ? "bg-green-100 text-green-800"
+                          : "bg-gray-100 text-gray-800"
                       }`}
                     >
                       {report.status}
                     </span>
                   </td>
-
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                     {report.incident_location || "N/A"}
                   </td>
@@ -322,15 +381,26 @@ const GBVAdminDashboard = ({
                       <button
                         onClick={() => onView(report)}
                         className="text-blue-600 hover:text-blue-900"
+                        title="View Details"
                       >
                         <Eye className="w-4 h-4" />
                       </button>
                       <button
                         onClick={() => onAssignReport(report.reference_code)}
                         className="text-gray-600 hover:text-gray-900"
+                        title="Assign Report"
                       >
                         <UserCheck className="w-4 h-4" />
                       </button>
+                      {report.status !== "resolved" && (
+                        <button
+                          onClick={() => onResolveReport(report.reference_code)}
+                          className="text-green-600 hover:text-green-900 p-1 rounded hover:bg-green-50"
+                          title="Resolve Case"
+                        >
+                          <CheckCircle className="w-4 h-4" />
+                        </button>
+                      )}
                       <button
                         onClick={() => onDeleteReport(report.reference_code)}
                         className="text-red-600 hover:text-red-900 p-1 rounded hover:bg-red-50"
@@ -718,6 +788,13 @@ const GBVAdminDashboard = ({
             setShowReportModal(false);
           }}
           onExport={() => {}}
+        />
+        <ResolveModal
+          showResolveModal={showResolveModal}
+          setShowResolveModal={setShowResolveModal}
+          selectedCase={selectedCase}
+          allReports={allReports}
+          onResolveCase={handleResolveCase} // You need to implement this
         />
 
         {/* Main Content Area */}

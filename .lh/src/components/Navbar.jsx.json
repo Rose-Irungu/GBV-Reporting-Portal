@@ -3,7 +3,7 @@
     "activeCommit": 0,
     "commits": [
         {
-            "activePatchIndex": 22,
+            "activePatchIndex": 24,
             "patches": [
                 {
                     "date": 1753341994306,
@@ -96,6 +96,14 @@
                 {
                     "date": 1754979498706,
                     "content": "Index: \n===================================================================\n--- \n+++ \n@@ -35,9 +35,9 @@\n \r\n           <div className=\"hidden md:flex space-x-4\">\r\n              \r\n                <button className=\"px-4 py-2  text-purple-600 hover:bg-purple-100 rounded-full border-2  border-purple-400 hover:border-purple-300 hover:shadow-lg transition-all duration-300\">\r\n-                <Link to=\"/getstarted\">Get Started</Link>\r\n+                <Link to=\"/login\">Get Started</Link>\r\n               </button>\r\n               \r\n             <button className=\"px-4 py-2 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg hover:shadow-lg transform hover:scale-105 transition-all\">\r\n               <Link to=\"/report\">Get Help Now</Link>\r\n"
+                },
+                {
+                    "date": 1757006760664,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -13,9 +13,9 @@\n             <div className=\"bg-gradient-to-r from-purple-600 to-blue-400 p-2 rounded-lg\">\r\n                 <Shield className=\"h-6 w-6 text-white\" />\r\n             </div>\r\n             <span className=\"text-xl font-bold bg-gradient-to-r from-[#a776b4] to-purple-400 bg-clip-text text-transparent\">\r\n-              SafeHaven\r\n+              Saf\r\n             </span>\r\n           </div>\r\n \r\n           <div className=\"hidden md:flex space-x-8\">\r\n"
+                },
+                {
+                    "date": 1757006797416,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -13,9 +13,9 @@\n             <div className=\"bg-gradient-to-r from-purple-600 to-blue-400 p-2 rounded-lg\">\r\n                 <Shield className=\"h-6 w-6 text-white\" />\r\n             </div>\r\n             <span className=\"text-xl font-bold bg-gradient-to-r from-[#a776b4] to-purple-400 bg-clip-text text-transparent\">\r\n-              SafeVoices\r\n+              SafeHaven\r\n             </span>\r\n           </div>\r\n \r\n           <div className=\"hidden md:flex space-x-8\">\r\n"
                 }
             ],
             "date": 1753341994305,
