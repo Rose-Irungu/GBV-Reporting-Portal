@@ -61,6 +61,8 @@ export default function AppointmentsManagement({
 
     }
     const userType = localStorage.getItem('userRole')
+    console.log(userType);
+    
     setUserRole(userType)
   }, [showReportModal, selectedAppointment]);
 
@@ -271,7 +273,7 @@ export default function AppointmentsManagement({
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Appointment Details
               </th>
-              {userRole === "admin" || userRole === 'survivor' && (
+              {(userRole === "admin" || userRole === 'survivor') && (
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Professional
                 </th>
@@ -315,7 +317,7 @@ export default function AppointmentsManagement({
                       </div>
                     </div>
                   </td>
-                  {userRole === "admin" || userRole === 'survivor' && (
+                  {(userRole === "admin" || userRole === 'survivor') && (
                     <td className="px-6 py-4 whitespace-nowrap">
 
                       <div className="text-sm font-medium text-gray-900">
@@ -403,12 +405,6 @@ export default function AppointmentsManagement({
                         onClick={() => handleCancelAppointment(appointment.id)}
                       >
                         <Trash2 className="w-4 h-4" />
-                      </button>
-                      <button
-                        className="text-gray-400 hover:text-gray-600 p-1 rounded"
-                        title="More Options"
-                      >
-                        <MoreHorizontal className="w-4 h-4" />
                       </button>
                     </div>
                   </td>

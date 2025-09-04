@@ -47,16 +47,13 @@ const AppointmentModal = ({
         const handleSubmit = async (e) => {
             e.preventDefault();
             setLoading(true);
-            let res;
-            // onSubmit(formData);
             if (editingAppointment) {
-                res = await updateAppointment(formData, editingAppointment.id)
+                 await updateAppointment(formData, editingAppointment.id)
             } else {
                 const { status, ...formDataWithoutStatus } = formData;
-                res = await addAppointment(formDataWithoutStatus);
+                await addAppointment(formDataWithoutStatus);
             }
 
-            console.log(res)
             setLoading(false);
             onClose();
         };
@@ -87,7 +84,7 @@ const AppointmentModal = ({
                                 <option value="">Select Report...</option>
                                 {allReports.map((report) => (
                                     <option key={report.id} value={report.id}>
-                                        {report.reference_code} {report.full_name}
+                                        {report.reference_code}
                                     </option>
                                 ))}
                             </select>
@@ -111,7 +108,7 @@ const AppointmentModal = ({
                                 {/*<option value="Support Group">Support Group</option>*/}
                             </select>
                         </div>
-                        {userRole === "admin" || userRole === 'survivor' && (
+                        {(userRole === "admin" || userRole === 'survivor') && (
                             <div>
                                 <label className="block text-sm font-medium mb-1">Professional</label>
                                 <select

@@ -23,6 +23,7 @@ import dayjs from "dayjs";
 import Header from "../components/AdminComponents/Header";
 import useReports from "../hooks/useReportStats";
 import ReportModal from "../components/ReportModal";
+import AppointmentsManagement from "../components/AdminComponents/AppointmentManagement";
 
 const CounselorDashboard = () => {
   const [activeTab, setActiveTab] = useState("reports");
@@ -33,7 +34,7 @@ const CounselorDashboard = () => {
   const [showReportModal, setShowReportModal] = useState(false);
   const [selectedReport, setSelectedReport] = useState(null);
 
-  const { allReports } = useReports();
+  const { allReports, appointments } = useReports();
 
   const handleViewReport = (report) => {
     setSelectedReport(report);
@@ -67,24 +68,6 @@ const CounselorDashboard = () => {
     },
   ]);
 
-  const [appointments, setAppointments] = useState([
-    {
-      id: "A001",
-      victimId: "RPT001",
-      date: "2024-07-25",
-      time: "10:00 AM",
-      type: "Follow-up Session",
-      status: "Scheduled",
-    },
-    {
-      id: "A002",
-      victimId: "RPT003",
-      date: "2024-07-26",
-      time: "2:00 PM",
-      type: "Progress Review",
-      status: "Scheduled",
-    },
-  ]);
 
   const [resources] = useState([
     {
@@ -544,70 +527,10 @@ const CounselorDashboard = () => {
         )}
 
         {activeTab === "appointments" && (
-          <div className="space-y-6">
-            <div className="flex justify-between items-center">
-              <h2 className="text-xl font-semibold text-gray-900">
-                Scheduled Appointments
-              </h2>
-              <button
-                onClick={() => setShowScheduleForm(true)}
-                className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-600 to-blue-600 hover:shadow-lg transition-all text-white rounded-lg"
-              >
-                <Calendar className="w-4 h-4" />
-                Schedule New
-              </button>
-            </div>
-
-            <div className="grid gap-4">
-              {appointments.map((appointment) => (
-                <div
-                  key={appointment.id}
-                  className="bg-white rounded-lg shadow-sm border border-gray-200 p-6"
-                >
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-4">
-                      <div className="p-3 bg-blue-100 rounded-lg">
-                        <Calendar className="w-6 h-6 text-blue-600" />
-                      </div>
-                      <div>
-                        <h3 className="text-lg font-semibold text-gray-900">
-                          {
-                            allReports.find(
-                              (r) => r.id === appointment.victimId
-                            )?.victimName
-                          }
-                        </h3>
-                        <p className="text-sm text-gray-600">
-                          {appointment.type}
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="text-right">
-                      <p className="font-medium text-gray-900">
-                        {appointment.date}
-                      </p>
-                      <p className="text-sm text-gray-600">
-                        {appointment.time}
-                      </p>
-                    </div>
-
-                    <div className="flex gap-2">
-                      <button className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg">
-                        <Video className="w-4 h-4" />
-                      </button>
-                      <button className="p-2 text-green-600 hover:bg-green-50 rounded-lg">
-                        <Phone className="w-4 h-4" />
-                      </button>
-                      <button className="p-2 text-purple-600 hover:bg-purple-50 rounded-lg">
-                        <MessageCircle className="w-4 h-4" />
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+          <AppointmentsManagement 
+          appointments_={appointments}
+          allReports={allReports}
+          />
         )}
 
         {activeTab === "resources" && (
