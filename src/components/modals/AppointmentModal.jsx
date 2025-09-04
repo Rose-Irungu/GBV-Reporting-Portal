@@ -3,13 +3,13 @@ import { X } from "lucide-react";
 import { addAppointment, updateAppointment } from '../../services/appointments'
 
 const AppointmentModal = ({
-                              isOpen,
-                              onClose,
-                              onSubmit,
-                              editingAppointment,
-                              allReports,
-                              professionals,
-                          }) => {
+    isOpen,
+    onClose,
+    userRole,
+    editingAppointment,
+    allReports,
+    professionals,
+}) => {
     const [formData, setFormData] = useState({
         appointment_type: "",
         scheduled_date: "",
@@ -20,28 +20,35 @@ const AppointmentModal = ({
         notes: "",
         status: ""
     });
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         if (editingAppointment) {
             setFormData(editingAppointment);
         } else {
-            setFormData({
+            const baseData = {
                 appointment_type: "",
                 scheduled_date: "",
                 location: "",
-                professional: "",
                 report: "",
                 isVirtual: false,
                 notes: "",
                 status: ""
-            });
+            };
+            if (userRole === "admin" || userRole === "survivor") {
+                baseData.professional = "";
+            }
+
+            setFormData(baseData);
         }
-    }, [editingAppointment]);
+
+    }, [editingAppointment, userRole]);
 
     if (!isOpen) return null;
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true);
         let res;
         // onSubmit(formData);
         if (editingAppointment) {
@@ -52,6 +59,7 @@ const AppointmentModal = ({
         }
 
         console.log(res)
+        setLoading(false);
         onClose();
     };
 
@@ -81,7 +89,7 @@ const AppointmentModal = ({
                             <option value="">Select Report...</option>
                             {allReports.map((report) => (
                                 <option key={report.id} value={report.id}>
-                                    {report.reference_code}
+                                    {report.reference_code} {report.full_name}
                                 </option>
                             ))}
                         </select>
@@ -105,22 +113,24 @@ const AppointmentModal = ({
                             {/*<option value="Support Group">Support Group</option>*/}
                         </select>
                     </div>
+                    {userRole === "admin" || userRole === 'survivor' && (
+                        <div>
+                            <label className="block text-sm font-medium mb-1">Professional</label>
+                            <select
+                                value={formData.professional}
+                                onChange={(e) => setFormData({ ...formData, professional: e.target.value })}
+                                className="w-full border border-gray-300 rounded-md px-3 py-2"
+                            >
+                                <option value="">Select a professional...</option>
+                                {professionals.map((pro) => (
+                                    <option key={pro.id} value={pro.id}>
+                                        {pro.first_name} {pro.last_name} - {pro.role}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                    )}
 
-                    <div>
-                        <label className="block text-sm font-medium mb-1">Professional</label>
-                        <select
-                            value={formData.professional}
-                            onChange={(e) => setFormData({ ...formData, professional: e.target.value })}
-                            className="w-full border border-gray-300 rounded-md px-3 py-2"
-                        >
-                            <option value="">Select a professional...</option>
-                            {professionals.map((pro) => (
-                                <option key={pro.id} value={pro.id}>
-                                    {pro.first_name} {pro.last_name} - {pro.role}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
 
                     {editingAppointment && (
                         <div>
@@ -189,6 +199,7 @@ const AppointmentModal = ({
                     <div className="flex gap-3 pt-4">
                         <button
                             type="submit"
+                            disabled={loading}
                             className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700"
                         >
                             {editingAppointment ? "Update" : "Schedule"} Appointment

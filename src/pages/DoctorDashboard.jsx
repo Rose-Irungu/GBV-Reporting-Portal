@@ -1,17 +1,9 @@
-import React, { use, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import {
   Calendar,
-  Clock,
   FileText,
-  User,
-  Camera,
   Plus,
-  Edit3,
-  Save,
-  X,
   CheckCircle,
-  AlertCircle,
   Eye,
   Upload,
 } from "lucide-react";
@@ -25,49 +17,13 @@ const DoctorDashboard = () => {
   const [selectedReport, setSelectedReport] = useState(null);
   const [showReportModal, setShowReportModal] = useState(false);
   const [newNote, setNewNote] = useState("");
-  const [newAppointment, setNewAppointment] = useState({
-    patientName: "",
-    date: "",
-    time: "",
-    type: "consultation",
-  });
-  const [showAppointmentForm, setShowAppointmentForm] = useState(false);
 
-  const { allReports} = useReports();
+  const { allReports, appointments, proffessionals} = useReports();
 
   const handleViewReport = (report) => {
     setSelectedReport(report);
     setShowReportModal(true);
   };
-
- 
-
-  const [appointments, setAppointments] = useState([
-    {
-      id: 1,
-      patientName: "Emma Davis",
-      date: "2024-08-27",
-      time: "09:00",
-      type: "consultation",
-      status: "scheduled",
-    },
-    {
-      id: 2,
-      patientName: "Robert Wilson",
-      date: "2024-08-27",
-      time: "11:30",
-      type: "follow-up",
-      status: "scheduled",
-    },
-    {
-      id: 3,
-      patientName: "Lisa Chen",
-      date: "2024-08-28",
-      time: "14:00",
-      type: "consultation",
-      status: "scheduled",
-    },
-  ]);
 
   const addNote = (reportId) => {
     if (!newNote.trim()) return;
@@ -82,30 +38,6 @@ const DoctorDashboard = () => {
     // You might want to trigger a refetch of reports here
   };
 
-  const addAppointment = () => {
-    if (
-      !newAppointment.patientName ||
-      !newAppointment.date ||
-      !newAppointment.time
-    )
-      return;
-
-    setAppointments([
-      ...appointments,
-      {
-        id: Date.now(),
-        ...newAppointment,
-        status: "scheduled",
-      },
-    ]);
-    setNewAppointment({
-      patientName: "",
-      date: "",
-      time: "",
-      type: "consultation",
-    });
-    setShowAppointmentForm(false);
-  };
 
   const handleImageUpload = (reportId, event) => {
     const file = event.target.files[0];
@@ -133,19 +65,6 @@ const DoctorDashboard = () => {
     }
   };
 
-  const getStatusColor = (status) => {
-    switch (status?.toLowerCase()) {
-      case "active":
-        return "text-blue-600 bg-blue-50";
-
-      case "closed":
-        return "text-green-600 bg-green-50";
-      case "pending":
-        return "text-yellow-600 bg-yellow-50";
-      default:
-        return "text-gray-600 bg-gray-50";
-    }
-  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -274,7 +193,7 @@ const DoctorDashboard = () => {
                           </p>
                         </div>
                         <div className="flex space-x-2">
-                          {selectedReport.status === "active" && (
+                          {selectedReport.status != "closed" && (
                             <button
                               onClick={() =>
                                 updateReportStatus(selectedReport.id, "closed")
@@ -446,144 +365,11 @@ const DoctorDashboard = () => {
           )}
 
           {activeTab === "appointments" && (
-            <div>
-              <div className="bg-white rounded-xl shadow-sm border">
-                <div className="p-6 border-b">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <h2 className="text-xl font-semibold text-gray-900">
-                        Appointments
-                      </h2>
-                      <p className="text-gray-600 mt-1">
-                        Manage your scheduled appointments
-                      </p>
-                    </div>
-                    <button
-                      onClick={() => setShowAppointmentForm(true)}
-                      className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-                    >
-                      <Plus className="w-4 h-4" />
-                      <span>New Appointment</span>
-                    </button>
-                  </div>
-                </div>
-
-                {showAppointmentForm && (
-                  <div className="p-6 border-b bg-gray-50">
-                    <h3 className="font-semibold text-gray-900 mb-4">
-                      Schedule New Appointment
-                    </h3>
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                      <input
-                        type="text"
-                        placeholder="Patient Name"
-                        value={newAppointment.patientName}
-                        onChange={(e) =>
-                          setNewAppointment({
-                            ...newAppointment,
-                            patientName: e.target.value,
-                          })
-                        }
-                        className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      />
-                      <input
-                        type="date"
-                        value={newAppointment.date}
-                        onChange={(e) =>
-                          setNewAppointment({
-                            ...newAppointment,
-                            date: e.target.value,
-                          })
-                        }
-                        className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      />
-                      <input
-                        type="time"
-                        value={newAppointment.time}
-                        onChange={(e) =>
-                          setNewAppointment({
-                            ...newAppointment,
-                            time: e.target.value,
-                          })
-                        }
-                        className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      />
-                      <select
-                        value={newAppointment.type}
-                        onChange={(e) =>
-                          setNewAppointment({
-                            ...newAppointment,
-                            type: e.target.value,
-                          })
-                        }
-                        className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      >
-                        <option value="consultation">Consultation</option>
-                        <option value="follow-up">Follow-up</option>
-                        <option value="procedure">Procedure</option>
-                        <option value="emergency">Emergency</option>
-                      </select>
-                    </div>
-                    <div className="flex space-x-2 mt-4">
-                      <button
-                        onClick={addAppointment}
-                        className="flex items-center space-x-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
-                      >
-                        <Save className="w-4 h-4" />
-                        <span>Save</span>
-                      </button>
-                      <button
-                        onClick={() => setShowAppointmentForm(false)}
-                        className="flex items-center space-x-2 px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
-                      >
-                        <X className="w-4 h-4" />
-                        <span>Cancel</span>
-                      </button>
-                    </div>
-                  </div>
-                )}
-
-                <div className="divide-y">
-                  {appointments.map((appointment) => (
-                    <div
-                      key={appointment.id}
-                      className="p-6 hover:bg-gray-50 transition-colors"
-                    >
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-4">
-                          <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                            <User className="w-6 h-6 text-blue-600" />
-                          </div>
-                          <div>
-                            <h3 className="font-semibold text-gray-900">
-                              {appointment.patientName}
-                            </h3>
-                            <div className="flex items-center space-x-4 mt-1 text-sm text-gray-600">
-                              <div className="flex items-center space-x-1">
-                                <Calendar className="w-4 h-4" />
-                                <span>{appointment.date}</span>
-                              </div>
-                              <div className="flex items-center space-x-1">
-                                <Clock className="w-4 h-4" />
-                                <span>{appointment.time}</span>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="flex items-center space-x-3">
-                          <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">
-                            {appointment.type}
-                          </span>
-                          <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium">
-                            {appointment.status}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
+            <AppointmentsManagement 
+              appointments_={appointments} 
+              allReports={allReports} 
+              proffessionals={proffessionals}
+            />
           )}
         </main>
       </div>

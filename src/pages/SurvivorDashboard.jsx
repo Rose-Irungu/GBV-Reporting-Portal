@@ -22,6 +22,7 @@ import useReports from "../hooks/useReportStats";
 import dayjs from "dayjs";
 import AppointmentModal from "../components/modals/AppointmentModal.jsx";
 import Header from "../components/AdminComponents/Header";
+import AppointmentsManagement from "../components/AdminComponents/AppointmentManagement.jsx";
 
 const SurvivorsDashboard = ({ userName }) => {
   const [activeTab, setActiveTab] = useState("overview");
@@ -329,100 +330,12 @@ const SurvivorsDashboard = ({ userName }) => {
 
         {/* Appointments Tab */}
         {activeTab === "appointments" && (
-          <div className="space-y-6">
-            <div className="bg-white rounded-lg shadow p-6">
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-lg font-medium text-gray-900">
-                  My Appointments
-                </h2>
-                <button
-                  onClick={() => setShowAppointmentModal(true)}
-                  className="bg-purple-600 text-white px-4 py-2 rounded-md hover:bg-purple-700 flex items-center space-x-2"
-                >
-                  <Plus size={16} />
-                  <span>Schedule New</span>
-                </button>
-              </div>
-
-              <div className="space-y-4">
-                {appointments.map((appointment) => (
-                  <div
-                    key={appointment.id}
-                    className={`border rounded-lg p-4 ${
-                      appointment.status === "completed"
-                        ? "border-green-200 bg-green-50"
-                        : "border-gray-200"
-                    }`}
-                  >
-                    <div className="flex justify-between items-start">
-                      <div className="flex-1">
-                        <div className="flex items-center space-x-2 mb-2">
-                          <h4 className="font-medium text-gray-900">
-                            {appointment.appointment_type}
-                          </h4>
-                          <span
-                            className={`px-2 py-1 text-xs rounded-full ${
-                              appointment.status === "completed"
-                                ? "bg-green-100 text-green-800"
-                                : "bg-blue-100 text-blue-800"
-                            }`}
-                          >
-                            {appointment.status}
-                          </span>
-                        </div>
-                        <div className="text-sm text-gray-600 space-y-1">
-                          <div className="flex items-center space-x-2">
-                            <Calendar size={14} />
-                            <span>
-                              <span>
-                                {dayjs(appointment.scheduled_date).format(
-                                  "YYYY-MM-DD"
-                                )}
-                              </span>
-                            </span>
-                          </div>
-                          <div className="flex items-center space-x-2">
-                            <Clock size={14} />
-                            <span>
-                              {dayjs(appointment.scheduled_date).format(
-                                "HH:MM"
-                              )}
-                            </span>
-                          </div>
-                          <div className="flex items-center space-x-2">
-                            <User size={14} />
-                            <span>{appointment.professional_name}</span>
-                          </div>
-                        </div>
-                      </div>
-
-                      {appointment.status === "scheduled" && (
-                        <div className="flex space-x-2">
-                          <button
-                            onClick={() => {
-                              setEditingAppointment(appointment);
-                              setShowAppointmentModal(true);
-                            }}
-                            className="text-blue-600 hover:text-blue-800 p-1"
-                          >
-                            <Edit size={16} />
-                          </button>
-                          <button
-                            onClick={() =>
-                              handleCancelAppointment(appointment.id)
-                            }
-                            className="text-red-600 hover:text-red-800 p-1"
-                          >
-                            <Trash2 size={16} />
-                          </button>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
+          <AppointmentsManagement 
+            appointments_={appointments}
+            allReports={allReports}
+            proffessionals={proffessionals}
+          /> 
+          
         )}
 
         {activeTab === "reports" && (

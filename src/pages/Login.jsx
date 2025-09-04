@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Eye, EyeOff, Shield, Heart, X } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { authService } from "../services/authService";
+import toast from "react-hot-toast";
 
 export default function Login() {
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -27,6 +28,7 @@ export default function Login() {
 
       if (result.result_code === 0) {
         const { access, refresh, user } = result.data;
+        toast.success("Login successful!");
 
         localStorage.setItem("accessToken", access);
         localStorage.setItem("refreshToken", refresh);
@@ -60,6 +62,7 @@ export default function Login() {
         }
       }
     } catch (error) {
+      toast.error(error.message || "Login failed. Please try again.");
       console.error("Login error:", error);
     } finally {
       setIsSubmitting(false);

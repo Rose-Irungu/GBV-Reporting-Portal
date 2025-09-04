@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, use } from "react";
 import {
   Clock,
   Plus,
@@ -17,7 +17,7 @@ import {
   XCircle,
   AlertCircle,
 } from "lucide-react";
-import useReports from "../../hooks/useReportStats";
+// import useReports from "../../hooks/useReportStats";
 import AppointmentModal from "../modals/AppointmentModal";
 import ReportModal from "../ReportModal";
 import { updateAppointment } from "../../services/appointments";
@@ -34,13 +34,14 @@ export default function AppointmentsManagement({
   const [showAppointmentModal, setShowAppointmentModal] = useState(false);
   const [editingAppointment, setEditingAppointment] = useState(null);
   const [selectedAppointment, setSelectedAppointment] = useState(null);
+  const [userRole, setUserRole] = useState(null)
   const [showViewAppointmentModal, setViewShowAppointmentModal] =
     useState(false);
 
   const [reportContent, setReportContent] = useState(null);
   const [showReportModal, setShowReportModal] = useState(false);
 
-  const { getAppointments } = useReports();
+  // const { getAppointments } = useReports();
 
   useEffect(() => {
     if (showReportModal && selectedAppointment?.report_reference) {
@@ -54,8 +55,18 @@ export default function AppointmentsManagement({
       };
 
       fetch_Report();
+
     }
+    const userType = localStorage.getItem('userRole')
+    setUserRole(userType)
   }, [showReportModal, selectedAppointment]);
+
+  // useEffect(() => {
+  //   const userType = localStorage.getItem('userRole')
+  //   console.log(userType);
+
+  //   setUserRole(userType)
+  // }, [])
 
   const getAppointmentTypeColor = (type) => {
     const colors = {
@@ -142,24 +153,24 @@ export default function AppointmentsManagement({
     return new Date(dateString) > new Date();
   };
 
-const safeIncludes = (field, term) =>
-  (field || "").toLowerCase().includes((term || "").toLowerCase());
+  const safeIncludes = (field, term) =>
+    (field || "").toLowerCase().includes((term || "").toLowerCase());
 
-const filteredAppointments = appointments.filter((appointment) => {
-  const matchesSearch =
-    safeIncludes(appointment.professional_name, searchTerm) ||
-    safeIncludes(appointment.report_reference, searchTerm);
+  const filteredAppointments = appointments.filter((appointment) => {
+    const matchesSearch =
+      safeIncludes(appointment.professional_name, searchTerm) ||
+      safeIncludes(appointment.report_reference, searchTerm);
 
-  if (selectedTab === "all") return matchesSearch;
+    if (selectedTab === "all") return matchesSearch;
 
-  if (selectedTab === "upcoming")
-    return matchesSearch && isUpcoming(appointment.scheduled_date);
+    if (selectedTab === "upcoming")
+      return matchesSearch && isUpcoming(appointment.scheduled_date);
 
-  if (selectedTab === "past")
-    return matchesSearch && !isUpcoming(appointment.scheduled_date);
+    if (selectedTab === "past")
+      return matchesSearch && !isUpcoming(appointment.scheduled_date);
 
-  return matchesSearch && appointment.status === selectedTab;
-});
+    return matchesSearch && appointment.status === selectedTab;
+  });
 
 
   const tabs = [
@@ -225,8 +236,8 @@ const filteredAppointments = appointments.filter((appointment) => {
               className="pl-10 pr-4 py-2 w-full border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
             />
           </div>
-        
-         
+
+
         </div>
 
         {/* Tabs */}
@@ -235,11 +246,10 @@ const filteredAppointments = appointments.filter((appointment) => {
             <button
               key={tab.id}
               onClick={() => setSelectedTab(tab.id)}
-              className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
-                selectedTab === tab.id
+              className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${selectedTab === tab.id
                   ? "text-purple-600 bg-purple-50 border border-purple-200"
                   : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
-              }`}
+                }`}
             >
               {tab.label}
               <span className="ml-2 px-2 py-0.5 text-xs bg-gray-200 rounded-full">
@@ -258,10 +268,13 @@ const filteredAppointments = appointments.filter((appointment) => {
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Appointment Details
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Professional
-              </th>
-             
+              {userRole === "admin" || userRole === 'survivor' && (
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Professional
+                </th>
+              )}
+
+
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Type
               </th>
@@ -299,15 +312,19 @@ const filteredAppointments = appointments.filter((appointment) => {
                       </div>
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-gray-900">
-                      {appointment.professional_name}
-                    </div>
-                    <div className="text-sm text-gray-500">
-                      ID: {appointment.professional}
-                    </div>
-                  </td>
-                 
+                  {userRole === "admin" || userRole === 'survivor' && (
+                    <td className="px-6 py-4 whitespace-nowrap">
+
+                      <div className="text-sm font-medium text-gray-900">
+                        {appointment.professional_name}
+                      </div>
+                      <div className="text-sm text-gray-500">
+                        ID: {appointment.professional}
+                      </div>
+                    </td>
+                  )}
+
+
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span
                       className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium capitalize ${getAppointmentTypeColor(
@@ -534,18 +551,10 @@ const filteredAppointments = appointments.filter((appointment) => {
       {showAppointmentModal && (
         <AppointmentModal
           isOpen={showAppointmentModal}
+          userRole={userRole}
           onClose={() => {
             setShowAppointmentModal(false);
             setEditingAppointment(null);
-          }}
-          onSubmit={(formData) => {
-            console.log(formData);
-            if (editingAppointment) {
-              // handleEditAppointment(formData);
-            } else {
-              console.log("Submitting appointment");
-              // handleCreateAppointment(formData);
-            }
           }}
           editingAppointment={editingAppointment}
           allReports={allReports}
@@ -622,15 +631,14 @@ const filteredAppointments = appointments.filter((appointment) => {
                     .toUpperCase()}
                 </div>
                 <div
-                  className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
-                    selectedAppointment.status === "cancelled"
+                  className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${selectedAppointment.status === "cancelled"
                       ? "bg-red-100 text-red-800"
                       : selectedAppointment.status === "completed"
-                      ? "bg-green-100 text-green-800"
-                      : selectedAppointment.status === "scheduled"
-                      ? "bg-blue-100 text-blue-800"
-                      : "bg-gray-100 text-gray-800"
-                  }`}
+                        ? "bg-green-100 text-green-800"
+                        : selectedAppointment.status === "scheduled"
+                          ? "bg-blue-100 text-blue-800"
+                          : "bg-gray-100 text-gray-800"
+                    }`}
                 >
                   {selectedAppointment.status === "cancelled" && "❌ "}
                   {selectedAppointment.status === "completed" && "✅ "}
@@ -845,7 +853,7 @@ const filteredAppointments = appointments.filter((appointment) => {
             setSelectedAppointment(null);
           }}
           onExport={() => {
-            
+
           }}
         />
       )}
