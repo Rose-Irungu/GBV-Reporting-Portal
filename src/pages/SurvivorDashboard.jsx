@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Calendar,
   Clock,
@@ -17,17 +17,24 @@ import {
   Home,
   Bell,
   X,
+  Eye,
 } from "lucide-react";
 import useReports from "../hooks/useReportStats";
 import dayjs from "dayjs";
 import AppointmentModal from "../components/modals/AppointmentModal.jsx";
 import Header from "../components/AdminComponents/Header";
+import ReportModal from "../components/ReportModal";
+import { getAssignments } from "../services/assignment";
 
 const SurvivorsDashboard = ({ userName }) => {
   const [activeTab, setActiveTab] = useState("overview");
   const [showAppointmentModal, setShowAppointmentModal] = useState(false);
   const [editingAppointment, setEditingAppointment] = useState(null);
   const [showEducationModal, setShowEducationModal] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedAppointment, setSelectedAppointment] = useState(null);
+  const [showReportModal, setShowReportModal] = useState(false);
+  const [reportContent, setReportContent] = useState(null);
   const handleEmergencyExit = () => {
     window.location.replace("https://poki.com/en/g/subway-surfers");
   };
@@ -41,8 +48,109 @@ const SurvivorsDashboard = ({ userName }) => {
     loading: reportLoading,
   } = useReports();
 
-
   const caseProgress = {};
+
+  const [assignments, setAssignments] = useState([]);
+
+  useEffect(() => {
+    const fetchAssignments = async () => {
+      try {
+        const data = await getAssignments();
+        setAssignments(data);
+      } catch (err) {
+        console.error("Error fetching assignments:", err);
+      }
+    };
+    fetchAssignments();
+  }, []);
+
+  const handleOpenModal = () => {
+    setEditingAppointment(null);
+    setIsModalOpen(true);
+  };
+  
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
+  // Function to get recent activity from scheduled appointments
+  const getRecentActivity = () => {
+    if (!appointments || appointments.length === 0) {
+      return [
+        {
+          id: 1,
+          type: "info",
+          message: "No recent appointments scheduled",
+          date: dayjs(),
+          color: "gray",
+        }
+      ];
+    }
+
+    // Get upcoming appointments (scheduled status) and sort by date
+    const upcomingAppointments = appointments
+      .filter(apt => apt.status === "scheduled")
+      .sort((a, b) => dayjs(a.scheduled_date).diff(dayjs(b.scheduled_date)))
+      .slice(0, 5); // Get the next 5 appointments
+
+    // Get recently completed appointments
+    const recentCompleted = appointments
+      .filter(apt => apt.status === "completed")
+      .sort((a, b) => dayjs(b.scheduled_date).diff(dayjs(a.scheduled_date)))
+      .slice(0, 3); // Get the last 3 completed appointments
+
+    const activities = [];
+
+    // Add completed appointments
+    recentCompleted.forEach(apt => {
+      activities.push({
+        id: `completed-${apt.id}`,
+        type: "completed",
+        message: `${apt.appointment_type} completed with ${apt.professional_name}`,
+        date: dayjs(apt.scheduled_date),
+        color: "green",
+      });
+    });
+
+    // Add upcoming appointments
+    upcomingAppointments.forEach(apt => {
+      const appointmentDate = dayjs(apt.scheduled_date);
+      const isToday = appointmentDate.isSame(dayjs(), 'day');
+      const isTomorrow = appointmentDate.isSame(dayjs().add(1, 'day'), 'day');
+      const isThisWeek = appointmentDate.diff(dayjs(), 'day') <= 7;
+      
+      let dateText;
+      if (isToday) {
+        dateText = "today";
+      } else if (isTomorrow) {
+        dateText = "tomorrow";
+      } else if (isThisWeek) {
+        dateText = `on ${appointmentDate.format('dddd')}`;
+      } else {
+        dateText = `on ${appointmentDate.format('MMM D')}`;
+      }
+
+      activities.push({
+        id: `upcoming-${apt.id}`,
+        type: "upcoming",
+        message: `${apt.appointment_type} scheduled ${dateText} with ${apt.professional_name}`,
+        date: appointmentDate,
+        color: isToday ? "yellow" : "blue",
+      });
+    });
+
+    // Sort all activities by date (most recent/upcoming first)
+    return activities
+      .sort((a, b) => {
+        if (a.type === "completed" && b.type === "upcoming") return 1;
+        if (a.type === "upcoming" && b.type === "completed") return -1;
+        if (a.type === "upcoming" && b.type === "upcoming") {
+          return a.date.diff(b.date);
+        }
+        return b.date.diff(a.date);
+      })
+      .slice(0, 5); // Show max 5 activities
+  };
 
   const educationalContent = [
     {
@@ -202,9 +310,9 @@ const SurvivorsDashboard = ({ userName }) => {
       </button>
       {/* Header */}
       <Header
-          // activeSection={activeSection}
-          // sidebarItems={sidebarItems}
-        />
+      // activeSection={activeSection}
+      // sidebarItems={sidebarItems}
+      />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         {/* Navigation Tabs */}
@@ -303,26 +411,33 @@ const SurvivorsDashboard = ({ userName }) => {
               <h3 className="text-lg font-bold text-gray-900 mb-4">
                 Recent Activity
               </h3>
-              <div className="space-y-3">
-                <div className="flex items-center space-x-3">
-                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  <span className="text-sm text-gray-600">
-                    Medical examination completed on Aug 20
-                  </span>
+              {reportLoading ? (
+                <div className="flex items-center justify-center py-4">
+                  <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-purple-600"></div>
+                  <span className="ml-2 text-sm text-gray-600">Loading activity...</span>
                 </div>
-                <div className="flex items-center space-x-3">
-                  <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                  <span className="text-sm text-gray-600">
-                    Counseling session scheduled for Aug 25
-                  </span>
+              ) : (
+                <div className="space-y-3">
+                  {getRecentActivity().map((activity) => (
+                    <div key={activity.id} className="flex items-center space-x-3">
+                      <div className={`w-2 h-2 rounded-full ${
+                        activity.color === 'green' ? 'bg-green-500' :
+                        activity.color === 'blue' ? 'bg-blue-500' :
+                        activity.color === 'yellow' ? 'bg-yellow-500' :
+                        'bg-gray-500'
+                      }`}></div>
+                      <span className="text-sm text-gray-600 flex-1">
+                        {activity.message}
+                      </span>
+                      {activity.type === "upcoming" && (
+                        <span className="text-xs text-gray-500">
+                          {activity.date.format('MMM D, h:mm A')}
+                        </span>
+                      )}
+                    </div>
+                  ))}
                 </div>
-                <div className="flex items-center space-x-3">
-                  <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
-                  <span className="text-sm text-gray-600">
-                    Legal consultation upcoming on Aug 28
-                  </span>
-                </div>
-              </div>
+              )}
             </div>
           </div>
         )}
@@ -336,14 +451,20 @@ const SurvivorsDashboard = ({ userName }) => {
                   My Appointments
                 </h2>
                 <button
-                  onClick={() => setShowAppointmentModal(true)}
+                  onClick={handleOpenModal}
                   className="bg-purple-600 text-white px-4 py-2 rounded-md hover:bg-purple-700 flex items-center space-x-2"
                 >
                   <Plus size={16} />
                   <span>Schedule New</span>
                 </button>
               </div>
-
+              <AppointmentModal
+                isOpen={isModalOpen}
+                onClose={handleCloseModal}
+                editingAppointment={editingAppointment}
+                allReports={allReports}
+                professionals={proffessionals}
+              />
               <div className="space-y-4">
                 {appointments.map((appointment) => (
                   <div
@@ -398,6 +519,16 @@ const SurvivorsDashboard = ({ userName }) => {
 
                       {appointment.status === "scheduled" && (
                         <div className="flex space-x-2">
+
+                          <button
+                            onClick={() => {
+                              setSelectedAppointment(appointment);
+                          setViewShowAppointmentModal(true);
+                            }}
+                            className="text-blue-600 hover:text-blue-800 p-1"
+                          >
+                            <Eye size={16} />
+                          </button>
                           <button
                             onClick={() => {
                               setEditingAppointment(appointment);
@@ -454,30 +585,41 @@ const SurvivorsDashboard = ({ userName }) => {
                       </tr>
                     </thead>
                     <tbody>
-                      {allReports.map((report, index) => (
-                        <tr key={report.reference_code} className="border-t">
-                          <td className="px-4 py-2 text-sm text-gray-700">
-                            {report.reference_code}
-                          </td>
-                          <td className="px-4 py-2 text-sm text-gray-700">
-                            {report.incident_type || "N/A"}
-                          </td>
-                          <td className="px-4 py-2 text-sm">
-                            <span
-                              className={`px-2 py-1 rounded-full text-xs font-medium ${
-                                report.status === "Completed"
-                                  ? "bg-green-100 text-green-700"
-                                  : "bg-yellow-100 text-yellow-700"
-                              }`}
-                            >
-                              {report.status}
-                            </span>
-                          </td>
-                          <td className="px-4 py-2 text-sm text-gray-600">
-                            {dayjs(report.incident_date).format("YYYY-MM-DD")}
-                          </td>
-                        </tr>
-                      ))}
+                      {allReports.map((report) => {
+                        const assignment = assignments.find(
+                          (a) => a.report === report.id && a.is_active
+                        );
+
+                        return (
+                          <tr key={report.reference_code} className="border-t">
+                            <td className="px-4 py-2 text-sm text-gray-700">
+                              {report.reference_code}
+                            </td>
+                            <td className="px-4 py-2 text-sm text-gray-700">
+                              {report.incident_type || "N/A"}
+                            </td>
+                            <td className="px-4 py-2 text-sm">
+                              <span
+                                className={`px-2 py-1 rounded-full text-xs font-medium ${
+                                  report.status === "Completed"
+                                    ? "bg-green-100 text-green-700"
+                                    : "bg-yellow-100 text-yellow-700"
+                                }`}
+                              >
+                                {report.status}
+                              </span>
+                            </td>
+                            <td className="px-4 py-2 text-sm text-gray-600">
+                              {dayjs(report.incident_date).format("YYYY-MM-DD")}
+                            </td>
+                            <td className="px-4 py-2 text-sm text-gray-600">
+                              {assignment
+                                ? assignment.professional_name
+                                : report.assigned_to || "Unassigned"}
+                            </td>
+                          </tr>
+                        );
+                      })}
                     </tbody>
                   </table>
                 </div>
@@ -572,7 +714,21 @@ const SurvivorsDashboard = ({ userName }) => {
       {/* Modals */}
       {showAppointmentModal && <AppointmentModal />}
       {showEducationModal && <EducationModal content={showEducationModal} />}
-    </div>
+      {showReportModal && selectedAppointment && (
+             <ReportModal
+               isOpen={showReportModal}
+               reportContent={reportContent}
+               onClose={() => {
+                 setShowReportModal(false);
+                 setReportContent(null);
+                 setSelectedAppointment(null);
+               }}
+               onExport={() => {
+                 
+               }}
+             />
+           )}
+         </div>
   );
 };
 

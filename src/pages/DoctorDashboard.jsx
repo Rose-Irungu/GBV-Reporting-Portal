@@ -18,7 +18,6 @@ import {
 import Header from "../components/AdminComponents/Header";
 import useReports from "../hooks/useReportStats";
 import ReportModal from "../components/ReportModal";
-import AppointmentsManagement from "../components/AdminComponents/AppointmentManagement";
 
 const DoctorDashboard = () => {
   const [activeTab, setActiveTab] = useState("cases");
