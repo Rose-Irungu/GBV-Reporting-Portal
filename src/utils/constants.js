@@ -20,8 +20,4 @@ ASSIGNMENTS: '/assignments/',
 ASSIGN_REPORT: '/assignments/assign/',
 
 
-
-
-
-  
 };

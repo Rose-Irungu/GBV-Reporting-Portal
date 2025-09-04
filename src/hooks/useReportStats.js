@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { getDashboardStats, getAppointments, getAllReports, getReport as gR, getProfessionals, } from "../services/adminDashboardService";
+import { getDashboardStats, getAppointments, getAllReports, getReport as gR, getProfessionals } from "../services/adminDashboardService";
+import { resolveReport as rV } from "../services/reportService";
 
 const useReports = () => {
 
@@ -73,6 +74,22 @@ const useReports = () => {
       setLoading(false);
     }
   };
+
+  const resolveReport = async (ref_no) => {
+    try {
+      setLoading(true);
+      const report = await rV(ref_no);
+      fetchReports();
+      return report || null;
+    } catch (error) {
+      console.error("Error resolving report:", error);
+      setError("Something went wrong while resolving the report.");
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return {
     dashboardData,
     loading,
@@ -83,6 +100,7 @@ const useReports = () => {
     getAppointments,
     setAllReports,
     getAppointment,
+    resolveReport,
     proffessionals: proffessionals || [],
     allReports: allReports || [],
     appointments: appointments || [],

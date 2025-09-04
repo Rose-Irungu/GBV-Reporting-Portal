@@ -98,6 +98,7 @@ const GBVAdminDashboard = ({
     assignedReports,
     urgentCases,
     proffessionals,
+    resolveReport,
     refreshReports,
     setAllReports,
   } = useReports();
@@ -142,52 +143,12 @@ const GBVAdminDashboard = ({
     setShowResolveModal(true);
   };
 
-  // Add this function to handle the actual resolution
-  const handleResolveCase = async ({
-    referenceCode,
-    resolutionType,
-    resolutionNotes,
-    resolvedAt,
-  }) => {
-    try {
-      // API call to update the case
-      const response = await fetch(`/api/reports/${referenceCode}/resolve`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          status: "resolved",
-          resolution_type: resolutionType,
-          resolution_notes: resolutionNotes,
-          resolved_at: resolvedAt,
-        }),
-      });
+  const handleResolveReport = async () => {
+    await resolveReport(selectedCase);
+    setShowResolveModal(false);
+    setSelectedCase(null);
+  }
 
-      if (!response.ok) throw new Error("Failed to resolve case");
-
-      // Update local state
-      setAllReports((prevReports) =>
-        prevReports.map((report) =>
-          report.reference_code === referenceCode
-            ? {
-                ...report,
-                status: "resolved",
-                resolution_type: resolutionType,
-                resolution_notes: resolutionNotes,
-                resolved_at: resolvedAt,
-              }
-            : report
-        )
-      );
-
-      // Optional: Show success message
-      toast.success("Case resolved successfully");
-    } catch (error) {
-      console.error("Error resolving case:", error);
-      throw error; // Re-throw to handle in modal
-    }
-  };
 
   const onSearchReports = () => {};
 
@@ -794,7 +755,7 @@ const GBVAdminDashboard = ({
           setShowResolveModal={setShowResolveModal}
           selectedCase={selectedCase}
           allReports={allReports}
-          onResolveCase={handleResolveCase} // You need to implement this
+          onResolveCase={handleResolveReport}
         />
 
         {/* Main Content Area */}
