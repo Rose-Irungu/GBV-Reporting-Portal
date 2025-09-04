@@ -26,7 +26,7 @@ import { fetchReport } from "../../services/reportService";
 export default function AppointmentsManagement({
   appointments_,
   allReports,
-  proffessionals, 
+  proffessionals,
 }) {
   const [selectedTab, setSelectedTab] = useState("upcoming");
   const [appointments, setAppointments] = useState(appointments_);
@@ -34,7 +34,7 @@ export default function AppointmentsManagement({
   const [showAppointmentModal, setShowAppointmentModal] = useState(false);
   const [editingAppointment, setEditingAppointment] = useState(null);
   const [selectedAppointment, setSelectedAppointment] = useState(null);
-  const [userRole, setUserRole] = useState(null)
+  const [userRole, setUserRole] = useState(null);
   const [showViewAppointmentModal, setViewShowAppointmentModal] =
     useState(false);
 
@@ -51,19 +51,15 @@ export default function AppointmentsManagement({
           setReportContent(res);
         } catch (err) {
           console.error("Failed to fetch report:", err);
-
-
-
         }
       };
 
       fetch_Report();
-
     }
-    const userType = localStorage.getItem('userRole')
+    const userType = localStorage.getItem("userRole");
     console.log(userType);
-    
-    setUserRole(userType)
+
+    setUserRole(userType);
   }, [showReportModal, selectedAppointment]);
 
   // useEffect(() => {
@@ -177,7 +173,6 @@ export default function AppointmentsManagement({
     return matchesSearch && appointment.status === selectedTab;
   });
 
-
   const tabs = [
     {
       id: "upcoming",
@@ -241,8 +236,6 @@ export default function AppointmentsManagement({
               className="pl-10 pr-4 py-2 w-full border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
             />
           </div>
-
-
         </div>
 
         {/* Tabs */}
@@ -251,10 +244,11 @@ export default function AppointmentsManagement({
             <button
               key={tab.id}
               onClick={() => setSelectedTab(tab.id)}
-              className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${selectedTab === tab.id
+              className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
+                selectedTab === tab.id
                   ? "text-purple-600 bg-purple-50 border border-purple-200"
                   : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
-                }`}
+              }`}
             >
               {tab.label}
               <span className="ml-2 px-2 py-0.5 text-xs bg-gray-200 rounded-full">
@@ -273,12 +267,11 @@ export default function AppointmentsManagement({
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Appointment Details
               </th>
-              {(userRole === "admin" || userRole === 'survivor') && (
+              {(userRole === "admin" || userRole === "survivor") && (
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Professional
                 </th>
               )}
-
 
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Type
@@ -317,9 +310,8 @@ export default function AppointmentsManagement({
                       </div>
                     </div>
                   </td>
-                  {(userRole === "admin" || userRole === 'survivor') && (
+                  {(userRole === "admin" || userRole === "survivor") && (
                     <td className="px-6 py-4 whitespace-nowrap">
-
                       <div className="text-sm font-medium text-gray-900">
                         {appointment.professional_name}
                       </div>
@@ -328,7 +320,6 @@ export default function AppointmentsManagement({
                       </div>
                     </td>
                   )}
-
 
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span
@@ -378,34 +369,74 @@ export default function AppointmentsManagement({
                         <Eye className="w-4 h-4" />
                       </button>
 
-                      <button
-                        className="text-gray-600 hover:text-gray-900 p-1 rounded"
-                        title="Edit Appointment"
-                        onClick={() => {
-                          setEditingAppointment(appointment);
-                          setShowAppointmentModal(true);
-                        }}
-                      >
-                        <Edit className="w-4 h-4" />
-                      </button>
-                      <button
-                        className="text-green-600 hover:text-green-900 p-1 rounded"
-                        title="View Report"
-                        onClick={() => {
-                          setSelectedAppointment(appointment);
-                          setShowReportModal(true);
-                        }}
-                      >
-                        <FileText className="w-4 h-4" />
-                      </button>
+                      {/* Survivors: ONLY view, so skip other buttons */}
+                      {userRole === "admin" && (
+                        <>
+                          {/* Edit */}
+                          <button
+                            className="text-gray-600 hover:text-gray-900 p-1 rounded"
+                            title="Edit Appointment"
+                            onClick={() => {
+                              setEditingAppointment(appointment);
+                              setShowAppointmentModal(true);
+                            }}
+                          >
+                            <Edit className="w-4 h-4" />
+                          </button>
 
-                      <button
-                        className="text-red-600 hover:text-red-900 p-1 rounded"
-                        title="Cancel Appointment"
-                        onClick={() => handleCancelAppointment(appointment.id)}
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
+                          {/* View Report */}
+                          <button
+                            className="text-green-600 hover:text-green-900 p-1 rounded"
+                            title="View Report"
+                            onClick={() => {
+                              setSelectedAppointment(appointment);
+                              setShowReportModal(true);
+                            }}
+                          >
+                            <FileText className="w-4 h-4" />
+                          </button>
+
+                          {/* Delete */}
+                          <button
+                            className="text-red-600 hover:text-red-900 p-1 rounded"
+                            title="Cancel Appointment"
+                            onClick={() =>
+                              handleCancelAppointment(appointment.id)
+                            }
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </>
+                      )}
+
+                      {/* Doctors, counselors, lawyers: can EDIT + VIEW REPORT, but NOT delete */}
+                      {(userRole === "doctor" ||
+                        userRole === "counselor" ||
+                        userRole === "lawyer") && (
+                        <>
+                          <button
+                            className="text-gray-600 hover:text-gray-900 p-1 rounded"
+                            title="Edit Appointment"
+                            onClick={() => {
+                              setEditingAppointment(appointment);
+                              setShowAppointmentModal(true);
+                            }}
+                          >
+                            <Edit className="w-4 h-4" />
+                          </button>
+
+                          <button
+                            className="text-green-600 hover:text-green-900 p-1 rounded"
+                            title="View Report"
+                            onClick={() => {
+                              setSelectedAppointment(appointment);
+                              setShowReportModal(true);
+                            }}
+                          >
+                            <FileText className="w-4 h-4" />
+                          </button>
+                        </>
+                      )}
                     </div>
                   </td>
                 </tr>
@@ -630,14 +661,15 @@ export default function AppointmentsManagement({
                     .toUpperCase()}
                 </div>
                 <div
-                  className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${selectedAppointment.status === "cancelled"
+                  className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
+                    selectedAppointment.status === "cancelled"
                       ? "bg-red-100 text-red-800"
                       : selectedAppointment.status === "completed"
-                        ? "bg-green-100 text-green-800"
-                        : selectedAppointment.status === "scheduled"
-                          ? "bg-blue-100 text-blue-800"
-                          : "bg-gray-100 text-gray-800"
-                    }`}
+                      ? "bg-green-100 text-green-800"
+                      : selectedAppointment.status === "scheduled"
+                      ? "bg-blue-100 text-blue-800"
+                      : "bg-gray-100 text-gray-800"
+                  }`}
                 >
                   {selectedAppointment.status === "cancelled" && "❌ "}
                   {selectedAppointment.status === "completed" && "✅ "}
@@ -851,9 +883,7 @@ export default function AppointmentsManagement({
             setReportContent(null);
             setSelectedAppointment(null);
           }}
-          onExport={() => {
-
-          }}
+          onExport={() => {}}
         />
       )}
     </div>

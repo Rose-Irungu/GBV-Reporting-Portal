@@ -193,7 +193,7 @@ const DoctorDashboard = () => {
                           </p>
                         </div>
                         <div className="flex space-x-2">
-                          {selectedReport.status != "closed" && (
+                          {/* {selectedReport.status != "closed" && (
                             <button
                               onClick={() =>
                                 updateReportStatus(selectedReport.id, "closed")
@@ -203,7 +203,7 @@ const DoctorDashboard = () => {
                               <CheckCircle className="w-4 h-4" />
                               <span>Mark Closed</span>
                             </button>
-                          )}
+                          )} */}
                           <button
                             onClick={() => handleViewReport(selectedReport)}
                             className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-purple-600 to-blue-600 hover:shadow-lg text-white rounded-lg hover:bg-blue-700 transition-colors"

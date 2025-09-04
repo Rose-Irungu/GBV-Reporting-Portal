@@ -18,6 +18,8 @@ import {
   Bell,
   X,
   Eye,
+  UserCheck,
+  
 } from "lucide-react";
 import useReports from "../hooks/useReportStats";
 import dayjs from "dayjs";
@@ -36,6 +38,7 @@ const SurvivorsDashboard = ({ userName }) => {
   const [selectedAppointment, setSelectedAppointment] = useState(null);
   const [showReportModal, setShowReportModal] = useState(false);
   const [reportContent, setReportContent] = useState(null);
+  const [selectedReport, setSelectedReport] = useState(null);
   const handleEmergencyExit = () => {
     window.location.replace("https://poki.com/en/g/subway-surfers");
   };
@@ -72,6 +75,12 @@ const SurvivorsDashboard = ({ userName }) => {
   
   const handleCloseModal = () => {
     setIsModalOpen(false);
+  };
+
+   const handleViewReport = (report) => {
+    setSelectedReport(report);
+    setShowReportModal(true);
+    setSelectedAppointment(report);
   };
 
   // Function to get recent activity from scheduled appointments
@@ -454,79 +463,102 @@ const SurvivorsDashboard = ({ userName }) => {
         )}
 
         {activeTab === "reports" && (
-          <div className="space-y-6">
-            <div className="bg-white rounded-lg shadow p-6">
-              <h2 className="text-lg font-medium text-gray-900 mb-4">
-                My Reports
-              </h2>
-              {allReports && allReports.length > 0 ? (
-                <div className="overflow-x-auto">
-                  <table className="min-w-full border border-gray-200 rounded-lg">
-                    <thead className="bg-gray-100">
-                      <tr>
-                        <th className="px-4 py-2 text-left text-sm font-medium text-gray-600">
-                          Report ID
-                        </th>
-                        <th className="px-4 py-2 text-left text-sm font-medium text-gray-600">
-                          Type
-                        </th>
-                        <th className="px-4 py-2 text-left text-sm font-medium text-gray-600">
-                          Status
-                        </th>
-                        <th className="px-4 py-2 text-left text-sm font-medium text-gray-600">
-                          Date Submitted
-                        </th>
-                        <th className="px-4 py-2 text-left text-sm font-medium text-gray-600">
-                          Assigned to
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {allReports.map((report) => {
-                        const assignment = assignments.find(
-                          (a) => a.report === report.id && a.is_active
-                        );
+          <div className="overflow-x-auto">
+             <h3 className="text-lg font-semibold text-gray-900">
+            My Reports
+          </h3>
+        <table className="w-full">
+          <thead className="bg-gray-50">
+            <tr>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Case ID
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Full Name
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Date
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Type
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Status
+              </th>
 
-                        return (
-                          <tr key={report.reference_code} className="border-t">
-                            <td className="px-4 py-2 text-sm text-gray-700">
-                              {report.reference_code}
-                            </td>
-                            <td className="px-4 py-2 text-sm text-gray-700">
-                              {report.incident_type || "N/A"}
-                            </td>
-                            <td className="px-4 py-2 text-sm">
-                              <span
-                                className={`px-2 py-1 rounded-full text-xs font-medium ${
-                                  report.status === "Completed"
-                                    ? "bg-green-100 text-green-700"
-                                    : "bg-yellow-100 text-yellow-700"
-                                }`}
-                              >
-                                {report.status}
-                              </span>
-                            </td>
-                            <td className="px-4 py-2 text-sm text-gray-600">
-                              {dayjs(report.incident_date).format("YYYY-MM-DD")}
-                            </td>
-                            <td className="px-4 py-2 text-sm text-gray-600">
-                              {assignment
-                                ? assignment.professional_name
-                                : report.assigned_to || "Unassigned"}
-                            </td>
-                          </tr>
-                        );
-                      })}
-                    </tbody>
-                  </table>
-                </div>
-              ) : (
-                <p className="text-gray-500 text-sm">
-                  No reports submitted yet.
-                </p>
-              )}
-            </div>
-          </div>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Location
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Assigned To
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Actions
+              </th>
+            </tr>
+          </thead>
+          <tbody className="bg-white divide-y divide-gray-200">
+            {allReports && allReports.length > 0 ? (
+              allReports.map((report) => (
+                <tr key={report.reference_code} className="hover:bg-gray-50">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-600 hover:text-blue-800 cursor-pointer">
+                    {report.reference_code}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    {report.full_name || "N/A"}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    {dayjs(report.incident_date).format("YYYY-MM-DD")}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    {report.incident_type || "N/A"}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <span
+                      className={`px-2 py-1 text-xs font-medium rounded-full ${
+                        report.status === "pending"
+                          ? "bg-yellow-100 text-yellow-800"
+                          : report.status === "under_review"
+                          ? "bg-blue-100 text-blue-800"
+                          : "bg-green-100 text-green-800"
+                      }`}
+                    >
+                      {report.status}
+                    </span>
+                  </td>
+
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    {report.incident_location || "N/A"}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    {report.assigned_to_name || "Unassigned"}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <div className="flex space-x-2">
+                      <button
+                         onClick={() => handleViewReport(reportContent)}
+                        className="text-blue-600 hover:text-blue-900"
+                      >
+                        <Eye className="w-4 h-4" />
+                      </button>
+                     
+                     
+                    </div>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="8" className="px-6 py-8 text-center text-gray-500">
+                  {reportLoading
+                    ? "Loading reports..."
+                    : "No reports available"}
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
         )}
 
         {/* Education Tab */}
