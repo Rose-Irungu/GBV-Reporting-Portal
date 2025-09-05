@@ -215,13 +215,15 @@ export default function AppointmentsManagement({
               <p className="text-gray-600">Manage and track all appointments</p>
             </div>
           </div>
-          <button
-            onClick={() => setShowAppointmentModal(true)}
-            className="flex items-center px-4 py-2 text-sm font-medium text-white rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 hover:shadow-lg transition-all"
-          >
-            <Plus className="w-4 h-4 mr-2" />
-            Add Appointment
-          </button>
+          {userRole !== "survivor" && (
+            <button
+              onClick={() => setShowAppointmentModal(true)}
+              className="flex items-center px-4 py-2 text-sm font-medium text-white rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 hover:shadow-lg transition-all"
+            >
+              <Plus className="w-4 h-4 mr-2" />
+              Add Appointment
+            </button>
+          )}
         </div>
 
         {/* Search and Filter */}
